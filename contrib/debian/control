@@ -1,0 +1,9 @@
+Source: novacoin
+Section: utils
+Priority: optional
+Maintainer: Jonas Smedegaard <dr@jones.dk>
+Uploaders: Micah Anderson <micah@debian.org>
+Build-Depends: debhelper,
+ devscripts,
+ bash-completion,
+ l
