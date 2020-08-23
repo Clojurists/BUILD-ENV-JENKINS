@@ -4,4 +4,28 @@ novacoin.conf \- novacoin configuration file
 .SH SYNOPSIS
 All command-line options (except for '-datadir' and '-conf') may be specified in a configuration file, and all configuration file options may also be specified on the command line. Command-line options override values set in the configuration file.
 .TP
-The configuration file is a list of 'setting=value' pairs, one per line, with optional comments starting with
+The configuration file is a list of 'setting=value' pairs, one per line, with optional comments starting with the '#' character.
+.TP
+The configuration file is not automatically created; you can create it using your favorite plain-text editor. By default, novacoind(1) will look for a file named novacoin.conf(5) in the novacoin data directory, but both the data directory and the configuration file path may be changed using the '-datadir' and '-conf' command-line arguments.
+.SH LOCATION
+novacoin.conf should be located in $HOME/.novacoin
+.SH NETWORK-RELATED SETTINGS
+.TP
+.TP
+\fBtestnet=\fR[\fI'1'\fR|\fI'0'\fR]
+Enable or disable run on the test network instead of the real *novacoin* network.
+.TP
+\fBproxy=\fR\fI'127.0.0.1:9050'\fR
+Connect via a socks4 proxy.
+.TP
+\fBaddnode=\fR\fI'10.0.0.2:8333'\fR
+Use as many *addnode=* settings as you like to connect to specific peers.
+.TP
+\fBconnect=\fR\fI'10.0.0.1:8333'\fR
+Use as many *connect=* settings as you like to connect ONLY to specific peers.
+.TP
+\fBnoirc=\fR[\fI'1'\fR|\fI'0'\fR]
+Use or Do not use Internet Relay Chat (irc.lfnet.org #novacoin channel) to find other peers.
+.TP
+\fRmaxconnections=\fR\fI'value'\fR
+Maximum number of inbound+outbound connections.
