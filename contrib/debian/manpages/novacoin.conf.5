@@ -53,4 +53,31 @@ Listen for RPC connections on this TCP port.
 You can use *novacoin* or *novacoind(1)* to send commands to *novacoin*/*novacoind(1)* running on another host using this option.
 .TP
 \fBrpcssl=\fR\fI'1'\fR
-Use Secure Sockets Layer (also known as TLS
+Use Secure Sockets Layer (also known as TLS or HTTPS) to communicate with *novacoin* '-server' or *novacoind(1)*. Example of OpenSSL settings used when *rpcssl*='1':
+.TP
+\fBrpcsslciphers=\fR\fI'TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH'\fR
+.TP
+\fBrpcsslcertificatechainfile=\fR\fI'server.cert'\fR
+.TP
+\fBrpcsslprivatekeyfile=\fR\fI'server.pem'\fR
+.TP
+.SH MISCELLANEOUS OPTIONS
+.TP
+\fBgen=\fR[\fI'0'\fR|\fI'1'\fR]
+Enable or disable attempt to generate novacoins.
+.TP
+\fBkeypool=\fR\fI'100'\fR
+Pre-generate this many public/private key pairs, so wallet backups will be valid for both prior transactions and several dozen future transactions.
+.TP
+\fBpaytxfee=\fR\fI'0.00'\fR
+Pay an optional transaction fee every time you send novacoins. Transactions with fees are more likely than free transactions to be included in generated blocks, so may be validated sooner.
+.TP
+\fBallowreceivebyip=\fR\fI'1'\fR
+Allow direct connections for the 'pay via IP address' feature.
+.TP
+.SH USER INTERFACE OPTIONS
+.TP
+\fBmin=\fR[\fI'0'\fR|\fI'1'\fR]
+Enable or disable start novacoind minimized.
+.TP
+\fBminimizetotray=\fR[\fI'0'\fR|\fI'1'
