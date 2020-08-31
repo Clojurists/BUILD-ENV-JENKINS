@@ -85,4 +85,34 @@ This help message
 Safely copies *wallet.dat* to 'destination', which can be a directory or a path with filename.
 .TP
 \fBgetaccount 'novacoinaddress'\fR
-Ret
+Returns the account associated with the given address.
+.TP
+\fBsetaccount 'novacoinaddress' ['account']\fR
+Sets the ['account'] associated with the given address. ['account'] may be omitted to remove an address from ['account'].
+.TP
+\fBgetaccountaddress 'account'\fR
+Returns a new novacoin address for 'account'.
+.TP
+\fBgetaddressesbyaccount 'account'\fR
+Returns the list of addresses associated with the given 'account'.
+.TP
+\fBgetbalance 'account'\fR
+Returns the server's available balance, or the balance for 'account'.
+.TP
+\fBgetblockcount\fR
+Returns the number of blocks in the longest block chain.
+.TP
+\fBgetblocknumber\fR
+Returns the block number of the latest block in the longest block chain.
+.TP
+\fBgetconnectioncount\fR
+Returns the number of connections to other nodes.
+.TP
+\fBgetdifficulty\fR
+Returns the proof-of-work difficulty as a multiple of the minimum difficulty.
+.TP
+\fBgetgenerate\fR
+Returns boolean true if server is trying to generate novacoins, false otherwise.
+.TP
+\fBsetgenerate 'generate' ['genproclimit']\fR
+Generation is limited to ['genproclimi
