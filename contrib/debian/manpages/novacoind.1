@@ -6,4 +6,43 @@ novacoin [options] <command> [params]
 .TP
 novacoin [options] help <command> - Get help for a command
 .SH DESCRIPTION
-This  manual page documents the novacoind program. Novacoin is a peer-to-peer digital currency. Peer-to-peer (P2P) means that there is no central authority to issue new money or keep track of transactions. Instead, these tasks are managed c
+This  manual page documents the novacoind program. Novacoin is a peer-to-peer digital currency. Peer-to-peer (P2P) means that there is no central authority to issue new money or keep track of transactions. Instead, these tasks are managed collectively by the nodes of the network. Advantages:
+
+Novacoins can be sent easily through the Internet, without having to trust middlemen. Transactions are designed to be irreversible. Be safe from instability caused by fractional reserve banking and central banks. The limited inflation of the Novacoin system’s money supply is distributed evenly (by CPU power) throughout the network, not monopolized by banks.
+
+.SH OPTIONS
+.TP
+\fB\-conf=\fR<file>
+Specify configuration file (default: novacoin.conf)
+.TP
+\fB\-gen\fR
+Generate coins
+.TP
+\fB\-gen\fR=\fI0\fR
+Don't generate coins
+.TP
+\fB\-min\fR
+Start minimized
+.TP
+\fB\-datadir=\fR<dir>
+Specify data directory
+.TP
+\fB\-proxy=\fR<ip:port>
+Connect through socks4 proxy
+.TP
+\fB\-addnode=\fR<ip>
+Add a node to connect to
+.TP
+\fB\-connect=\fR<ip>
+Connect only to the specified node
+.TP
+\fB\-paytxfee=\fR<amt>
+Fee per KB to add to transactions you send
+.TP
+\fB\-server\fR
+Accept command line and JSON\-RPC commands
+.TP
+\fB\-daemon\fR
+Run in the background as a daemon and accept commands
+.TP
+\fB\-testnet\f
