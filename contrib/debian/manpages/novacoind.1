@@ -115,4 +115,27 @@ Returns the proof-of-work difficulty as a multiple of the minimum difficulty.
 Returns boolean true if server is trying to generate novacoins, false otherwise.
 .TP
 \fBsetgenerate 'generate' ['genproclimit']\fR
-Generation is limited to ['genproclimi
+Generation is limited to ['genproclimit'] processors, -1 is unlimited.
+.TP
+\fBgethashespersec\fR
+Returns a recent hashes per second performance measurement while generating.
+.TP
+\fBgetinfo\fR
+Returns an object containing server information.
+.TP
+\fBgetnewaddress 'account'\fR
+Returns a new novacoin address for receiving payments. If 'account' is specified (recommended), it is added to the address book so payments received with the address will be credited to 'account'.
+.TP
+\fBgetreceivedbyaccount 'account' ['minconf=1']\fR
+Returns the total amount received by addresses associated with 'account' in transactions with at least ['minconf'] confirmations.
+.TP
+\fBgetreceivedbyaddress 'novacoinaddress' ['minconf=1']\fR
+Returns the total amount received by 'novacoinaddress' in transactions with at least ['minconf'] confirmations.
+.TP
+\fBgettransaction 'txid'\fR
+Returns information about a specific transaction, given hexadecimal transaction ID.
+.TP
+\fBgetwork 'data'\fR
+If 'data' is specified, tries to solve the block and returns true if it was successful. If 'data' is not specified, returns formatted hash 'data' to work on:
+
+    "midstate" :
