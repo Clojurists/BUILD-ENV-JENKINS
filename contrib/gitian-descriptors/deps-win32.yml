@@ -1,0 +1,36 @@
+---
+name: "bitcoin-deps"
+suites:
+- "lucid"
+architectures:
+- "i386"
+packages: 
+- "mingw32"
+- "git-core"
+- "zip"
+- "faketime"
+- "wine"
+reference_datetime: "2011-01-30 00:00:00"
+remotes: []
+files:
+- "openssl-1.0.1b.tar.gz"
+- "db-4.8.30.NC.tar.gz"
+- "miniupnpc-1.6.tar.gz"
+- "zlib-1.2.7.tar.gz"
+- "libpng-1.5.12.tar.gz"
+- "qrencode-3.2.0.tar.bz2"
+script: |
+  #
+  export LD_PRELOAD=/usr/lib/faketime/libfaketime.so.1
+  export FAKETIME=$REFERENCE_DATETIME
+  export TZ=UTC
+  #
+  tar xzf openssl-1.0.1b.tar.gz
+  cd openssl-1.0.1b
+  ./Configure --cross-compile-prefix=i586-mingw32msvc- mingw
+  make
+  cd ..
+  #
+  tar xzf db-4.8.30.NC.tar.gz
+  cd db-4.8.30.NC/build_unix
+  ../dist/configure --enable-mingw --enable-cxx --host=i586-mingw32msvc CFLAGS="-I/usr/i586-mingw32m
