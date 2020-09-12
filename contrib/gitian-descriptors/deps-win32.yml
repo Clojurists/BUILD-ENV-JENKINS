@@ -58,4 +58,14 @@ script: |
   #
   tar xjf qrencode-3.2.0.tar.bz2
   cd qrencode-3.2.0
-  ./configure CC=i586-mingw32msvc-cc AR=i586-mingw32msvc-ar STRIP=i586-mingw32msvc-strip 
+  ./configure CC=i586-mingw32msvc-cc AR=i586-mingw32msvc-ar STRIP=i586-mingw32msvc-strip RANLIB=i586-mingw32msvc-ranlib OBJDUMP=i586-mingw32msvc-objdump LD=i586-mingw32msvc-ld png_LIBS="../libpng-1.5.12/.libs/libpng15.a ../zlib-1.2.7/libz.a" png_CFLAGS="-I../libpng-1.5.12"
+  make $MAKEOPTS
+  cd ..
+  #
+  zip -r $OUTDIR/ppcoin-deps-0.0.1.zip \
+    $(ls qrencode-*/{qrencode.h,.libs/libqrencode.{,l}a} | sort) \
+    $(ls db-*/build_unix/{libdb_cxx.a,db.h,db_cxx.h,libdb.a,.libs/libdb_cxx-?.?.a} | sort) \
+    $(find openssl-* -name '*.a' -o -name '*.h' | sort) \
+    $(find miniupnpc -name '*.h' -o -name 'libminiupnpc.a' | sort)
+  # Kill wine processes as gitian won't figure out we are done otherwise
+  killall wineserver services.exe explorer.exe winedevice.exe
