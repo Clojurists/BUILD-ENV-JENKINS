@@ -54,4 +54,39 @@ Licenses of statically linked libraries:
 
 Versions used in this release:
  GCC           4.3.3
- Ope
+ OpenSSL       0.9.8g
+ Berkeley DB   4.8.30.NC
+ Boost         1.37
+ miniupnpc     1.6
+
+Dependency Build Instructions: Ubuntu & Debian
+----------------------------------------------
+sudo apt-get install build-essential
+sudo apt-get install libssl-dev
+sudo apt-get install libdb4.8-dev
+sudo apt-get install libdb4.8++-dev
+ Boost 1.40+: sudo apt-get install libboost-all-dev
+ or Boost 1.37: sudo apt-get install libboost1.37-dev
+sudo apt-get install libqrencode-dev
+
+If using Boost 1.37, append -mt to the boost libraries in the makefile.
+
+
+Dependency Build Instructions: Gentoo
+-------------------------------------
+
+Note: If you just want to install bitcoind on Gentoo, you can add the Bitcoin
+      overlay and use your package manager:
+          layman -a bitcoin && emerge bitcoind
+
+emerge -av1 --noreplace boost glib openssl sys-libs/db:4.8
+
+Take the following steps to build (no UPnP support):
+ cd ${BITCOIN_DIR}/src
+ make -f makefile.unix USE_UPNP= BDB_INCLUDE_PATH='/usr/include/db4.8'
+ strip bitcoind
+
+
+Notes
+-----
+The release is built with GCC and then "strip bitcoind" to stri
