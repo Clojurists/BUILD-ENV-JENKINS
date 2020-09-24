@@ -156,4 +156,4 @@ exploit even if a vulnerability is found, you can take the following measures:
     STK/REL/PTL
     RW- R-- RW-
 
-    The STK RW- means that the stack is readable and write
+    The STK RW- means that the stack is readable and writeable but not executable.
