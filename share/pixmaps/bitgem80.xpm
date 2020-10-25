@@ -917,4 +917,10 @@ static char * BottleCaps80_xpm[] = {
 "                          v%w%x%x.g.S+g.g.,+g.M.g.,+M.g.M.M.g+y%z%'.J J J J J U J U O U U J U B.A%B%C%%$&$*$&$&$&$&$&$*$&$=$=$&$&$D%E%F%                          ",
 "                            G%H%I%f.g.g.g.M.S+g.g.M.g.g.E+E+M.f.J%V K N K K K K J K K K O K K y K%>@L%%$%$%$%$%$%$%$%$*$%$=$=$%$M%N%O%                            ",
 "                              P%Q%R%[.M.g.M.y.h+g.M.g.g.y.y.g.A@S%T%-.J O O K U J U K U O K K q ]#U%l%%$3$3$%$%$%$3$%$*$4$=$&$^$|#V%r$                            ",
-"                        
+"                              A$W%k 2+g.M.M.h+M.y.M.,+y.M.M.g.f.X%Y%r J N J J U J U M U K N K |@Z%`% &4$&$3$4$4$4$&$4$*$4$=$y$.&k +&                              ",
+"                                W.@&#&2+g.,+g.,+,+,+,+,+,+,+,+g+..Q.+.J O O K K J K M U O K J $&%&&&%$%$*$3$%$%$%$*$%$o$&$*&=&-&;&                                ",
+"                                  >&,&'&M.M.S+M.S+M.E+S+S+S+,+M.)&!&q K N J T T J T M O J M I ~&{&C%&$4$&$*$&$&$&$&$&$&$%$M%]&^&/&                                ",
+"                                    (&k _&1+M.M.g.M.,+g.M.M.g.g.x.k :&N N J J J J J M U O N V <&[&k%%$*$*$*$*$*$*$*$*$&$6$}&F+|&                                  ",
+"                                    B$1&2&h.g.h+g.h+N.g.M.M.g.g.f.3&4&w J N N K J K K U K K 5&6&7&:%%$%$*$3$%$%$%$*$&$S$*%8&9&                                    ",
+"                                      D 0&h%a&g.g.,+M.g.M.M.g.g.[.b&c&_.T J J U J U O U U O d&e&n$5$%$&$&$*$&$&$&$&$&$U$f&g&                                      ",
+"                                        h&k S+g.M.M.g.g.E+E+g.E+M.l@i&V ].K K K J K K K
