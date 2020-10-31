@@ -46,4 +46,41 @@ Var StartMenuGroup
 
 # Installer attributes
 OutFile BottleCaps-0.3.0-win32-setup.exe
-InstallDir $PROGRAMFILES\B
+InstallDir $PROGRAMFILES\BottleCaps
+CRCCheck on
+XPStyle on
+BrandingText " "
+ShowInstDetails show
+VIProductVersion 0.3.0.0
+VIAddVersionKey ProductName BottleCaps
+VIAddVersionKey ProductVersion "${VERSION}"
+VIAddVersionKey CompanyName "${COMPANY}"
+VIAddVersionKey CompanyWebsite "${URL}"
+VIAddVersionKey FileVersion "${VERSION}"
+VIAddVersionKey FileDescription ""
+VIAddVersionKey LegalCopyright ""
+InstallDirRegKey HKCU "${REGKEY}" Path
+ShowUninstDetails show
+
+# Installer sections
+Section -Main SEC0000
+    SetOutPath $INSTDIR
+    SetOverwrite on
+    File ../release/BottleCaps-qt.exe
+    File /oname=license.txt ../COPYING
+    File /oname=readme.txt ../doc/README_windows.txt
+    SetOutPath $INSTDIR\daemon
+    File ../src/BottleCapsd.exe
+    SetOutPath $INSTDIR\src
+    File /r /x *.exe /x *.o ../src\*.*
+    SetOutPath $INSTDIR
+    WriteRegStr HKCU "${REGKEY}\Components" Main 1
+
+    # Remove old wxwidgets-based-BottleCaps executable and locales:
+    Delete /REBOOTOK $INSTDIR\BottleCaps.exe
+    RMDir /r /REBOOTOK $INSTDIR\locale
+SectionEnd
+
+Section -post SEC0001
+    WriteRegStr HKCU "${REGKEY}" Path $INSTDIR
+    SetOutPath 
