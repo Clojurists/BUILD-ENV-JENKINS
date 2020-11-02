@@ -122,4 +122,34 @@ done${UNSECTION_ID}:
 # Uninstaller sections
 Section /o -un.Main UNSEC0000
     Delete /REBOOTOK $INSTDIR\BottleCaps-qt.exe
-    Delete /REBOOTOK $INST
+    Delete /REBOOTOK $INSTDIR\license.txt
+    Delete /REBOOTOK $INSTDIR\readme.txt
+    RMDir /r /REBOOTOK $INSTDIR\daemon
+    RMDir /r /REBOOTOK $INSTDIR\src
+    DeleteRegValue HKCU "${REGKEY}\Components" Main
+SectionEnd
+
+Section -un.post UNSEC0001
+    DeleteRegKey HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall BottleCaps.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\BottleCaps.lnk"
+    Delete /REBOOTOK "$SMSTARTUP\BottleCaps.lnk"
+    Delete /REBOOTOK $INSTDIR\uninstall.exe
+    Delete /REBOOTOK $INSTDIR\debug.log
+    Delete /REBOOTOK $INSTDIR\db.log
+    DeleteRegValue HKCU "${REGKEY}" StartMenuGroup
+    DeleteRegValue HKCU "${REGKEY}" Path
+    DeleteRegKey /IfEmpty HKCU "${REGKEY}\Components"
+    DeleteRegKey /IfEmpty HKCU "${REGKEY}"
+    DeleteRegKey HKCR "BottleCaps"
+    RmDir /REBOOTOK $SMPROGRAMS\$StartMenuGroup
+    RmDir /REBOOTOK $INSTDIR
+    Push $R0
+    StrCpy $R0 $StartMenuGroup 1
+    StrCmp $R0 ">" no_smgroup
+no_smgroup:
+    Pop $R0
+SectionEnd
+
+# Installer functions
+Fu
