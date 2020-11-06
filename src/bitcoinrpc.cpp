@@ -1,0 +1,378 @@
+
+// Copyright (c) 2010 Satoshi Nakamoto
+// Copyright (c) 2009-2012 The Bitcoin developers
+// Distributed under the MIT/X11 software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include "init.h"
+#include "util.h"
+#include "sync.h"
+#include "ui_interface.h"
+#include "base58.h"
+#include "bitcoinrpc.h"
+#include "db.h"
+
+#undef printf
+#include <boost/asio.hpp>
+#include <boost/asio/ip/v6_only.hpp>
+#include <boost/bind.hpp>
+#include <boost/filesystem.hpp>
+#include <boost/foreach.hpp>
+#include <boost/iostreams/concepts.hpp>
+#include <boost/iostreams/stream.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+#include <boost/asio/ssl.hpp>
+#include <boost/filesystem/fstream.hpp>
+#include <boost/shared_ptr.hpp>
+#include <list>
+
+#define printf OutputDebugStringF
+
+using namespace std;
+using namespace boost;
+using namespace boost::asio;
+using namespace json_spirit;
+
+void ThreadRPCServer2(void* parg);
+
+static std::string strRPCUserColonPass;
+
+const Object emptyobj;
+
+void ThreadRPCServer3(void* parg);
+
+static inline unsigned short GetDefaultRPCPort()
+{
+    return GetBoolArg("-testnet", false) ? 25372 : 15372;
+}
+
+Object JSONRPCError(int code, const string& message)
+{
+    Object error;
+    error.push_back(Pair("code", code));
+    error.push_back(Pair("message", message));
+    return error;
+}
+
+void RPCTypeCheck(const Array& params,
+                  const list<Value_type>& typesExpected,
+                  bool fAllowNull)
+{
+    unsigned int i = 0;
+    BOOST_FOREACH(Value_type t, typesExpected)
+    {
+        if (params.size() <= i)
+            break;
+
+        const Value& v = params[i];
+        if (!((v.type() == t) || (fAllowNull && (v.type() == null_type))))
+        {
+            string err = strprintf("Expected type %s, got %s",
+                                   Value_type_name[t], Value_type_name[v.type()]);
+            throw JSONRPCError(RPC_TYPE_ERROR, err);
+        }
+        i++;
+    }
+}
+
+void RPCTypeCheck(const Object& o,
+                  const map<string, Value_type>& typesExpected,
+                  bool fAllowNull)
+{
+    BOOST_FOREACH(const PAIRTYPE(string, Value_type)& t, typesExpected)
+    {
+        const Value& v = find_value(o, t.first);
+        if (!fAllowNull && v.type() == null_type)
+            throw JSONRPCError(RPC_TYPE_ERROR, strprintf("Missing %s", t.first.c_str()));
+
+        if (!((v.type() == t.second) || (fAllowNull && (v.type() == null_type))))
+        {
+            string err = strprintf("Expected type %s for %s, got %s",
+                                   Value_type_name[t.second], t.first.c_str(), Value_type_name[v.type()]);
+            throw JSONRPCError(RPC_TYPE_ERROR, err);
+        }
+    }
+}
+
+int64 AmountFromValue(const Value& value)
+{
+    double dAmount = value.get_real();
+    if (dAmount <= 0.0 || dAmount > MAX_MONEY)
+        throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
+    int64 nAmount = roundint64(dAmount * COIN);
+    if (!MoneyRange(nAmount))
+        throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
+    return nAmount;
+}
+
+Value ValueFromAmount(int64 amount)
+{
+    return (double)amount / (double)COIN;
+}
+
+std::string HexBits(unsigned int nBits)
+{
+    union {
+        int32_t nBits;
+        char cBits[4];
+    } uBits;
+    uBits.nBits = htonl((int32_t)nBits);
+    return HexStr(BEGIN(uBits.cBits), END(uBits.cBits));
+}
+
+
+///
+/// Note: This interface may still be subject to change.
+///
+
+string CRPCTable::help(string strCommand) const
+{
+    string strRet;
+    set<rpcfn_type> setDone;
+    for (map<string, const CRPCCommand*>::const_iterator mi = mapCommands.begin(); mi != mapCommands.end(); ++mi)
+    {
+        const CRPCCommand *pcmd = mi->second;
+        string strMethod = mi->first;
+        // We already filter duplicates, but these deprecated screw up the sort order
+        if (strMethod.find("label") != string::npos)
+            continue;
+        if (strCommand != "" && strMethod != strCommand)
+            continue;
+        try
+        {
+            Array params;
+            rpcfn_type pfn = pcmd->actor;
+            if (setDone.insert(pfn).second)
+                (*pfn)(params, true);
+        }
+        catch (std::exception& e)
+        {
+            // Help text is returned in an exception
+            string strHelp = string(e.what());
+            if (strCommand == "")
+                if (strHelp.find('\n') != string::npos)
+                    strHelp = strHelp.substr(0, strHelp.find('\n'));
+            strRet += strHelp + "\n";
+        }
+    }
+    if (strRet == "")
+        strRet = strprintf("help: unknown command: %s\n", strCommand.c_str());
+    strRet = strRet.substr(0,strRet.size()-1);
+    return strRet;
+}
+
+Value help(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "help [command]\n"
+            "List commands, or get help for a command.");
+
+    string strCommand;
+    if (params.size() > 0)
+        strCommand = params[0].get_str();
+
+    return tableRPC.help(strCommand);
+}
+
+
+Value stop(const Array& params, bool fHelp)
+{
+    // Accept the deprecated and ignored 'detach' boolean argument
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "stop <detach>\n"
+            "<detach> is true or false to detach the database or not for this stop only\n"
+            "Stop JackpotCoin server (and possibly override the detachdb config value).");
+    // Shutdown will take long enough that the response should get back
+    if (params.size() > 0)
+        bitdb.SetDetach(params[0].get_bool());
+    StartShutdown();
+    return "JackpotCoin server stopping";
+}
+
+
+
+//
+// Call Table
+//
+
+
+static const CRPCCommand vRPCCommands[] =
+{ //  name                      function                 safemd  unlocked
+  //  ------------------------  -----------------------  ------  --------
+    { "help",                   &help,                   true,   true },
+    { "stop",                   &stop,                   true,   true },
+    { "getbestblockhash",       &getbestblockhash,       true,   false },
+    { "getblockcount",          &getblockcount,          true,   false },
+    { "getconnectioncount",     &getconnectioncount,     true,   false },
+    { "getpeerinfo",            &getpeerinfo,            true,   false },
+    { "getdifficulty",          &getdifficulty,          true,   false },
+    { "getgenerate",            &getgenerate,            true,   false },
+    { "setgenerate",            &setgenerate,            true,   false },
+    { "getnostake",             &getnostake,             true,   false },
+    { "setnostake",             &setnostake,             true,   false },
+    { "gethashespersec",        &gethashespersec,        true,   false },
+    { "getinfo",                &getinfo,                true,   false },
+    { "getmininginfo",          &getmininginfo,          true,   false },
+    { "getcurrentjackpot",      &getcurrentjackpot,      true,   false },
+	{ "getnewaddress",          &getnewaddress,          true,   false },
+    { "getnewpubkey",           &getnewpubkey,           true,   false },
+    { "getaccountaddress",      &getaccountaddress,      true,   false },
+    { "setaccount",             &setaccount,             true,   false },
+    { "getaccount",             &getaccount,             false,  false },
+    { "getaddressesbyaccount",  &getaddressesbyaccount,  true,   false },
+    { "sendtoaddress",          &sendtoaddress,          false,  false },
+    { "getreceivedbyaddress",   &getreceivedbyaddress,   false,  false },
+    { "getreceivedbyaccount",   &getreceivedbyaccount,   false,  false },
+    { "listreceivedbyaddress",  &listreceivedbyaddress,  false,  false },
+    { "listreceivedbyaccount",  &listreceivedbyaccount,  false,  false },
+    { "backupwallet",           &backupwallet,           true,   false },
+    { "keypoolrefill",          &keypoolrefill,          true,   false },
+    { "walletpassphrase",       &walletpassphrase,       true,   false },
+    { "walletpassphrasechange", &walletpassphrasechange, false,  false },
+    { "walletlock",             &walletlock,             true,   false },
+    { "encryptwallet",          &encryptwallet,          false,  false },
+    { "validateaddress",        &validateaddress,        true,   false },
+    { "validatepubkey",         &validatepubkey,         true,   false },
+    { "getbalance",             &getbalance,             false,  false },
+    { "move",                   &movecmd,                false,  false },
+    { "sendfrom",               &sendfrom,               false,  false },
+    { "sendmany",               &sendmany,               false,  false },
+    { "addmultisigaddress",     &addmultisigaddress,     false,  false },
+    { "getrawmempool",          &getrawmempool,          true,   false },
+    { "getblock",               &getblock,               false,  false },
+    { "getblockbynumber",       &getblockbynumber,       false,  false },
+    { "getblockhash",           &getblockhash,           false,  false },
+    { "gettransaction",         &gettransaction,         false,  false },
+    { "listtransactions",       &listtransactions,       false,  false },
+    { "listaddressgroupings",   &listaddressgroupings,   false,  false },
+    { "signmessage",            &signmessage,            false,  false },
+    { "verifymessage",          &verifymessage,          false,  false },
+    { "getwork",                &getwork,                true,   false },
+    { "getworkex",              &getworkex,              true,   false },
+    { "listaccounts",           &listaccounts,           false,  false },
+    { "settxfee",               &settxfee,               false,  false },
+    { "getblocktemplate",       &getblocktemplate,       true,   false },
+    { "submitblock",            &submitblock,            false,  false },
+    { "listsinceblock",         &listsinceblock,         false,  false },
+    { "dumpprivkey",            &dumpprivkey,            false,  false },
+    { "importprivkey",          &importprivkey,          false,  false },
+    { "listunspent",            &listunspent,            false,  false },
+    { "getrawtransaction",      &getrawtransaction,      false,  false },
+    { "createrawtransaction",   &createrawtransaction,   false,  false },
+    { "decoderawtransaction",   &decoderawtransaction,   false,  false },
+    { "signrawtransaction",     &signrawtransaction,     false,  false },
+    { "sendrawtransaction",     &sendrawtransaction,     false,  false },
+    { "getcheckpoint",          &getcheckpoint,          true,   false },
+    { "reservebalance",         &reservebalance,         false,  true},
+    { "checkwallet",            &checkwallet,            false,  true},
+    { "repairwallet",           &repairwallet,           false,  true},
+    { "resendtx",               &resendtx,               false,  true},
+    { "makekeypair",            &makekeypair,            false,  true},
+    { "sendalert",              &sendalert,              false,  false},
+};
+
+CRPCTable::CRPCTable()
+{
+    unsigned int vcidx;
+    for (vcidx = 0; vcidx < (sizeof(vRPCCommands) / sizeof(vRPCCommands[0])); vcidx++)
+    {
+        const CRPCCommand *pcmd;
+
+        pcmd = &vRPCCommands[vcidx];
+        mapCommands[pcmd->name] = pcmd;
+    }
+}
+
+const CRPCCommand *CRPCTable::operator[](string name) const
+{
+    map<string, const CRPCCommand*>::const_iterator it = mapCommands.find(name);
+    if (it == mapCommands.end())
+        return NULL;
+    return (*it).second;
+}
+
+//
+// HTTP protocol
+//
+// This ain't Apache.  We're just using HTTP header for the length field
+// and to be compatible with other JSON-RPC implementations.
+//
+
+string HTTPPost(const string& strMsg, const map<string,string>& mapRequestHeaders)
+{
+    ostringstream s;
+    s << "POST / HTTP/1.1\r\n"
+      << "User-Agent: JackpotCoin-json-rpc/" << FormatFullVersion() << "\r\n"
+      << "Host: 127.0.0.1\r\n"
+      << "Content-Type: application/json\r\n"
+      << "Content-Length: " << strMsg.size() << "\r\n"
+      << "Connection: close\r\n"
+      << "Accept: application/json\r\n";
+    BOOST_FOREACH(const PAIRTYPE(string, string)& item, mapRequestHeaders)
+        s << item.first << ": " << item.second << "\r\n";
+    s << "\r\n" << strMsg;
+
+    return s.str();
+}
+
+string rfc1123Time()
+{
+    char buffer[64];
+    time_t now;
+    time(&now);
+    struct tm* now_gmt = gmtime(&now);
+    string locale(setlocale(LC_TIME, NULL));
+    setlocale(LC_TIME, "C"); // we want POSIX (aka "C") weekday/month strings
+    strftime(buffer, sizeof(buffer), "%a, %d %b %Y %H:%M:%S +0000", now_gmt);
+    setlocale(LC_TIME, locale.c_str());
+    return string(buffer);
+}
+
+static string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
+{
+    if (nStatus == HTTP_UNAUTHORIZED)
+        return strprintf("HTTP/1.0 401 Authorization Required\r\n"
+            "Date: %s\r\n"
+            "Server: JackpotCoin-json-rpc/%s\r\n"
+            "WWW-Authenticate: Basic realm=\"jsonrpc\"\r\n"
+            "Content-Type: text/html\r\n"
+            "Content-Length: 296\r\n"
+            "\r\n"
+            "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\r\n"
+            "\"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\r\n"
+            "<HTML>\r\n"
+            "<HEAD>\r\n"
+            "<TITLE>Error</TITLE>\r\n"
+            "<META HTTP-EQUIV='Content-Type' CONTENT='text/html; charset=ISO-8859-1'>\r\n"
+            "</HEAD>\r\n"
+            "<BODY><H1>401 Unauthorized.</H1></BODY>\r\n"
+            "</HTML>\r\n", rfc1123Time().c_str(), FormatFullVersion().c_str());
+    const char *cStatus;
+         if (nStatus == HTTP_OK) cStatus = "OK";
+    else if (nStatus == HTTP_BAD_REQUEST) cStatus = "Bad Request";
+    else if (nStatus == HTTP_FORBIDDEN) cStatus = "Forbidden";
+    else if (nStatus == HTTP_NOT_FOUND) cStatus = "Not Found";
+    else if (nStatus == HTTP_INTERNAL_SERVER_ERROR) cStatus = "Internal Server Error";
+    else cStatus = "";
+    return strprintf(
+            "HTTP/1.1 %d %s\r\n"
+            "Date: %s\r\n"
+            "Connection: %s\r\n"
+            "Content-Length: %"PRIszu"\r\n"
+            "Content-Type: application/json\r\n"
+            "Server: JackpotCoin-json-rpc/%s\r\n"
+            "\r\n"
+            "%s",
+        nStatus,
+        cStatus,
+        rfc1123Time().c_str(),
+        keepalive ? "keep-alive" : "close",
+        strMsg.size(),
+        FormatFullVersion().c_str(),
+        strMsg.c_str());
+}
+
+int ReadHTTPStatus(std::basic_istream<char>& stream, int &proto)
