@@ -18,4 +18,36 @@
 
 class uint256;
 class CBlockIndex;
-class CSyncCh
+class CSyncCheckpoint;
+
+/** Block-chain checkpoints are compiled-in sanity checks.
+ * They are updated every release or three.
+ */
+namespace Checkpoints
+{
+    /** Checkpointing mode */
+    enum CPMode
+    {
+        // Scrict checkpoints policy, perform conflicts verification and resolve conflicts
+        STRICT = 0,
+        // Advisory checkpoints policy, perform conflicts verification but don't try to resolve them
+        ADVISORY = 1,
+        // Permissive checkpoints policy, don't perform any checking
+        PERMISSIVE = 2
+    };
+
+    // Returns true if block passes checkpoint checks
+    bool CheckHardened(int nHeight, const uint256& hash);
+
+    // Return conservative estimate of total number of blocks, 0 if unknown
+    int GetTotalBlocksEstimate();
+
+    // Returns last CBlockIndex* in mapBlockIndex that is a checkpoint
+    CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex);
+
+    extern uint256 hashSyncCheckpoint;
+    extern CSyncCheckpoint checkpointMessage;
+    extern uint256 hashInvalidCheckpoint;
+    extern CCriticalSection cs_hashSyncCheckpoint;
+
+    CBlockIndex* Get
