@@ -50,4 +50,43 @@ namespace Checkpoints
     extern uint256 hashInvalidCheckpoint;
     extern CCriticalSection cs_hashSyncCheckpoint;
 
-    CBlockIndex* Get
+    CBlockIndex* GetLastSyncCheckpoint();
+    bool WriteSyncCheckpoint(const uint256& hashCheckpoint);
+    bool AcceptPendingSyncCheckpoint();
+    uint256 AutoSelectSyncCheckpoint();
+    bool CheckSync(const uint256& hashBlock, const CBlockIndex* pindexPrev);
+    bool WantedByPendingSyncCheckpoint(uint256 hashBlock);
+    bool ResetSyncCheckpoint();
+    void AskForPendingSyncCheckpoint(CNode* pfrom);
+    bool SetCheckpointPrivKey(std::string strPrivKey);
+    bool SendSyncCheckpoint(uint256 hashCheckpoint);
+    bool IsMatureSyncCheckpoint();
+    bool IsSyncCheckpointTooOld(unsigned int nSeconds);
+}
+
+// ppcoin: synchronized checkpoint
+class CUnsignedSyncCheckpoint
+{
+public:
+    int nVersion;
+    uint256 hashCheckpoint;      // checkpoint block
+
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(this->nVersion);
+        nVersion = this->nVersion;
+        READWRITE(hashCheckpoint);
+    )
+
+    void SetNull()
+    {
+        nVersion = 1;
+        hashCheckpoint = 0;
+    }
+
+    std::string ToString() const
+    {
+        return strprintf(
+                "CSyncCheckpoint(\n"
+                "    nVersion       = %d\n"
+                "    hashC
