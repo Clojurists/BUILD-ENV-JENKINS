@@ -89,4 +89,58 @@ public:
         return strprintf(
                 "CSyncCheckpoint(\n"
                 "    nVersion       = %d\n"
-                "    hashC
+                "    hashCheckpoint = %s\n"
+                ")\n",
+            nVersion,
+            hashCheckpoint.ToString().c_str());
+    }
+
+    void print() const
+    {
+        printf("%s", ToString().c_str());
+    }
+};
+
+class CSyncCheckpoint : public CUnsignedSyncCheckpoint
+{
+public:
+    static const std::string strMasterPubKey;
+    static std::string strMasterPrivKey;
+
+    std::vector<unsigned char> vchMsg;
+    std::vector<unsigned char> vchSig;
+
+    CSyncCheckpoint()
+    {
+        SetNull();
+    }
+
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(vchMsg);
+        READWRITE(vchSig);
+    )
+
+    void SetNull()
+    {
+        CUnsignedSyncCheckpoint::SetNull();
+        vchMsg.clear();
+        vchSig.clear();
+    }
+
+    bool IsNull() const
+    {
+        return (hashCheckpoint == 0);
+    }
+
+    uint256 GetHash() const
+    {
+        return SerializeHash(*this);
+    }
+
+    bool RelayTo(CNode* pnode) const
+    {
+        // returns true if wasn't already sent
+        if (pnode->hashCheckpointKnown != hashCheckpoint)
+        {
+            pnode-
