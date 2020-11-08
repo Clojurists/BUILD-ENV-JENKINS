@@ -143,4 +143,15 @@ public:
         // returns true if wasn't already sent
         if (pnode->hashCheckpointKnown != hashCheckpoint)
         {
-            pnode-
+            pnode->hashCheckpointKnown = hashCheckpoint;
+            pnode->PushMessage("checkpoint", *this);
+            return true;
+        }
+        return false;
+    }
+
+    bool CheckSignature();
+    bool ProcessSyncCheckpoint(CNode* pfrom);
+};
+
+#endif
