@@ -561,3 +561,1074 @@ static const sph_u64 T2[] = {
 static const sph_u64 T3[] = {
 	C64e(0x97a5c6c632f4a5f4), C64e(0xeb84f8f86f978497),
 	C64e(0xc799eeee5eb099b0), C64e(0xf78df6f67a8c8d8c),
+	C64e(0xe50dffffe8170d17), C64e(0xb7bdd6d60adcbddc),
+	C64e(0xa7b1dede16c8b1c8), C64e(0x395491916dfc54fc),
+	C64e(0xc050606090f050f0), C64e(0x0403020207050305),
+	C64e(0x87a9cece2ee0a9e0), C64e(0xac7d5656d1877d87),
+	C64e(0xd519e7e7cc2b192b), C64e(0x7162b5b513a662a6),
+	C64e(0x9ae64d4d7c31e631), C64e(0xc39aecec59b59ab5),
+	C64e(0x05458f8f40cf45cf), C64e(0x3e9d1f1fa3bc9dbc),
+	C64e(0x0940898949c040c0), C64e(0xef87fafa68928792),
+	C64e(0xc515efefd03f153f), C64e(0x7febb2b29426eb26),
+	C64e(0x07c98e8ece40c940), C64e(0xed0bfbfbe61d0b1d),
+	C64e(0x82ec41416e2fec2f), C64e(0x7d67b3b31aa967a9),
+	C64e(0xbefd5f5f431cfd1c), C64e(0x8aea45456025ea25),
+	C64e(0x46bf2323f9dabfda), C64e(0xa6f753535102f702),
+	C64e(0xd396e4e445a196a1), C64e(0x2d5b9b9b76ed5bed),
+	C64e(0xeac27575285dc25d), C64e(0xd91ce1e1c5241c24),
+	C64e(0x7aae3d3dd4e9aee9), C64e(0x986a4c4cf2be6abe),
+	C64e(0xd85a6c6c82ee5aee), C64e(0xfc417e7ebdc341c3),
+	C64e(0xf102f5f5f3060206), C64e(0x1d4f838352d14fd1),
+	C64e(0xd05c68688ce45ce4), C64e(0xa2f451515607f407),
+	C64e(0xb934d1d18d5c345c), C64e(0xe908f9f9e1180818),
+	C64e(0xdf93e2e24cae93ae), C64e(0x4d73abab3e957395),
+	C64e(0xc453626297f553f5), C64e(0x543f2a2a6b413f41),
+	C64e(0x100c08081c140c14), C64e(0x3152959563f652f6),
+	C64e(0x8c654646e9af65af), C64e(0x215e9d9d7fe25ee2),
+	C64e(0x6028303048782878), C64e(0x6ea13737cff8a1f8),
+	C64e(0x140f0a0a1b110f11), C64e(0x5eb52f2febc4b5c4),
+	C64e(0x1c090e0e151b091b), C64e(0x483624247e5a365a),
+	C64e(0x369b1b1badb69bb6), C64e(0xa53ddfdf98473d47),
+	C64e(0x8126cdcda76a266a), C64e(0x9c694e4ef5bb69bb),
+	C64e(0xfecd7f7f334ccd4c), C64e(0xcf9feaea50ba9fba),
+	C64e(0x241b12123f2d1b2d), C64e(0x3a9e1d1da4b99eb9),
+	C64e(0xb0745858c49c749c), C64e(0x682e343446722e72),
+	C64e(0x6c2d363641772d77), C64e(0xa3b2dcdc11cdb2cd),
+	C64e(0x73eeb4b49d29ee29), C64e(0xb6fb5b5b4d16fb16),
+	C64e(0x53f6a4a4a501f601), C64e(0xec4d7676a1d74dd7),
+	C64e(0x7561b7b714a361a3), C64e(0xface7d7d3449ce49),
+	C64e(0xa47b5252df8d7b8d), C64e(0xa13edddd9f423e42),
+	C64e(0xbc715e5ecd937193), C64e(0x26971313b1a297a2),
+	C64e(0x57f5a6a6a204f504), C64e(0x6968b9b901b868b8),
+	C64e(0x0000000000000000), C64e(0x992cc1c1b5742c74),
+	C64e(0x80604040e0a060a0), C64e(0xdd1fe3e3c2211f21),
+	C64e(0xf2c879793a43c843), C64e(0x77edb6b69a2ced2c),
+	C64e(0xb3bed4d40dd9bed9), C64e(0x01468d8d47ca46ca),
+	C64e(0xced967671770d970), C64e(0xe44b7272afdd4bdd),
+	C64e(0x33de9494ed79de79), C64e(0x2bd49898ff67d467),
+	C64e(0x7be8b0b09323e823), C64e(0x114a85855bde4ade),
+	C64e(0x6d6bbbbb06bd6bbd), C64e(0x912ac5c5bb7e2a7e),
+	C64e(0x9ee54f4f7b34e534), C64e(0xc116ededd73a163a),
+	C64e(0x17c58686d254c554), C64e(0x2fd79a9af862d762),
+	C64e(0xcc55666699ff55ff), C64e(0x22941111b6a794a7),
+	C64e(0x0fcf8a8ac04acf4a), C64e(0xc910e9e9d9301030),
+	C64e(0x080604040e0a060a), C64e(0xe781fefe66988198),
+	C64e(0x5bf0a0a0ab0bf00b), C64e(0xf0447878b4cc44cc),
+	C64e(0x4aba2525f0d5bad5), C64e(0x96e34b4b753ee33e),
+	C64e(0x5ff3a2a2ac0ef30e), C64e(0xbafe5d5d4419fe19),
+	C64e(0x1bc08080db5bc05b), C64e(0x0a8a050580858a85),
+	C64e(0x7ead3f3fd3ecadec), C64e(0x42bc2121fedfbcdf),
+	C64e(0xe0487070a8d848d8), C64e(0xf904f1f1fd0c040c),
+	C64e(0xc6df6363197adf7a), C64e(0xeec177772f58c158),
+	C64e(0x4575afaf309f759f), C64e(0x84634242e7a563a5),
+	C64e(0x4030202070503050), C64e(0xd11ae5e5cb2e1a2e),
+	C64e(0xe10efdfdef120e12), C64e(0x656dbfbf08b76db7),
+	C64e(0x194c818155d44cd4), C64e(0x30141818243c143c),
+	C64e(0x4c352626795f355f), C64e(0x9d2fc3c3b2712f71),
+	C64e(0x67e1bebe8638e138), C64e(0x6aa23535c8fda2fd),
+	C64e(0x0bcc8888c74fcc4f), C64e(0x5c392e2e654b394b),
+	C64e(0x3d5793936af957f9), C64e(0xaaf25555580df20d),
+	C64e(0xe382fcfc619d829d), C64e(0xf4477a7ab3c947c9),
+	C64e(0x8bacc8c827efacef), C64e(0x6fe7baba8832e732),
+	C64e(0x642b32324f7d2b7d), C64e(0xd795e6e642a495a4),
+	C64e(0x9ba0c0c03bfba0fb), C64e(0x32981919aab398b3),
+	C64e(0x27d19e9ef668d168), C64e(0x5d7fa3a322817f81),
+	C64e(0x88664444eeaa66aa), C64e(0xa87e5454d6827e82),
+	C64e(0x76ab3b3bdde6abe6), C64e(0x16830b0b959e839e),
+	C64e(0x03ca8c8cc945ca45), C64e(0x9529c7c7bc7b297b),
+	C64e(0xd6d36b6b056ed36e), C64e(0x503c28286c443c44),
+	C64e(0x5579a7a72c8b798b), C64e(0x63e2bcbc813de23d),
+	C64e(0x2c1d161631271d27), C64e(0x4176adad379a769a),
+	C64e(0xad3bdbdb964d3b4d), C64e(0xc85664649efa56fa),
+	C64e(0xe84e7474a6d24ed2), C64e(0x281e141436221e22),
+	C64e(0x3fdb9292e476db76), C64e(0x180a0c0c121e0a1e),
+	C64e(0x906c4848fcb46cb4), C64e(0x6be4b8b88f37e437),
+	C64e(0x255d9f9f78e75de7), C64e(0x616ebdbd0fb26eb2),
+	C64e(0x86ef4343692aef2a), C64e(0x93a6c4c435f1a6f1),
+	C64e(0x72a83939dae3a8e3), C64e(0x62a43131c6f7a4f7),
+	C64e(0xbd37d3d38a593759), C64e(0xff8bf2f274868b86),
+	C64e(0xb132d5d583563256), C64e(0x0d438b8b4ec543c5),
+	C64e(0xdc596e6e85eb59eb), C64e(0xafb7dada18c2b7c2),
+	C64e(0x028c01018e8f8c8f), C64e(0x7964b1b11dac64ac),
+	C64e(0x23d29c9cf16dd26d), C64e(0x92e04949723be03b),
+	C64e(0xabb4d8d81fc7b4c7), C64e(0x43faacacb915fa15),
+	C64e(0xfd07f3f3fa090709), C64e(0x8525cfcfa06f256f),
+	C64e(0x8fafcaca20eaafea), C64e(0xf38ef4f47d898e89),
+	C64e(0x8ee947476720e920), C64e(0x2018101038281828),
+	C64e(0xded56f6f0b64d564), C64e(0xfb88f0f073838883),
+	C64e(0x946f4a4afbb16fb1), C64e(0xb8725c5cca967296),
+	C64e(0x70243838546c246c), C64e(0xaef157575f08f108),
+	C64e(0xe6c773732152c752), C64e(0x3551979764f351f3),
+	C64e(0x8d23cbcbae652365), C64e(0x597ca1a125847c84),
+	C64e(0xcb9ce8e857bf9cbf), C64e(0x7c213e3e5d632163),
+	C64e(0x37dd9696ea7cdd7c), C64e(0xc2dc61611e7fdc7f),
+	C64e(0x1a860d0d9c918691), C64e(0x1e850f0f9b948594),
+	C64e(0xdb90e0e04bab90ab), C64e(0xf8427c7cbac642c6),
+	C64e(0xe2c471712657c457), C64e(0x83aacccc29e5aae5),
+	C64e(0x3bd89090e373d873), C64e(0x0c050606090f050f),
+	C64e(0xf501f7f7f4030103), C64e(0x38121c1c2a361236),
+	C64e(0x9fa3c2c23cfea3fe), C64e(0xd45f6a6a8be15fe1),
+	C64e(0x47f9aeaebe10f910), C64e(0xd2d06969026bd06b),
+	C64e(0x2e911717bfa891a8), C64e(0x2958999971e858e8),
+	C64e(0x74273a3a53692769), C64e(0x4eb92727f7d0b9d0),
+	C64e(0xa938d9d991483848), C64e(0xcd13ebebde351335),
+	C64e(0x56b32b2be5ceb3ce), C64e(0x4433222277553355),
+	C64e(0xbfbbd2d204d6bbd6), C64e(0x4970a9a939907090),
+	C64e(0x0e89070787808980), C64e(0x66a73333c1f2a7f2),
+	C64e(0x5ab62d2decc1b6c1), C64e(0x78223c3c5a662266),
+	C64e(0x2a921515b8ad92ad), C64e(0x8920c9c9a9602060),
+	C64e(0x154987875cdb49db), C64e(0x4fffaaaab01aff1a),
+	C64e(0xa0785050d8887888), C64e(0x517aa5a52b8e7a8e),
+	C64e(0x068f0303898a8f8a), C64e(0xb2f859594a13f813),
+	C64e(0x12800909929b809b), C64e(0x34171a1a23391739),
+	C64e(0xcada65651075da75), C64e(0xb531d7d784533153),
+	C64e(0x13c68484d551c651), C64e(0xbbb8d0d003d3b8d3),
+	C64e(0x1fc38282dc5ec35e), C64e(0x52b02929e2cbb0cb),
+	C64e(0xb4775a5ac3997799), C64e(0x3c111e1e2d331133),
+	C64e(0xf6cb7b7b3d46cb46), C64e(0x4bfca8a8b71ffc1f),
+	C64e(0xdad66d6d0c61d661), C64e(0x583a2c2c624e3a4e)
+};
+
+#endif
+
+static const sph_u64 T4[] = {
+	C64e(0xf497a5c6c632f4a5), C64e(0x97eb84f8f86f9784),
+	C64e(0xb0c799eeee5eb099), C64e(0x8cf78df6f67a8c8d),
+	C64e(0x17e50dffffe8170d), C64e(0xdcb7bdd6d60adcbd),
+	C64e(0xc8a7b1dede16c8b1), C64e(0xfc395491916dfc54),
+	C64e(0xf0c050606090f050), C64e(0x0504030202070503),
+	C64e(0xe087a9cece2ee0a9), C64e(0x87ac7d5656d1877d),
+	C64e(0x2bd519e7e7cc2b19), C64e(0xa67162b5b513a662),
+	C64e(0x319ae64d4d7c31e6), C64e(0xb5c39aecec59b59a),
+	C64e(0xcf05458f8f40cf45), C64e(0xbc3e9d1f1fa3bc9d),
+	C64e(0xc00940898949c040), C64e(0x92ef87fafa689287),
+	C64e(0x3fc515efefd03f15), C64e(0x267febb2b29426eb),
+	C64e(0x4007c98e8ece40c9), C64e(0x1ded0bfbfbe61d0b),
+	C64e(0x2f82ec41416e2fec), C64e(0xa97d67b3b31aa967),
+	C64e(0x1cbefd5f5f431cfd), C64e(0x258aea45456025ea),
+	C64e(0xda46bf2323f9dabf), C64e(0x02a6f753535102f7),
+	C64e(0xa1d396e4e445a196), C64e(0xed2d5b9b9b76ed5b),
+	C64e(0x5deac27575285dc2), C64e(0x24d91ce1e1c5241c),
+	C64e(0xe97aae3d3dd4e9ae), C64e(0xbe986a4c4cf2be6a),
+	C64e(0xeed85a6c6c82ee5a), C64e(0xc3fc417e7ebdc341),
+	C64e(0x06f102f5f5f30602), C64e(0xd11d4f838352d14f),
+	C64e(0xe4d05c68688ce45c), C64e(0x07a2f451515607f4),
+	C64e(0x5cb934d1d18d5c34), C64e(0x18e908f9f9e11808),
+	C64e(0xaedf93e2e24cae93), C64e(0x954d73abab3e9573),
+	C64e(0xf5c453626297f553), C64e(0x41543f2a2a6b413f),
+	C64e(0x14100c08081c140c), C64e(0xf63152959563f652),
+	C64e(0xaf8c654646e9af65), C64e(0xe2215e9d9d7fe25e),
+	C64e(0x7860283030487828), C64e(0xf86ea13737cff8a1),
+	C64e(0x11140f0a0a1b110f), C64e(0xc45eb52f2febc4b5),
+	C64e(0x1b1c090e0e151b09), C64e(0x5a483624247e5a36),
+	C64e(0xb6369b1b1badb69b), C64e(0x47a53ddfdf98473d),
+	C64e(0x6a8126cdcda76a26), C64e(0xbb9c694e4ef5bb69),
+	C64e(0x4cfecd7f7f334ccd), C64e(0xbacf9feaea50ba9f),
+	C64e(0x2d241b12123f2d1b), C64e(0xb93a9e1d1da4b99e),
+	C64e(0x9cb0745858c49c74), C64e(0x72682e343446722e),
+	C64e(0x776c2d363641772d), C64e(0xcda3b2dcdc11cdb2),
+	C64e(0x2973eeb4b49d29ee), C64e(0x16b6fb5b5b4d16fb),
+	C64e(0x0153f6a4a4a501f6), C64e(0xd7ec4d7676a1d74d),
+	C64e(0xa37561b7b714a361), C64e(0x49face7d7d3449ce),
+	C64e(0x8da47b5252df8d7b), C64e(0x42a13edddd9f423e),
+	C64e(0x93bc715e5ecd9371), C64e(0xa226971313b1a297),
+	C64e(0x0457f5a6a6a204f5), C64e(0xb86968b9b901b868),
+	C64e(0x0000000000000000), C64e(0x74992cc1c1b5742c),
+	C64e(0xa080604040e0a060), C64e(0x21dd1fe3e3c2211f),
+	C64e(0x43f2c879793a43c8), C64e(0x2c77edb6b69a2ced),
+	C64e(0xd9b3bed4d40dd9be), C64e(0xca01468d8d47ca46),
+	C64e(0x70ced967671770d9), C64e(0xdde44b7272afdd4b),
+	C64e(0x7933de9494ed79de), C64e(0x672bd49898ff67d4),
+	C64e(0x237be8b0b09323e8), C64e(0xde114a85855bde4a),
+	C64e(0xbd6d6bbbbb06bd6b), C64e(0x7e912ac5c5bb7e2a),
+	C64e(0x349ee54f4f7b34e5), C64e(0x3ac116ededd73a16),
+	C64e(0x5417c58686d254c5), C64e(0x622fd79a9af862d7),
+	C64e(0xffcc55666699ff55), C64e(0xa722941111b6a794),
+	C64e(0x4a0fcf8a8ac04acf), C64e(0x30c910e9e9d93010),
+	C64e(0x0a080604040e0a06), C64e(0x98e781fefe669881),
+	C64e(0x0b5bf0a0a0ab0bf0), C64e(0xccf0447878b4cc44),
+	C64e(0xd54aba2525f0d5ba), C64e(0x3e96e34b4b753ee3),
+	C64e(0x0e5ff3a2a2ac0ef3), C64e(0x19bafe5d5d4419fe),
+	C64e(0x5b1bc08080db5bc0), C64e(0x850a8a050580858a),
+	C64e(0xec7ead3f3fd3ecad), C64e(0xdf42bc2121fedfbc),
+	C64e(0xd8e0487070a8d848), C64e(0x0cf904f1f1fd0c04),
+	C64e(0x7ac6df6363197adf), C64e(0x58eec177772f58c1),
+	C64e(0x9f4575afaf309f75), C64e(0xa584634242e7a563),
+	C64e(0x5040302020705030), C64e(0x2ed11ae5e5cb2e1a),
+	C64e(0x12e10efdfdef120e), C64e(0xb7656dbfbf08b76d),
+	C64e(0xd4194c818155d44c), C64e(0x3c30141818243c14),
+	C64e(0x5f4c352626795f35), C64e(0x719d2fc3c3b2712f),
+	C64e(0x3867e1bebe8638e1), C64e(0xfd6aa23535c8fda2),
+	C64e(0x4f0bcc8888c74fcc), C64e(0x4b5c392e2e654b39),
+	C64e(0xf93d5793936af957), C64e(0x0daaf25555580df2),
+	C64e(0x9de382fcfc619d82), C64e(0xc9f4477a7ab3c947),
+	C64e(0xef8bacc8c827efac), C64e(0x326fe7baba8832e7),
+	C64e(0x7d642b32324f7d2b), C64e(0xa4d795e6e642a495),
+	C64e(0xfb9ba0c0c03bfba0), C64e(0xb332981919aab398),
+	C64e(0x6827d19e9ef668d1), C64e(0x815d7fa3a322817f),
+	C64e(0xaa88664444eeaa66), C64e(0x82a87e5454d6827e),
+	C64e(0xe676ab3b3bdde6ab), C64e(0x9e16830b0b959e83),
+	C64e(0x4503ca8c8cc945ca), C64e(0x7b9529c7c7bc7b29),
+	C64e(0x6ed6d36b6b056ed3), C64e(0x44503c28286c443c),
+	C64e(0x8b5579a7a72c8b79), C64e(0x3d63e2bcbc813de2),
+	C64e(0x272c1d161631271d), C64e(0x9a4176adad379a76),
+	C64e(0x4dad3bdbdb964d3b), C64e(0xfac85664649efa56),
+	C64e(0xd2e84e7474a6d24e), C64e(0x22281e141436221e),
+	C64e(0x763fdb9292e476db), C64e(0x1e180a0c0c121e0a),
+	C64e(0xb4906c4848fcb46c), C64e(0x376be4b8b88f37e4),
+	C64e(0xe7255d9f9f78e75d), C64e(0xb2616ebdbd0fb26e),
+	C64e(0x2a86ef4343692aef), C64e(0xf193a6c4c435f1a6),
+	C64e(0xe372a83939dae3a8), C64e(0xf762a43131c6f7a4),
+	C64e(0x59bd37d3d38a5937), C64e(0x86ff8bf2f274868b),
+	C64e(0x56b132d5d5835632), C64e(0xc50d438b8b4ec543),
+	C64e(0xebdc596e6e85eb59), C64e(0xc2afb7dada18c2b7),
+	C64e(0x8f028c01018e8f8c), C64e(0xac7964b1b11dac64),
+	C64e(0x6d23d29c9cf16dd2), C64e(0x3b92e04949723be0),
+	C64e(0xc7abb4d8d81fc7b4), C64e(0x1543faacacb915fa),
+	C64e(0x09fd07f3f3fa0907), C64e(0x6f8525cfcfa06f25),
+	C64e(0xea8fafcaca20eaaf), C64e(0x89f38ef4f47d898e),
+	C64e(0x208ee947476720e9), C64e(0x2820181010382818),
+	C64e(0x64ded56f6f0b64d5), C64e(0x83fb88f0f0738388),
+	C64e(0xb1946f4a4afbb16f), C64e(0x96b8725c5cca9672),
+	C64e(0x6c70243838546c24), C64e(0x08aef157575f08f1),
+	C64e(0x52e6c773732152c7), C64e(0xf33551979764f351),
+	C64e(0x658d23cbcbae6523), C64e(0x84597ca1a125847c),
+	C64e(0xbfcb9ce8e857bf9c), C64e(0x637c213e3e5d6321),
+	C64e(0x7c37dd9696ea7cdd), C64e(0x7fc2dc61611e7fdc),
+	C64e(0x911a860d0d9c9186), C64e(0x941e850f0f9b9485),
+	C64e(0xabdb90e0e04bab90), C64e(0xc6f8427c7cbac642),
+	C64e(0x57e2c471712657c4), C64e(0xe583aacccc29e5aa),
+	C64e(0x733bd89090e373d8), C64e(0x0f0c050606090f05),
+	C64e(0x03f501f7f7f40301), C64e(0x3638121c1c2a3612),
+	C64e(0xfe9fa3c2c23cfea3), C64e(0xe1d45f6a6a8be15f),
+	C64e(0x1047f9aeaebe10f9), C64e(0x6bd2d06969026bd0),
+	C64e(0xa82e911717bfa891), C64e(0xe82958999971e858),
+	C64e(0x6974273a3a536927), C64e(0xd04eb92727f7d0b9),
+	C64e(0x48a938d9d9914838), C64e(0x35cd13ebebde3513),
+	C64e(0xce56b32b2be5ceb3), C64e(0x5544332222775533),
+	C64e(0xd6bfbbd2d204d6bb), C64e(0x904970a9a9399070),
+	C64e(0x800e890707878089), C64e(0xf266a73333c1f2a7),
+	C64e(0xc15ab62d2decc1b6), C64e(0x6678223c3c5a6622),
+	C64e(0xad2a921515b8ad92), C64e(0x608920c9c9a96020),
+	C64e(0xdb154987875cdb49), C64e(0x1a4fffaaaab01aff),
+	C64e(0x88a0785050d88878), C64e(0x8e517aa5a52b8e7a),
+	C64e(0x8a068f0303898a8f), C64e(0x13b2f859594a13f8),
+	C64e(0x9b12800909929b80), C64e(0x3934171a1a233917),
+	C64e(0x75cada65651075da), C64e(0x53b531d7d7845331),
+	C64e(0x5113c68484d551c6), C64e(0xd3bbb8d0d003d3b8),
+	C64e(0x5e1fc38282dc5ec3), C64e(0xcb52b02929e2cbb0),
+	C64e(0x99b4775a5ac39977), C64e(0x333c111e1e2d3311),
+	C64e(0x46f6cb7b7b3d46cb), C64e(0x1f4bfca8a8b71ffc),
+	C64e(0x61dad66d6d0c61d6), C64e(0x4e583a2c2c624e3a)
+};
+
+#if !SPH_SMALL_FOOTPRINT_GROESTL
+
+static const sph_u64 T5[] = {
+	C64e(0xa5f497a5c6c632f4), C64e(0x8497eb84f8f86f97),
+	C64e(0x99b0c799eeee5eb0), C64e(0x8d8cf78df6f67a8c),
+	C64e(0x0d17e50dffffe817), C64e(0xbddcb7bdd6d60adc),
+	C64e(0xb1c8a7b1dede16c8), C64e(0x54fc395491916dfc),
+	C64e(0x50f0c050606090f0), C64e(0x0305040302020705),
+	C64e(0xa9e087a9cece2ee0), C64e(0x7d87ac7d5656d187),
+	C64e(0x192bd519e7e7cc2b), C64e(0x62a67162b5b513a6),
+	C64e(0xe6319ae64d4d7c31), C64e(0x9ab5c39aecec59b5),
+	C64e(0x45cf05458f8f40cf), C64e(0x9dbc3e9d1f1fa3bc),
+	C64e(0x40c00940898949c0), C64e(0x8792ef87fafa6892),
+	C64e(0x153fc515efefd03f), C64e(0xeb267febb2b29426),
+	C64e(0xc94007c98e8ece40), C64e(0x0b1ded0bfbfbe61d),
+	C64e(0xec2f82ec41416e2f), C64e(0x67a97d67b3b31aa9),
+	C64e(0xfd1cbefd5f5f431c), C64e(0xea258aea45456025),
+	C64e(0xbfda46bf2323f9da), C64e(0xf702a6f753535102),
+	C64e(0x96a1d396e4e445a1), C64e(0x5bed2d5b9b9b76ed),
+	C64e(0xc25deac27575285d), C64e(0x1c24d91ce1e1c524),
+	C64e(0xaee97aae3d3dd4e9), C64e(0x6abe986a4c4cf2be),
+	C64e(0x5aeed85a6c6c82ee), C64e(0x41c3fc417e7ebdc3),
+	C64e(0x0206f102f5f5f306), C64e(0x4fd11d4f838352d1),
+	C64e(0x5ce4d05c68688ce4), C64e(0xf407a2f451515607),
+	C64e(0x345cb934d1d18d5c), C64e(0x0818e908f9f9e118),
+	C64e(0x93aedf93e2e24cae), C64e(0x73954d73abab3e95),
+	C64e(0x53f5c453626297f5), C64e(0x3f41543f2a2a6b41),
+	C64e(0x0c14100c08081c14), C64e(0x52f63152959563f6),
+	C64e(0x65af8c654646e9af), C64e(0x5ee2215e9d9d7fe2),
+	C64e(0x2878602830304878), C64e(0xa1f86ea13737cff8),
+	C64e(0x0f11140f0a0a1b11), C64e(0xb5c45eb52f2febc4),
+	C64e(0x091b1c090e0e151b), C64e(0x365a483624247e5a),
+	C64e(0x9bb6369b1b1badb6), C64e(0x3d47a53ddfdf9847),
+	C64e(0x266a8126cdcda76a), C64e(0x69bb9c694e4ef5bb),
+	C64e(0xcd4cfecd7f7f334c), C64e(0x9fbacf9feaea50ba),
+	C64e(0x1b2d241b12123f2d), C64e(0x9eb93a9e1d1da4b9),
+	C64e(0x749cb0745858c49c), C64e(0x2e72682e34344672),
+	C64e(0x2d776c2d36364177), C64e(0xb2cda3b2dcdc11cd),
+	C64e(0xee2973eeb4b49d29), C64e(0xfb16b6fb5b5b4d16),
+	C64e(0xf60153f6a4a4a501), C64e(0x4dd7ec4d7676a1d7),
+	C64e(0x61a37561b7b714a3), C64e(0xce49face7d7d3449),
+	C64e(0x7b8da47b5252df8d), C64e(0x3e42a13edddd9f42),
+	C64e(0x7193bc715e5ecd93), C64e(0x97a226971313b1a2),
+	C64e(0xf50457f5a6a6a204), C64e(0x68b86968b9b901b8),
+	C64e(0x0000000000000000), C64e(0x2c74992cc1c1b574),
+	C64e(0x60a080604040e0a0), C64e(0x1f21dd1fe3e3c221),
+	C64e(0xc843f2c879793a43), C64e(0xed2c77edb6b69a2c),
+	C64e(0xbed9b3bed4d40dd9), C64e(0x46ca01468d8d47ca),
+	C64e(0xd970ced967671770), C64e(0x4bdde44b7272afdd),
+	C64e(0xde7933de9494ed79), C64e(0xd4672bd49898ff67),
+	C64e(0xe8237be8b0b09323), C64e(0x4ade114a85855bde),
+	C64e(0x6bbd6d6bbbbb06bd), C64e(0x2a7e912ac5c5bb7e),
+	C64e(0xe5349ee54f4f7b34), C64e(0x163ac116ededd73a),
+	C64e(0xc55417c58686d254), C64e(0xd7622fd79a9af862),
+	C64e(0x55ffcc55666699ff), C64e(0x94a722941111b6a7),
+	C64e(0xcf4a0fcf8a8ac04a), C64e(0x1030c910e9e9d930),
+	C64e(0x060a080604040e0a), C64e(0x8198e781fefe6698),
+	C64e(0xf00b5bf0a0a0ab0b), C64e(0x44ccf0447878b4cc),
+	C64e(0xbad54aba2525f0d5), C64e(0xe33e96e34b4b753e),
+	C64e(0xf30e5ff3a2a2ac0e), C64e(0xfe19bafe5d5d4419),
+	C64e(0xc05b1bc08080db5b), C64e(0x8a850a8a05058085),
+	C64e(0xadec7ead3f3fd3ec), C64e(0xbcdf42bc2121fedf),
+	C64e(0x48d8e0487070a8d8), C64e(0x040cf904f1f1fd0c),
+	C64e(0xdf7ac6df6363197a), C64e(0xc158eec177772f58),
+	C64e(0x759f4575afaf309f), C64e(0x63a584634242e7a5),
+	C64e(0x3050403020207050), C64e(0x1a2ed11ae5e5cb2e),
+	C64e(0x0e12e10efdfdef12), C64e(0x6db7656dbfbf08b7),
+	C64e(0x4cd4194c818155d4), C64e(0x143c30141818243c),
+	C64e(0x355f4c352626795f), C64e(0x2f719d2fc3c3b271),
+	C64e(0xe13867e1bebe8638), C64e(0xa2fd6aa23535c8fd),
+	C64e(0xcc4f0bcc8888c74f), C64e(0x394b5c392e2e654b),
+	C64e(0x57f93d5793936af9), C64e(0xf20daaf25555580d),
+	C64e(0x829de382fcfc619d), C64e(0x47c9f4477a7ab3c9),
+	C64e(0xacef8bacc8c827ef), C64e(0xe7326fe7baba8832),
+	C64e(0x2b7d642b32324f7d), C64e(0x95a4d795e6e642a4),
+	C64e(0xa0fb9ba0c0c03bfb), C64e(0x98b332981919aab3),
+	C64e(0xd16827d19e9ef668), C64e(0x7f815d7fa3a32281),
+	C64e(0x66aa88664444eeaa), C64e(0x7e82a87e5454d682),
+	C64e(0xabe676ab3b3bdde6), C64e(0x839e16830b0b959e),
+	C64e(0xca4503ca8c8cc945), C64e(0x297b9529c7c7bc7b),
+	C64e(0xd36ed6d36b6b056e), C64e(0x3c44503c28286c44),
+	C64e(0x798b5579a7a72c8b), C64e(0xe23d63e2bcbc813d),
+	C64e(0x1d272c1d16163127), C64e(0x769a4176adad379a),
+	C64e(0x3b4dad3bdbdb964d), C64e(0x56fac85664649efa),
+	C64e(0x4ed2e84e7474a6d2), C64e(0x1e22281e14143622),
+	C64e(0xdb763fdb9292e476), C64e(0x0a1e180a0c0c121e),
+	C64e(0x6cb4906c4848fcb4), C64e(0xe4376be4b8b88f37),
+	C64e(0x5de7255d9f9f78e7), C64e(0x6eb2616ebdbd0fb2),
+	C64e(0xef2a86ef4343692a), C64e(0xa6f193a6c4c435f1),
+	C64e(0xa8e372a83939dae3), C64e(0xa4f762a43131c6f7),
+	C64e(0x3759bd37d3d38a59), C64e(0x8b86ff8bf2f27486),
+	C64e(0x3256b132d5d58356), C64e(0x43c50d438b8b4ec5),
+	C64e(0x59ebdc596e6e85eb), C64e(0xb7c2afb7dada18c2),
+	C64e(0x8c8f028c01018e8f), C64e(0x64ac7964b1b11dac),
+	C64e(0xd26d23d29c9cf16d), C64e(0xe03b92e04949723b),
+	C64e(0xb4c7abb4d8d81fc7), C64e(0xfa1543faacacb915),
+	C64e(0x0709fd07f3f3fa09), C64e(0x256f8525cfcfa06f),
+	C64e(0xafea8fafcaca20ea), C64e(0x8e89f38ef4f47d89),
+	C64e(0xe9208ee947476720), C64e(0x1828201810103828),
+	C64e(0xd564ded56f6f0b64), C64e(0x8883fb88f0f07383),
+	C64e(0x6fb1946f4a4afbb1), C64e(0x7296b8725c5cca96),
+	C64e(0x246c70243838546c), C64e(0xf108aef157575f08),
+	C64e(0xc752e6c773732152), C64e(0x51f33551979764f3),
+	C64e(0x23658d23cbcbae65), C64e(0x7c84597ca1a12584),
+	C64e(0x9cbfcb9ce8e857bf), C64e(0x21637c213e3e5d63),
+	C64e(0xdd7c37dd9696ea7c), C64e(0xdc7fc2dc61611e7f),
+	C64e(0x86911a860d0d9c91), C64e(0x85941e850f0f9b94),
+	C64e(0x90abdb90e0e04bab), C64e(0x42c6f8427c7cbac6),
+	C64e(0xc457e2c471712657), C64e(0xaae583aacccc29e5),
+	C64e(0xd8733bd89090e373), C64e(0x050f0c050606090f),
+	C64e(0x0103f501f7f7f403), C64e(0x123638121c1c2a36),
+	C64e(0xa3fe9fa3c2c23cfe), C64e(0x5fe1d45f6a6a8be1),
+	C64e(0xf91047f9aeaebe10), C64e(0xd06bd2d06969026b),
+	C64e(0x91a82e911717bfa8), C64e(0x58e82958999971e8),
+	C64e(0x276974273a3a5369), C64e(0xb9d04eb92727f7d0),
+	C64e(0x3848a938d9d99148), C64e(0x1335cd13ebebde35),
+	C64e(0xb3ce56b32b2be5ce), C64e(0x3355443322227755),
+	C64e(0xbbd6bfbbd2d204d6), C64e(0x70904970a9a93990),
+	C64e(0x89800e8907078780), C64e(0xa7f266a73333c1f2),
+	C64e(0xb6c15ab62d2decc1), C64e(0x226678223c3c5a66),
+	C64e(0x92ad2a921515b8ad), C64e(0x20608920c9c9a960),
+	C64e(0x49db154987875cdb), C64e(0xff1a4fffaaaab01a),
+	C64e(0x7888a0785050d888), C64e(0x7a8e517aa5a52b8e),
+	C64e(0x8f8a068f0303898a), C64e(0xf813b2f859594a13),
+	C64e(0x809b12800909929b), C64e(0x173934171a1a2339),
+	C64e(0xda75cada65651075), C64e(0x3153b531d7d78453),
+	C64e(0xc65113c68484d551), C64e(0xb8d3bbb8d0d003d3),
+	C64e(0xc35e1fc38282dc5e), C64e(0xb0cb52b02929e2cb),
+	C64e(0x7799b4775a5ac399), C64e(0x11333c111e1e2d33),
+	C64e(0xcb46f6cb7b7b3d46), C64e(0xfc1f4bfca8a8b71f),
+	C64e(0xd661dad66d6d0c61), C64e(0x3a4e583a2c2c624e)
+};
+
+static const sph_u64 T6[] = {
+	C64e(0xf4a5f497a5c6c632), C64e(0x978497eb84f8f86f),
+	C64e(0xb099b0c799eeee5e), C64e(0x8c8d8cf78df6f67a),
+	C64e(0x170d17e50dffffe8), C64e(0xdcbddcb7bdd6d60a),
+	C64e(0xc8b1c8a7b1dede16), C64e(0xfc54fc395491916d),
+	C64e(0xf050f0c050606090), C64e(0x0503050403020207),
+	C64e(0xe0a9e087a9cece2e), C64e(0x877d87ac7d5656d1),
+	C64e(0x2b192bd519e7e7cc), C64e(0xa662a67162b5b513),
+	C64e(0x31e6319ae64d4d7c), C64e(0xb59ab5c39aecec59),
+	C64e(0xcf45cf05458f8f40), C64e(0xbc9dbc3e9d1f1fa3),
+	C64e(0xc040c00940898949), C64e(0x928792ef87fafa68),
+	C64e(0x3f153fc515efefd0), C64e(0x26eb267febb2b294),
+	C64e(0x40c94007c98e8ece), C64e(0x1d0b1ded0bfbfbe6),
+	C64e(0x2fec2f82ec41416e), C64e(0xa967a97d67b3b31a),
+	C64e(0x1cfd1cbefd5f5f43), C64e(0x25ea258aea454560),
+	C64e(0xdabfda46bf2323f9), C64e(0x02f702a6f7535351),
+	C64e(0xa196a1d396e4e445), C64e(0xed5bed2d5b9b9b76),
+	C64e(0x5dc25deac2757528), C64e(0x241c24d91ce1e1c5),
+	C64e(0xe9aee97aae3d3dd4), C64e(0xbe6abe986a4c4cf2),
+	C64e(0xee5aeed85a6c6c82), C64e(0xc341c3fc417e7ebd),
+	C64e(0x060206f102f5f5f3), C64e(0xd14fd11d4f838352),
+	C64e(0xe45ce4d05c68688c), C64e(0x07f407a2f4515156),
+	C64e(0x5c345cb934d1d18d), C64e(0x180818e908f9f9e1),
+	C64e(0xae93aedf93e2e24c), C64e(0x9573954d73abab3e),
+	C64e(0xf553f5c453626297), C64e(0x413f41543f2a2a6b),
+	C64e(0x140c14100c08081c), C64e(0xf652f63152959563),
+	C64e(0xaf65af8c654646e9), C64e(0xe25ee2215e9d9d7f),
+	C64e(0x7828786028303048), C64e(0xf8a1f86ea13737cf),
+	C64e(0x110f11140f0a0a1b), C64e(0xc4b5c45eb52f2feb),
+	C64e(0x1b091b1c090e0e15), C64e(0x5a365a483624247e),
+	C64e(0xb69bb6369b1b1bad), C64e(0x473d47a53ddfdf98),
+	C64e(0x6a266a8126cdcda7), C64e(0xbb69bb9c694e4ef5),
+	C64e(0x4ccd4cfecd7f7f33), C64e(0xba9fbacf9feaea50),
+	C64e(0x2d1b2d241b12123f), C64e(0xb99eb93a9e1d1da4),
+	C64e(0x9c749cb0745858c4), C64e(0x722e72682e343446),
+	C64e(0x772d776c2d363641), C64e(0xcdb2cda3b2dcdc11),
+	C64e(0x29ee2973eeb4b49d), C64e(0x16fb16b6fb5b5b4d),
+	C64e(0x01f60153f6a4a4a5), C64e(0xd74dd7ec4d7676a1),
+	C64e(0xa361a37561b7b714), C64e(0x49ce49face7d7d34),
+	C64e(0x8d7b8da47b5252df), C64e(0x423e42a13edddd9f),
+	C64e(0x937193bc715e5ecd), C64e(0xa297a226971313b1),
+	C64e(0x04f50457f5a6a6a2), C64e(0xb868b86968b9b901),
+	C64e(0x0000000000000000), C64e(0x742c74992cc1c1b5),
+	C64e(0xa060a080604040e0), C64e(0x211f21dd1fe3e3c2),
+	C64e(0x43c843f2c879793a), C64e(0x2ced2c77edb6b69a),
+	C64e(0xd9bed9b3bed4d40d), C64e(0xca46ca01468d8d47),
+	C64e(0x70d970ced9676717), C64e(0xdd4bdde44b7272af),
+	C64e(0x79de7933de9494ed), C64e(0x67d4672bd49898ff),
+	C64e(0x23e8237be8b0b093), C64e(0xde4ade114a85855b),
+	C64e(0xbd6bbd6d6bbbbb06), C64e(0x7e2a7e912ac5c5bb),
+	C64e(0x34e5349ee54f4f7b), C64e(0x3a163ac116ededd7),
+	C64e(0x54c55417c58686d2), C64e(0x62d7622fd79a9af8),
+	C64e(0xff55ffcc55666699), C64e(0xa794a722941111b6),
+	C64e(0x4acf4a0fcf8a8ac0), C64e(0x301030c910e9e9d9),
+	C64e(0x0a060a080604040e), C64e(0x988198e781fefe66),
+	C64e(0x0bf00b5bf0a0a0ab), C64e(0xcc44ccf0447878b4),
+	C64e(0xd5bad54aba2525f0), C64e(0x3ee33e96e34b4b75),
+	C64e(0x0ef30e5ff3a2a2ac), C64e(0x19fe19bafe5d5d44),
+	C64e(0x5bc05b1bc08080db), C64e(0x858a850a8a050580),
+	C64e(0xecadec7ead3f3fd3), C64e(0xdfbcdf42bc2121fe),
+	C64e(0xd848d8e0487070a8), C64e(0x0c040cf904f1f1fd),
+	C64e(0x7adf7ac6df636319), C64e(0x58c158eec177772f),
+	C64e(0x9f759f4575afaf30), C64e(0xa563a584634242e7),
+	C64e(0x5030504030202070), C64e(0x2e1a2ed11ae5e5cb),
+	C64e(0x120e12e10efdfdef), C64e(0xb76db7656dbfbf08),
+	C64e(0xd44cd4194c818155), C64e(0x3c143c3014181824),
+	C64e(0x5f355f4c35262679), C64e(0x712f719d2fc3c3b2),
+	C64e(0x38e13867e1bebe86), C64e(0xfda2fd6aa23535c8),
+	C64e(0x4fcc4f0bcc8888c7), C64e(0x4b394b5c392e2e65),
+	C64e(0xf957f93d5793936a), C64e(0x0df20daaf2555558),
+	C64e(0x9d829de382fcfc61), C64e(0xc947c9f4477a7ab3),
+	C64e(0xefacef8bacc8c827), C64e(0x32e7326fe7baba88),
+	C64e(0x7d2b7d642b32324f), C64e(0xa495a4d795e6e642),
+	C64e(0xfba0fb9ba0c0c03b), C64e(0xb398b332981919aa),
+	C64e(0x68d16827d19e9ef6), C64e(0x817f815d7fa3a322),
+	C64e(0xaa66aa88664444ee), C64e(0x827e82a87e5454d6),
+	C64e(0xe6abe676ab3b3bdd), C64e(0x9e839e16830b0b95),
+	C64e(0x45ca4503ca8c8cc9), C64e(0x7b297b9529c7c7bc),
+	C64e(0x6ed36ed6d36b6b05), C64e(0x443c44503c28286c),
+	C64e(0x8b798b5579a7a72c), C64e(0x3de23d63e2bcbc81),
+	C64e(0x271d272c1d161631), C64e(0x9a769a4176adad37),
+	C64e(0x4d3b4dad3bdbdb96), C64e(0xfa56fac85664649e),
+	C64e(0xd24ed2e84e7474a6), C64e(0x221e22281e141436),
+	C64e(0x76db763fdb9292e4), C64e(0x1e0a1e180a0c0c12),
+	C64e(0xb46cb4906c4848fc), C64e(0x37e4376be4b8b88f),
+	C64e(0xe75de7255d9f9f78), C64e(0xb26eb2616ebdbd0f),
+	C64e(0x2aef2a86ef434369), C64e(0xf1a6f193a6c4c435),
+	C64e(0xe3a8e372a83939da), C64e(0xf7a4f762a43131c6),
+	C64e(0x593759bd37d3d38a), C64e(0x868b86ff8bf2f274),
+	C64e(0x563256b132d5d583), C64e(0xc543c50d438b8b4e),
+	C64e(0xeb59ebdc596e6e85), C64e(0xc2b7c2afb7dada18),
+	C64e(0x8f8c8f028c01018e), C64e(0xac64ac7964b1b11d),
+	C64e(0x6dd26d23d29c9cf1), C64e(0x3be03b92e0494972),
+	C64e(0xc7b4c7abb4d8d81f), C64e(0x15fa1543faacacb9),
+	C64e(0x090709fd07f3f3fa), C64e(0x6f256f8525cfcfa0),
+	C64e(0xeaafea8fafcaca20), C64e(0x898e89f38ef4f47d),
+	C64e(0x20e9208ee9474767), C64e(0x2818282018101038),
+	C64e(0x64d564ded56f6f0b), C64e(0x838883fb88f0f073),
+	C64e(0xb16fb1946f4a4afb), C64e(0x967296b8725c5cca),
+	C64e(0x6c246c7024383854), C64e(0x08f108aef157575f),
+	C64e(0x52c752e6c7737321), C64e(0xf351f33551979764),
+	C64e(0x6523658d23cbcbae), C64e(0x847c84597ca1a125),
+	C64e(0xbf9cbfcb9ce8e857), C64e(0x6321637c213e3e5d),
+	C64e(0x7cdd7c37dd9696ea), C64e(0x7fdc7fc2dc61611e),
+	C64e(0x9186911a860d0d9c), C64e(0x9485941e850f0f9b),
+	C64e(0xab90abdb90e0e04b), C64e(0xc642c6f8427c7cba),
+	C64e(0x57c457e2c4717126), C64e(0xe5aae583aacccc29),
+	C64e(0x73d8733bd89090e3), C64e(0x0f050f0c05060609),
+	C64e(0x030103f501f7f7f4), C64e(0x36123638121c1c2a),
+	C64e(0xfea3fe9fa3c2c23c), C64e(0xe15fe1d45f6a6a8b),
+	C64e(0x10f91047f9aeaebe), C64e(0x6bd06bd2d0696902),
+	C64e(0xa891a82e911717bf), C64e(0xe858e82958999971),
+	C64e(0x69276974273a3a53), C64e(0xd0b9d04eb92727f7),
+	C64e(0x483848a938d9d991), C64e(0x351335cd13ebebde),
+	C64e(0xceb3ce56b32b2be5), C64e(0x5533554433222277),
+	C64e(0xd6bbd6bfbbd2d204), C64e(0x9070904970a9a939),
+	C64e(0x8089800e89070787), C64e(0xf2a7f266a73333c1),
+	C64e(0xc1b6c15ab62d2dec), C64e(0x66226678223c3c5a),
+	C64e(0xad92ad2a921515b8), C64e(0x6020608920c9c9a9),
+	C64e(0xdb49db154987875c), C64e(0x1aff1a4fffaaaab0),
+	C64e(0x887888a0785050d8), C64e(0x8e7a8e517aa5a52b),
+	C64e(0x8a8f8a068f030389), C64e(0x13f813b2f859594a),
+	C64e(0x9b809b1280090992), C64e(0x39173934171a1a23),
+	C64e(0x75da75cada656510), C64e(0x533153b531d7d784),
+	C64e(0x51c65113c68484d5), C64e(0xd3b8d3bbb8d0d003),
+	C64e(0x5ec35e1fc38282dc), C64e(0xcbb0cb52b02929e2),
+	C64e(0x997799b4775a5ac3), C64e(0x3311333c111e1e2d),
+	C64e(0x46cb46f6cb7b7b3d), C64e(0x1ffc1f4bfca8a8b7),
+	C64e(0x61d661dad66d6d0c), C64e(0x4e3a4e583a2c2c62)
+};
+
+static const sph_u64 T7[] = {
+	C64e(0x32f4a5f497a5c6c6), C64e(0x6f978497eb84f8f8),
+	C64e(0x5eb099b0c799eeee), C64e(0x7a8c8d8cf78df6f6),
+	C64e(0xe8170d17e50dffff), C64e(0x0adcbddcb7bdd6d6),
+	C64e(0x16c8b1c8a7b1dede), C64e(0x6dfc54fc39549191),
+	C64e(0x90f050f0c0506060), C64e(0x0705030504030202),
+	C64e(0x2ee0a9e087a9cece), C64e(0xd1877d87ac7d5656),
+	C64e(0xcc2b192bd519e7e7), C64e(0x13a662a67162b5b5),
+	C64e(0x7c31e6319ae64d4d), C64e(0x59b59ab5c39aecec),
+	C64e(0x40cf45cf05458f8f), C64e(0xa3bc9dbc3e9d1f1f),
+	C64e(0x49c040c009408989), C64e(0x68928792ef87fafa),
+	C64e(0xd03f153fc515efef), C64e(0x9426eb267febb2b2),
+	C64e(0xce40c94007c98e8e), C64e(0xe61d0b1ded0bfbfb),
+	C64e(0x6e2fec2f82ec4141), C64e(0x1aa967a97d67b3b3),
+	C64e(0x431cfd1cbefd5f5f), C64e(0x6025ea258aea4545),
+	C64e(0xf9dabfda46bf2323), C64e(0x5102f702a6f75353),
+	C64e(0x45a196a1d396e4e4), C64e(0x76ed5bed2d5b9b9b),
+	C64e(0x285dc25deac27575), C64e(0xc5241c24d91ce1e1),
+	C64e(0xd4e9aee97aae3d3d), C64e(0xf2be6abe986a4c4c),
+	C64e(0x82ee5aeed85a6c6c), C64e(0xbdc341c3fc417e7e),
+	C64e(0xf3060206f102f5f5), C64e(0x52d14fd11d4f8383),
+	C64e(0x8ce45ce4d05c6868), C64e(0x5607f407a2f45151),
+	C64e(0x8d5c345cb934d1d1), C64e(0xe1180818e908f9f9),
+	C64e(0x4cae93aedf93e2e2), C64e(0x3e9573954d73abab),
+	C64e(0x97f553f5c4536262), C64e(0x6b413f41543f2a2a),
+	C64e(0x1c140c14100c0808), C64e(0x63f652f631529595),
+	C64e(0xe9af65af8c654646), C64e(0x7fe25ee2215e9d9d),
+	C64e(0x4878287860283030), C64e(0xcff8a1f86ea13737),
+	C64e(0x1b110f11140f0a0a), C64e(0xebc4b5c45eb52f2f),
+	C64e(0x151b091b1c090e0e), C64e(0x7e5a365a48362424),
+	C64e(0xadb69bb6369b1b1b), C64e(0x98473d47a53ddfdf),
+	C64e(0xa76a266a8126cdcd), C64e(0xf5bb69bb9c694e4e),
+	C64e(0x334ccd4cfecd7f7f), C64e(0x50ba9fbacf9feaea),
+	C64e(0x3f2d1b2d241b1212), C64e(0xa4b99eb93a9e1d1d),
+	C64e(0xc49c749cb0745858), C64e(0x46722e72682e3434),
+	C64e(0x41772d776c2d3636), C64e(0x11cdb2cda3b2dcdc),
+	C64e(0x9d29ee2973eeb4b4), C64e(0x4d16fb16b6fb5b5b),
+	C64e(0xa501f60153f6a4a4), C64e(0xa1d74dd7ec4d7676),
+	C64e(0x14a361a37561b7b7), C64e(0x3449ce49face7d7d),
+	C64e(0xdf8d7b8da47b5252), C64e(0x9f423e42a13edddd),
+	C64e(0xcd937193bc715e5e), C64e(0xb1a297a226971313),
+	C64e(0xa204f50457f5a6a6), C64e(0x01b868b86968b9b9),
+	C64e(0x0000000000000000), C64e(0xb5742c74992cc1c1),
+	C64e(0xe0a060a080604040), C64e(0xc2211f21dd1fe3e3),
+	C64e(0x3a43c843f2c87979), C64e(0x9a2ced2c77edb6b6),
+	C64e(0x0dd9bed9b3bed4d4), C64e(0x47ca46ca01468d8d),
+	C64e(0x1770d970ced96767), C64e(0xafdd4bdde44b7272),
+	C64e(0xed79de7933de9494), C64e(0xff67d4672bd49898),
+	C64e(0x9323e8237be8b0b0), C64e(0x5bde4ade114a8585),
+	C64e(0x06bd6bbd6d6bbbbb), C64e(0xbb7e2a7e912ac5c5),
+	C64e(0x7b34e5349ee54f4f), C64e(0xd73a163ac116eded),
+	C64e(0xd254c55417c58686), C64e(0xf862d7622fd79a9a),
+	C64e(0x99ff55ffcc556666), C64e(0xb6a794a722941111),
+	C64e(0xc04acf4a0fcf8a8a), C64e(0xd9301030c910e9e9),
+	C64e(0x0e0a060a08060404), C64e(0x66988198e781fefe),
+	C64e(0xab0bf00b5bf0a0a0), C64e(0xb4cc44ccf0447878),
+	C64e(0xf0d5bad54aba2525), C64e(0x753ee33e96e34b4b),
+	C64e(0xac0ef30e5ff3a2a2), C64e(0x4419fe19bafe5d5d),
+	C64e(0xdb5bc05b1bc08080), C64e(0x80858a850a8a0505),
+	C64e(0xd3ecadec7ead3f3f), C64e(0xfedfbcdf42bc2121),
+	C64e(0xa8d848d8e0487070), C64e(0xfd0c040cf904f1f1),
+	C64e(0x197adf7ac6df6363), C64e(0x2f58c158eec17777),
+	C64e(0x309f759f4575afaf), C64e(0xe7a563a584634242),
+	C64e(0x7050305040302020), C64e(0xcb2e1a2ed11ae5e5),
+	C64e(0xef120e12e10efdfd), C64e(0x08b76db7656dbfbf),
+	C64e(0x55d44cd4194c8181), C64e(0x243c143c30141818),
+	C64e(0x795f355f4c352626), C64e(0xb2712f719d2fc3c3),
+	C64e(0x8638e13867e1bebe), C64e(0xc8fda2fd6aa23535),
+	C64e(0xc74fcc4f0bcc8888), C64e(0x654b394b5c392e2e),
+	C64e(0x6af957f93d579393), C64e(0x580df20daaf25555),
+	C64e(0x619d829de382fcfc), C64e(0xb3c947c9f4477a7a),
+	C64e(0x27efacef8bacc8c8), C64e(0x8832e7326fe7baba),
+	C64e(0x4f7d2b7d642b3232), C64e(0x42a495a4d795e6e6),
+	C64e(0x3bfba0fb9ba0c0c0), C64e(0xaab398b332981919),
+	C64e(0xf668d16827d19e9e), C64e(0x22817f815d7fa3a3),
+	C64e(0xeeaa66aa88664444), C64e(0xd6827e82a87e5454),
+	C64e(0xdde6abe676ab3b3b), C64e(0x959e839e16830b0b),
+	C64e(0xc945ca4503ca8c8c), C64e(0xbc7b297b9529c7c7),
+	C64e(0x056ed36ed6d36b6b), C64e(0x6c443c44503c2828),
+	C64e(0x2c8b798b5579a7a7), C64e(0x813de23d63e2bcbc),
+	C64e(0x31271d272c1d1616), C64e(0x379a769a4176adad),
+	C64e(0x964d3b4dad3bdbdb), C64e(0x9efa56fac8566464),
+	C64e(0xa6d24ed2e84e7474), C64e(0x36221e22281e1414),
+	C64e(0xe476db763fdb9292), C64e(0x121e0a1e180a0c0c),
+	C64e(0xfcb46cb4906c4848), C64e(0x8f37e4376be4b8b8),
+	C64e(0x78e75de7255d9f9f), C64e(0x0fb26eb2616ebdbd),
+	C64e(0x692aef2a86ef4343), C64e(0x35f1a6f193a6c4c4),
+	C64e(0xdae3a8e372a83939), C64e(0xc6f7a4f762a43131),
+	C64e(0x8a593759bd37d3d3), C64e(0x74868b86ff8bf2f2),
+	C64e(0x83563256b132d5d5), C64e(0x4ec543c50d438b8b),
+	C64e(0x85eb59ebdc596e6e), C64e(0x18c2b7c2afb7dada),
+	C64e(0x8e8f8c8f028c0101), C64e(0x1dac64ac7964b1b1),
+	C64e(0xf16dd26d23d29c9c), C64e(0x723be03b92e04949),
+	C64e(0x1fc7b4c7abb4d8d8), C64e(0xb915fa1543faacac),
+	C64e(0xfa090709fd07f3f3), C64e(0xa06f256f8525cfcf),
+	C64e(0x20eaafea8fafcaca), C64e(0x7d898e89f38ef4f4),
+	C64e(0x6720e9208ee94747), C64e(0x3828182820181010),
+	C64e(0x0b64d564ded56f6f), C64e(0x73838883fb88f0f0),
+	C64e(0xfbb16fb1946f4a4a), C64e(0xca967296b8725c5c),
+	C64e(0x546c246c70243838), C64e(0x5f08f108aef15757),
+	C64e(0x2152c752e6c77373), C64e(0x64f351f335519797),
+	C64e(0xae6523658d23cbcb), C64e(0x25847c84597ca1a1),
+	C64e(0x57bf9cbfcb9ce8e8), C64e(0x5d6321637c213e3e),
+	C64e(0xea7cdd7c37dd9696), C64e(0x1e7fdc7fc2dc6161),
+	C64e(0x9c9186911a860d0d), C64e(0x9b9485941e850f0f),
+	C64e(0x4bab90abdb90e0e0), C64e(0xbac642c6f8427c7c),
+	C64e(0x2657c457e2c47171), C64e(0x29e5aae583aacccc),
+	C64e(0xe373d8733bd89090), C64e(0x090f050f0c050606),
+	C64e(0xf4030103f501f7f7), C64e(0x2a36123638121c1c),
+	C64e(0x3cfea3fe9fa3c2c2), C64e(0x8be15fe1d45f6a6a),
+	C64e(0xbe10f91047f9aeae), C64e(0x026bd06bd2d06969),
+	C64e(0xbfa891a82e911717), C64e(0x71e858e829589999),
+	C64e(0x5369276974273a3a), C64e(0xf7d0b9d04eb92727),
+	C64e(0x91483848a938d9d9), C64e(0xde351335cd13ebeb),
+	C64e(0xe5ceb3ce56b32b2b), C64e(0x7755335544332222),
+	C64e(0x04d6bbd6bfbbd2d2), C64e(0x399070904970a9a9),
+	C64e(0x878089800e890707), C64e(0xc1f2a7f266a73333),
+	C64e(0xecc1b6c15ab62d2d), C64e(0x5a66226678223c3c),
+	C64e(0xb8ad92ad2a921515), C64e(0xa96020608920c9c9),
+	C64e(0x5cdb49db15498787), C64e(0xb01aff1a4fffaaaa),
+	C64e(0xd8887888a0785050), C64e(0x2b8e7a8e517aa5a5),
+	C64e(0x898a8f8a068f0303), C64e(0x4a13f813b2f85959),
+	C64e(0x929b809b12800909), C64e(0x2339173934171a1a),
+	C64e(0x1075da75cada6565), C64e(0x84533153b531d7d7),
+	C64e(0xd551c65113c68484), C64e(0x03d3b8d3bbb8d0d0),
+	C64e(0xdc5ec35e1fc38282), C64e(0xe2cbb0cb52b02929),
+	C64e(0xc3997799b4775a5a), C64e(0x2d3311333c111e1e),
+	C64e(0x3d46cb46f6cb7b7b), C64e(0xb71ffc1f4bfca8a8),
+	C64e(0x0c61d661dad66d6d), C64e(0x624e3a4e583a2c2c)
+};
+
+#endif
+
+#define DECL_STATE_SMALL \
+	sph_u64 H[8];
+
+#define READ_STATE_SMALL(sc)   do { \
+		memcpy(H, (sc)->state.wide, sizeof H); \
+	} while (0)
+
+#define WRITE_STATE_SMALL(sc)   do { \
+		memcpy((sc)->state.wide, H, sizeof H); \
+	} while (0)
+
+#if SPH_SMALL_FOOTPRINT_GROESTL
+
+#define RSTT(d, a, b0, b1, b2, b3, b4, b5, b6, b7)   do { \
+		t[d] = T0[B64_0(a[b0])] \
+			^ R64(T0[B64_1(a[b1])],  8) \
+			^ R64(T0[B64_2(a[b2])], 16) \
+			^ R64(T0[B64_3(a[b3])], 24) \
+			^ T4[B64_4(a[b4])] \
+			^ R64(T4[B64_5(a[b5])],  8) \
+			^ R64(T4[B64_6(a[b6])], 16) \
+			^ R64(T4[B64_7(a[b7])], 24); \
+	} while (0)
+
+#else
+
+#define RSTT(d, a, b0, b1, b2, b3, b4, b5, b6, b7)   do { \
+		t[d] = T0[B64_0(a[b0])] \
+			^ T1[B64_1(a[b1])] \
+			^ T2[B64_2(a[b2])] \
+			^ T3[B64_3(a[b3])] \
+			^ T4[B64_4(a[b4])] \
+			^ T5[B64_5(a[b5])] \
+			^ T6[B64_6(a[b6])] \
+			^ T7[B64_7(a[b7])]; \
+	} while (0)
+
+#endif
+
+#define ROUND_SMALL_P(a, r)   do { \
+		sph_u64 t[8]; \
+		a[0] ^= PC64(0x00, r); \
+		a[1] ^= PC64(0x10, r); \
+		a[2] ^= PC64(0x20, r); \
+		a[3] ^= PC64(0x30, r); \
+		a[4] ^= PC64(0x40, r); \
+		a[5] ^= PC64(0x50, r); \
+		a[6] ^= PC64(0x60, r); \
+		a[7] ^= PC64(0x70, r); \
+		RSTT(0, a, 0, 1, 2, 3, 4, 5, 6, 7); \
+		RSTT(1, a, 1, 2, 3, 4, 5, 6, 7, 0); \
+		RSTT(2, a, 2, 3, 4, 5, 6, 7, 0, 1); \
+		RSTT(3, a, 3, 4, 5, 6, 7, 0, 1, 2); \
+		RSTT(4, a, 4, 5, 6, 7, 0, 1, 2, 3); \
+		RSTT(5, a, 5, 6, 7, 0, 1, 2, 3, 4); \
+		RSTT(6, a, 6, 7, 0, 1, 2, 3, 4, 5); \
+		RSTT(7, a, 7, 0, 1, 2, 3, 4, 5, 6); \
+		a[0] = t[0]; \
+		a[1] = t[1]; \
+		a[2] = t[2]; \
+		a[3] = t[3]; \
+		a[4] = t[4]; \
+		a[5] = t[5]; \
+		a[6] = t[6]; \
+		a[7] = t[7]; \
+	} while (0)
+
+#define ROUND_SMALL_Q(a, r)   do { \
+		sph_u64 t[8]; \
+		a[0] ^= QC64(0x00, r); \
+		a[1] ^= QC64(0x10, r); \
+		a[2] ^= QC64(0x20, r); \
+		a[3] ^= QC64(0x30, r); \
+		a[4] ^= QC64(0x40, r); \
+		a[5] ^= QC64(0x50, r); \
+		a[6] ^= QC64(0x60, r); \
+		a[7] ^= QC64(0x70, r); \
+		RSTT(0, a, 1, 3, 5, 7, 0, 2, 4, 6); \
+		RSTT(1, a, 2, 4, 6, 0, 1, 3, 5, 7); \
+		RSTT(2, a, 3, 5, 7, 1, 2, 4, 6, 0); \
+		RSTT(3, a, 4, 6, 0, 2, 3, 5, 7, 1); \
+		RSTT(4, a, 5, 7, 1, 3, 4, 6, 0, 2); \
+		RSTT(5, a, 6, 0, 2, 4, 5, 7, 1, 3); \
+		RSTT(6, a, 7, 1, 3, 5, 6, 0, 2, 4); \
+		RSTT(7, a, 0, 2, 4, 6, 7, 1, 3, 5); \
+		a[0] = t[0]; \
+		a[1] = t[1]; \
+		a[2] = t[2]; \
+		a[3] = t[3]; \
+		a[4] = t[4]; \
+		a[5] = t[5]; \
+		a[6] = t[6]; \
+		a[7] = t[7]; \
+	} while (0)
+
+#if SPH_SMALL_FOOTPRINT_GROESTL
+
+#define PERM_SMALL_P(a)   do { \
+		int r; \
+		for (r = 0; r < 10; r ++) \
+			ROUND_SMALL_P(a, r); \
+	} while (0)
+
+#define PERM_SMALL_Q(a)   do { \
+		int r; \
+		for (r = 0; r < 10; r ++) \
+			ROUND_SMALL_Q(a, r); \
+	} while (0)
+
+#else
+
+/*
+ * Apparently, unrolling more than that confuses GCC, resulting in
+ * lower performance, even though L1 cache would be no problem.
+ */
+#define PERM_SMALL_P(a)   do { \
+		int r; \
+		for (r = 0; r < 10; r += 2) { \
+			ROUND_SMALL_P(a, r + 0); \
+			ROUND_SMALL_P(a, r + 1); \
+		} \
+	} while (0)
+
+#define PERM_SMALL_Q(a)   do { \
+		int r; \
+		for (r = 0; r < 10; r += 2) { \
+			ROUND_SMALL_Q(a, r + 0); \
+			ROUND_SMALL_Q(a, r + 1); \
+		} \
+	} while (0)
+
+#endif
+
+#define COMPRESS_SMALL   do { \
+		sph_u64 g[8], m[8]; \
+		size_t u; \
+		for (u = 0; u < 8; u ++) { \
+			m[u] = dec64e_aligned(buf + (u << 3)); \
+			g[u] = m[u] ^ H[u]; \
+		} \
+		PERM_SMALL_P(g); \
+		PERM_SMALL_Q(m); \
+		for (u = 0; u < 8; u ++) \
+			H[u] ^= g[u] ^ m[u]; \
+	} while (0)
+
+#define FINAL_SMALL   do { \
+		sph_u64 x[8]; \
+		size_t u; \
+		memcpy(x, H, sizeof x); \
+		PERM_SMALL_P(x); \
+		for (u = 0; u < 8; u ++) \
+			H[u] ^= x[u]; \
+	} while (0)
+
+#define DECL_STATE_BIG \
+	sph_u64 H[16];
+
+#define READ_STATE_BIG(sc)   do { \
+		memcpy(H, (sc)->state.wide, sizeof H); \
+	} while (0)
+
+#define WRITE_STATE_BIG(sc)   do { \
+		memcpy((sc)->state.wide, H, sizeof H); \
+	} while (0)
+
+#if SPH_SMALL_FOOTPRINT_GROESTL
+
+#define RBTT(d, a, b0, b1, b2, b3, b4, b5, b6, b7)   do { \
+		t[d] = T0[B64_0(a[b0])] \
+			^ R64(T0[B64_1(a[b1])],  8) \
+			^ R64(T0[B64_2(a[b2])], 16) \
+			^ R64(T0[B64_3(a[b3])], 24) \
+			^ T4[B64_4(a[b4])] \
+			^ R64(T4[B64_5(a[b5])],  8) \
+			^ R64(T4[B64_6(a[b6])], 16) \
+			^ R64(T4[B64_7(a[b7])], 24); \
+	} while (0)
+
+#else
+
+#define RBTT(d, a, b0, b1, b2, b3, b4, b5, b6, b7)   do { \
+		t[d] = T0[B64_0(a[b0])] \
+			^ T1[B64_1(a[b1])] \
+			^ T2[B64_2(a[b2])] \
+			^ T3[B64_3(a[b3])] \
+			^ T4[B64_4(a[b4])] \
+			^ T5[B64_5(a[b5])] \
+			^ T6[B64_6(a[b6])] \
+			^ T7[B64_7(a[b7])]; \
+	} while (0)
+
+#endif
+
+#if SPH_SMALL_FOOTPRINT_GROESTL
+
+#define ROUND_BIG_P(a, r)   do { \
+		sph_u64 t[16]; \
+		size_t u; \
+		a[0x0] ^= PC64(0x00, r); \
+		a[0x1] ^= PC64(0x10, r); \
+		a[0x2] ^= PC64(0x20, r); \
+		a[0x3] ^= PC64(0x30, r); \
+		a[0x4] ^= PC64(0x40, r); \
+		a[0x5] ^= PC64(0x50, r); \
+		a[0x6] ^= PC64(0x60, r); \
+		a[0x7] ^= PC64(0x70, r); \
+		a[0x8] ^= PC64(0x80, r); \
+		a[0x9] ^= PC64(0x90, r); \
+		a[0xA] ^= PC64(0xA0, r); \
+		a[0xB] ^= PC64(0xB0, r); \
+		a[0xC] ^= PC64(0xC0, r); \
+		a[0xD] ^= PC64(0xD0, r); \
+		a[0xE] ^= PC64(0xE0, r); \
+		a[0xF] ^= PC64(0xF0, r); \
+		for (u = 0; u < 16; u += 4) { \
+			RBTT(u + 0, a, u + 0, (u + 1) & 0xF, \
+				(u + 2) & 0xF, (u + 3) & 0xF, (u + 4) & 0xF, \
+				(u + 5) & 0xF, (u + 6) & 0xF, (u + 11) & 0xF); \
+			RBTT(u + 1, a, u + 1, (u + 2) & 0xF, \
+				(u + 3) & 0xF, (u + 4) & 0xF, (u + 5) & 0xF, \
+				(u + 6) & 0xF, (u + 7) & 0xF, (u + 12) & 0xF); \
+			RBTT(u + 2, a, u + 2, (u + 3) & 0xF, \
+				(u + 4) & 0xF, (u + 5) & 0xF, (u + 6) & 0xF, \
+				(u + 7) & 0xF, (u + 8) & 0xF, (u + 13) & 0xF); \
+			RBTT(u + 3, a, u + 3, (u + 4) & 0xF, \
+				(u + 5) & 0xF, (u + 6) & 0xF, (u + 7) & 0xF, \
+				(u + 8) & 0xF, (u + 9) & 0xF, (u + 14) & 0xF); \
+		} \
+		memcpy(a, t, sizeof t); \
+	} while (0)
+
+#define ROUND_BIG_Q(a, r)   do { \
+		sph_u64 t[16]; \
+		size_t u; \
+		a[0x0] ^= QC64(0x00, r); \
+		a[0x1] ^= QC64(0x10, r); \
+		a[0x2] ^= QC64(0x20, r); \
+		a[0x3] ^= QC64(0x30, r); \
+		a[0x4] ^= QC64(0x40, r); \
+		a[0x5] ^= QC64(0x50, r); \
+		a[0x6] ^= QC64(0x60, r); \
+		a[0x7] ^= QC64(0x70, r); \
+		a[0x8] ^= QC64(0x80, r); \
+		a[0x9] ^= QC64(0x90, r); \
+		a[0xA] ^= QC64(0xA0, r); \
+		a[0xB] ^= QC64(0xB0, r); \
+		a[0xC] ^= QC64(0xC0, r); \
+		a[0xD] ^= QC64(0xD0, r); \
+		a[0xE] ^= QC64(0xE0, r); \
+		a[0xF] ^= QC64(0xF0, r); \
+		for (u = 0; u < 16; u += 4) { \
+			RBTT(u + 0, a, (u + 1) & 0xF, (u + 3) & 0xF, \
+				(u + 5) & 0xF, (u + 11) & 0xF, (u + 0) & 0xF, \
+				(u + 2) & 0xF, (u + 4) & 0xF, (u + 6) & 0xF); \
+			RBTT(u + 1, a, (u + 2) & 0xF, (u + 4) & 0xF, \
+				(u + 6) & 0xF, (u + 12) & 0xF, (u + 1) & 0xF, \
+				(u + 3) & 0xF, (u + 5) & 0xF, (u + 7) & 0xF); \
+			RBTT(u + 2, a, (u + 3) & 0xF, (u + 5) & 0xF, \
+				(u + 7) & 0xF, (u + 13) & 0xF, (u + 2) & 0xF, \
+				(u + 4) & 0xF, (u + 6) & 0xF, (u + 8) & 0xF); \
+			RBTT(u + 3, a, (u + 4) & 0xF, (u + 6) & 0xF, \
+				(u + 8) & 0xF, (u + 14) & 0xF, (u + 3) & 0xF, \
+				(u + 5) & 0xF, (u + 7) & 0xF, (u + 9) & 0xF); \
+		} \
+		memcpy(a, t, sizeof t); \
+	} while (0)
+
+#else
+
+#define ROUND_BIG_P(a, r)   do { \
+		sph_u64 t[16]; \
+		a[0x0] ^= PC64(0x00, r); \
+		a[0x1] ^= PC64(0x10, r); \
+		a[0x2] ^= PC64(0x20, r); \
+		a[0x3] ^= PC64(0x30, r); \
+		a[0x4] ^= PC64(0x40, r); \
+		a[0x5] ^= PC64(0x50, r); \
+		a[0x6] ^= PC64(0x60, r); \
+		a[0x7] ^= PC64(0x70, r); \
+		a[0x8] ^= PC64(0x80, r); \
+		a[0x9] ^= PC64(0x90, r); \
+		a[0xA] ^= PC64(0xA0, r); \
+		a[0xB] ^= PC64(0xB0, r); \
+		a[0xC] ^= PC64(0xC0, r); \
+		a[0xD] ^= PC64(0xD0, r); \
+		a[0xE] ^= PC64(0xE0, r); \
+		a[0xF] ^= PC64(0xF0, r); \
+		RBTT(0x0, a, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0xB); \
+		RBTT(0x1, a, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0xC); \
+		RBTT(0x2, a, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0xD); \
+		RBTT(0x3, a, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xE); \
+		RBTT(0x4, a, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA, 0xF); \
+		RBTT(0x5, a, 0x5, 0x6, 0x7, 0x8, 0x9, 0xA, 0xB, 0x0); \
+		RBTT(0x6, a, 0x6, 0x7, 0x8, 0x9, 0xA, 0xB, 0xC, 0x1); \
+		RBTT(0x7, a, 0x7, 0x8, 0x9, 0xA, 0xB, 0xC, 0xD, 0x2); \
+		RBTT(0x8, a, 0x8, 0x9, 0xA, 0xB, 0xC, 0xD, 0xE, 0x3); \
+		RBTT(0x9, a, 0x9, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF, 0x4); \
+		RBTT(0xA, a, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF, 0x0, 0x5); \
+		RBTT(0xB, a, 0xB, 0xC, 0xD, 0xE, 0xF, 0x0, 0x1, 0x6); \
+		RBTT(0xC, a, 0xC, 0xD, 0xE, 0xF, 0x0, 0x1, 0x2, 0x7); \
+		RBTT(0xD, a, 0xD, 0xE, 0xF, 0x0, 0x1, 0x2, 0x3, 0x8); \
+		RBTT(0xE, a, 0xE, 0xF, 0x0, 0x1, 0x2, 0x3, 0x4, 0x9); \
+		RBTT(0xF, a, 0xF, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0xA); \
+		a[0x0] = t[0x0]; \
+		a[0x1] = t[0x1]; \
+		a[0x2] = t[0x2]; \
+		a[0x3] = t[0x3]; \
+		a[0x4] = t[0x4]; \
+		a[0x5] = t[0x5]; \
+		a[0x6] = t[0x6]; \
+		a[0x7] = t[0x7]; \
+		a[0x8] = t[0x8]; \
+		a[0x9] = t[0x9]; \
+		a[0xA] = t[0xA]; \
+		a[0xB] = t[0xB]; \
+		a[0xC] = t[0xC]; \
+		a[0xD] = t[0xD]; \
+		a[0xE] = t[0xE]; \
+		a[0xF] = t[0xF]; \
+	} while (0)
+
+#define ROUND_BIG_Q(a, r)   do { \
+		sph_u64 t[16]; \
+		a[0x0] ^= QC64(0x00, r); \
+		a[0x1] ^= QC64(0x10, r); \
+		a[0x2] ^= QC64(0x20, r); \
+		a[0x3] ^= QC64(0x30, r); \
+		a[0x4] ^= QC64(0x40, r); \
+		a[0x5] ^= QC64(0x50, r); \
+		a[0x6] ^= QC64(0x60, r); \
+		a[0x7] ^= QC64(0x70, r); \
+		a[0x8] ^= QC64(0x80, r); \
+		a[0x9] ^= QC64(0x90, r); \
+		a[0xA] ^= QC64(0xA0, r); \
+		a[0xB] ^= QC64(0xB0, r); \
+		a[0xC] ^= QC64(0xC0, r); \
+		a[0xD] ^= QC64(0xD0, r); \
+		a[0xE] ^= QC64(0xE0, r); \
+		a[0xF] ^= QC64(0xF0, r); \
+		RBTT(0x0, a, 0x1, 0x3, 0x5, 0xB, 0x0, 0x2, 0x4, 0x6); \
+		RBTT(0x1, a, 0x2, 0x4, 0x6, 0xC, 0x1, 0x3, 0x5, 0x7); \
+		RBTT(0x2, a, 0x3, 0x5, 0x7, 0xD, 0x2, 0x4, 0x6, 0x8); \
+		RBTT(0x3, a, 0x4, 0x6, 0x8, 0xE, 0x3, 0x5, 0x7, 0x9); \
+		RBTT(0x4, a, 0x5, 0x7, 0x9, 0xF, 0x4, 0x6, 0x8, 0xA); \
+		RBTT(0x5, a, 0x6, 0x8, 0xA, 0x0, 0x5, 0x7, 0x9, 0xB); \
+		RBTT(0x6, a, 0x7, 0x9, 0xB, 0x1, 0x6, 0x8, 0xA, 0xC); \
+		RBTT(0x7, a, 0x8, 0xA, 0xC, 0x2, 0x7, 0x9, 0xB, 0xD); \
+		RBTT(0x8, a, 0x9, 0xB, 0xD, 0x3, 0x8, 0xA, 0xC, 0xE); \
+		RBTT(0x9, a, 0xA, 0xC, 0xE, 0x4, 0x9, 0xB, 0xD, 0xF); \
+		RBTT(0xA, a, 0xB, 0xD, 0xF, 0x5, 0xA, 0xC, 0xE, 0x0); \
+		RBTT(0xB, a, 0xC, 0xE, 0x0, 0x6, 0xB, 0xD, 0xF, 0x1); \
+		RBTT(0xC, a, 0xD, 0xF, 0x1, 0x7, 0xC, 0xE, 0x0, 0x2); \
+		RBTT(0xD, a, 0xE, 0x0, 0x2, 0x8, 0xD, 0xF, 0x1, 0x3); \
+		RBTT(0xE, a, 0xF, 0x1, 0x3, 0x9, 0xE, 0x0, 0x2, 0x4); \
+		RBTT(0xF, a, 0x0, 0x2, 0x4, 0xA, 0xF, 0x1, 0x3, 0x5); \
+		a[0x0] = t[0x0]; \
+		a[0x1] = t[0x1]; \
+		a[0x2] = t[0x2]; \
+		a[0x3] = t[0x3]; \
+		a[0x4] = t[0x4]; \
+		a[0x5] = t[0x5]; \
+		a[0x6] = t[0x6]; \
+		a[0x7] = t[0x7]; \
+		a[0x8] = t[0x8]; \
+		a[0x9] = t[0x9]; \
+		a[0xA] = t[0xA]; \
+		a[0xB] = t[0xB]; \
+		a[0xC] = t[0xC]; \
+		a[0xD] = t[0xD]; \
+		a[0xE] = t[0xE]; \
+		a[0xF] = t[0xF]; \
+	} while (0)
+
+#endif
+
+#define PERM_BIG_P(a)   do { \
+		int r; \
+		for (r = 0; r < 14; r += 2) { \
+			ROUND_BIG_P(a, r + 0); \
+			ROUND_BIG_P(a, r + 1); \
+		} \
+	} while (0)
+
+#define PERM_BIG_Q(a)   do { \
+		int r; \
+		for (r = 0; r < 14; r += 2) { \
+			ROUND_BIG_Q(a, r + 0); \
+			ROUND_BIG_Q(a, r + 1); \
+		} \
+	} while (0)
+
+/* obsolete
+#if SPH_SMALL_FOOTPRINT_GROESTL
+
+#define COMPRESS_BIG   do { \
+		sph_u64 g[16], m[16], *ya; \
+		const sph_u64 *yc; \
+		size_t u; \
+		int i; \
+		for (u = 0; u < 16; u ++) { \
+			m[u] = dec64e_aligned(buf + (u << 3)); \
+			g[u] = m[u] ^ H[u]; \
+		} \
+		ya = g; \
+		yc = CP; \
+		for (i = 0; i < 2; i ++) { \
+			PERM_BIG(ya, yc); \
+			ya = m; \
+			yc = CQ; \
+		} \
+		for (u = 0; u < 16; u ++) { \
+			H[u] ^= g[u] ^ m[u]; \
