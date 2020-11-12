@@ -12,4 +12,57 @@
 #include "checkpoints.h"
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
-#include <boost/fil
+#include <boost/filesystem/convenience.hpp>
+#include <boost/interprocess/sync/file_lock.hpp>
+#include <boost/algorithm/string/predicate.hpp>
+#include <openssl/crypto.h>
+
+#ifndef WIN32
+#include <signal.h>
+#endif
+
+
+using namespace std;
+using namespace boost;
+
+CWallet* pwalletMain;
+CClientUIInterface uiInterface;
+std::string strWalletFileName;
+
+unsigned int nDerivationMethodIndex;
+enum Checkpoints::CPMode CheckpointsMode;
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Shutdown
+//
+
+void ExitTimeout(void* parg)
+{
+#ifdef WIN32
+    MilliSleep(5000);
+    ExitProcess(0);
+#endif
+}
+
+void StartShutdown()
+{
+#ifdef QT_GUI
+    // ensure we leave the Qt main loop for a clean GUI exit (Shutdown() is called in bitcoin.cpp afterwards)
+    uiInterface.QueueShutdown();
+#else
+    // Without UI, Shutdown() can simply be started in a new thread
+    NewThread(Shutdown, NULL);
+#endif
+}
+
+void Shutdown(void* parg)
+{
+    static CCriticalSection cs_Shutdown;
+    static bool fTaken;
+
+    // Make this thread recognisable as the shutdown thread
+    RenameThread("jackpotcoin-shutoff");
+
+    bool 
