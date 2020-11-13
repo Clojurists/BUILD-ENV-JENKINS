@@ -65,4 +65,56 @@ void Shutdown(void* parg)
     // Make this thread recognisable as the shutdown thread
     RenameThread("jackpotcoin-shutoff");
 
-    bool 
+    bool fFirstThread = false;
+    {
+        TRY_LOCK(cs_Shutdown, lockShutdown);
+        if (lockShutdown)
+        {
+            fFirstThread = !fTaken;
+            fTaken = true;
+        }
+    }
+    static bool fExit;
+    if (fFirstThread)
+    {
+        fShutdown = true;
+        nTransactionsUpdated++;
+        bitdb.Flush(false);
+        StopNode();
+        bitdb.Flush(true);
+        boost::filesystem::remove(GetPidFile());
+        UnregisterWallet(pwalletMain);
+        delete pwalletMain;
+        NewThread(ExitTimeout, NULL);
+        MilliSleep(50);
+        printf("JackpotCoin exited\n\n");
+        fExit = true;
+#ifndef QT_GUI
+        // ensure non-UI client gets exited here, but let Bitcoin-Qt reach 'return 0;' in bitcoin.cpp
+        exit(0);
+#endif
+    }
+    else
+    {
+        while (!fExit)
+            MilliSleep(500);
+        MilliSleep(100);
+        ExitThread(0);
+    }
+}
+
+void HandleSIGTERM(int)
+{
+    fRequestShutdown = true;
+}
+
+void HandleSIGHUP(int)
+{
+    fReopenDebugLog = true;
+}
+
+
+
+
+
+///////////////////
