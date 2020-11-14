@@ -145,4 +145,45 @@ bool AppInit(int argc, char* argv[])
             std::string strUsage = _("JackpotCoin version") + " " + FormatFullVersion() + "\n\n" +
                 _("Usage:") + "\n" +
                   "  JackpotCoind [options]                     " + "\n" +
-                  "  JackpotCoind [options] <command> [params]  " + _("Send command to -server or JackpotCoind") + 
+                  "  JackpotCoind [options] <command> [params]  " + _("Send command to -server or JackpotCoind") + "\n" +
+                  "  JackpotCoind [options] help                " + _("List commands") + "\n" +
+                  "  JackpotCoind [options] help <command>      " + _("Get help for a command") + "\n";
+
+            strUsage += "\n" + HelpMessage();
+
+            fprintf(stdout, "%s", strUsage.c_str());
+            return false;
+        }
+
+        // Command-line RPC
+        for (int i = 1; i < argc; i++)
+            if (!IsSwitchChar(argv[i][0]) && !boost::algorithm::istarts_with(argv[i], "JackpotCoin:"))
+                fCommandLine = true;
+
+        if (fCommandLine)
+        {
+            int ret = CommandLineRPC(argc, argv);
+            exit(ret);
+        }
+
+        fRet = AppInit2();
+    }
+    catch (std::exception& e) {
+        PrintException(&e, "AppInit()");
+    } catch (...) {
+        PrintException(NULL, "AppInit()");
+    }
+    if (!fRet)
+        Shutdown(NULL);
+    return fRet;
+}
+
+extern void noui_connect();
+int main(int argc, char* argv[])
+{
+    bool fRet = false;
+
+    // Connect bitcoind signal handlers
+    noui_connect();
+
+    fRet
