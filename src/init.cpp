@@ -186,4 +186,43 @@ int main(int argc, char* argv[])
     // Connect bitcoind signal handlers
     noui_connect();
 
-    fRet
+    fRet = AppInit(argc, argv);
+
+    if (fRet && fDaemon)
+        return 0;
+
+    return 1;
+}
+#endif
+
+bool static InitError(const std::string &str)
+{
+    uiInterface.ThreadSafeMessageBox(str, _("JackpotCoin"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+    return false;
+}
+
+bool static InitWarning(const std::string &str)
+{
+    uiInterface.ThreadSafeMessageBox(str, _("JackpotCoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+    return true;
+}
+
+
+bool static Bind(const CService &addr, bool fError = true) {
+    if (IsLimited(addr))
+        return false;
+    std::string strError;
+    if (!BindListenPort(addr, strError)) {
+        if (fError)
+            return InitError(strError);
+        return false;
+    }
+    return true;
+}
+
+// Core-specific options shared between UI and daemon
+std::string HelpMessage()
+{
+    string strUsage = _("Options:") + "\n" +
+        "  -?                     " + _("This help message") + "\n" +
+        "  -conf=<file>           " + _("Specify configuration file 
