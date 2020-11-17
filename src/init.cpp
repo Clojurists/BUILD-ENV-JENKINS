@@ -247,4 +247,15 @@ std::string HelpMessage()
         "  -onlynet=<net>         " + _("Only connect to nodes in network <net> (IPv4, IPv6 or Tor)") + "\n" +
         "  -discover              " + _("Discover own IP address (default: 1 when listening and no -externalip)") + "\n" +
         "  -irc                   " + _("Find peers using internet relay chat (default: 1)") + "\n" +
-        "  -listen   
+        "  -listen                " + _("Accept connections from outside (default: 1 if no -proxy or -connect)") + "\n" +
+        "  -bind=<addr>           " + _("Bind to given address. Use [host]:port notation for IPv6") + "\n" +
+        "  -dnsseed               " + _("Find peers using DNS lookup (default: 0)") + "\n" +
+        "  -cppolicy              " + _("Sync checkpoints policy (default: strict)") + "\n" +
+        "  -nosynccheckpoints     " + _("Disable sync checkpoints (default: 0)") + "\n" +
+        "  -banscore=<n>          " + _("Threshold for disconnecting misbehaving peers (default: 100)") + "\n" +
+        "  -bantime=<n>           " + _("Number of seconds to keep misbehaving peers from reconnecting (default: 86400)") + "\n" +
+        "  -maxreceivebuffer=<n>  " + _("Maximum per-connection receive buffer, <n>*1000 bytes (default: 5000)") + "\n" +
+        "  -maxsendbuffer=<n>     " + _("Maximum per-connection send buffer, <n>*1000 bytes (default: 1000)") + "\n" +
+#ifdef USE_UPNP
+#if USE_UPNP
+        "  -upnp                  " + _("Use UPnP to map the listening port (default: 1 when listening)
