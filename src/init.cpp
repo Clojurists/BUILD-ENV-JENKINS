@@ -276,4 +276,16 @@ std::string HelpMessage()
         "  -debug                 " + _("Output extra debugging information.") + "\n" +
         "  -debughigh             " + _("Output detail extra debugging information.") + "\n" +
         "  -debughash             " + _("Output hashing debugging information.") + "\n" +        
-        "  -debugnet              " + _("Output extra network deb
+        "  -debugnet              " + _("Output extra network debugging information") + "\n" +
+        "  -logtimestamps         " + _("Prepend debug output with timestamp") + "\n" +
+        "  -shrinkdebugfile       " + _("Shrink debug.log file on client startup (default: 1 when no -debug)") + "\n" +
+        "  -printtoconsole        " + _("Send trace/debug info to console instead of debug.log file") + "\n" +
+#ifdef WIN32
+        "  -printtodebugger       " + _("Send trace/debug info to debugger") + "\n" +
+#endif
+        "  -rpcuser=<user>        " + _("Username for JSON-RPC connections") + "\n" +
+        "  -rpcpassword=<pw>      " + _("Password for JSON-RPC connections") + "\n" +
+        "  -rpcport=<port>        " + _("Listen for JSON-RPC connections on <port> (default: 15372 or testnet: 25372)") + "\n" +
+        "  -rpcallowip=<ip>       " + _("Allow JSON-RPC connections from specified IP address") + "\n" +
+        "  -rpcconnect=<ip>       " + _("Send commands to node running on <ip> (default: 127.0.0.1)") + "\n" +
+        "  -blocknotify=<cmd>     " + _("Execute command when the best block changes (%s in cmd is rep
