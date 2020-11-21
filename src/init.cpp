@@ -346,4 +346,45 @@ bool AppInit2()
     // Clean shutdown on SIGTERM
     struct sigaction sa;
     sa.sa_handler = HandleSIGTERM;
-    sigemptyset(&sa
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGTERM, &sa, NULL);
+    sigaction(SIGINT, &sa, NULL);
+
+    // Reopen debug.log on SIGHUP
+    struct sigaction sa_hup;
+    sa_hup.sa_handler = HandleSIGHUP;
+    sigemptyset(&sa_hup.sa_mask);
+    sa_hup.sa_flags = 0;
+    sigaction(SIGHUP, &sa_hup, NULL);
+#endif
+
+    // ********************************************************* Step 2: parameter interactions
+
+    CheckpointsMode = Checkpoints::STRICT;
+    std::string strCpMode = GetArg("-cppolicy", "strict");
+
+    if (strCpMode == "strict")
+    {
+        CheckpointsMode = Checkpoints::STRICT;
+    }
+    else if (strCpMode == "advisory")
+    {
+        CheckpointsMode = Checkpoints::ADVISORY;
+    }
+    else if (strCpMode == "permissive")
+    {
+        CheckpointsMode = Checkpoints::PERMISSIVE;
+    }
+
+
+    nDerivationMethodIndex = 0;
+
+
+    fTestNet = GetBoolArg("-testnet");
+    if (fTestNet) {
+        SoftSetBoolArg("-irc", true);
+    }
+
+    if (mapArgs.count("-bind")) {
+        // when specifying an explicit binding address, you want to listen 
