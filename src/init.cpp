@@ -419,4 +419,50 @@ bool AppInit2()
         SoftSetBoolArg("-rescan", true);
     }
 
-    // ****************************************
+    // ********************************************************* Step 3: parameter-to-internal-flags
+
+    fDebug     = GetBoolArg("-debug");
+    fDebugHigh = GetBoolArg("-debughigh");
+    fDebugHash = GetBoolArg("-debughash");
+
+    if (fDebug)
+    {
+        fDebugNet = true;
+    }
+    else
+    {
+        fDebugNet = GetBoolArg("-debugnet");
+    }
+
+    bitdb.SetDetach(GetBoolArg("-detachdb", false));
+
+#if !defined(WIN32) && !defined(QT_GUI)
+    fDaemon = GetBoolArg("-daemon");
+#else
+    fDaemon = false;
+#endif
+
+    if (fDaemon)
+    {
+        fServer = true;
+    }
+    else
+    {
+        fServer = GetBoolArg("-server");
+    }
+    
+    /* force fServer when running without GUI */
+#if !defined(QT_GUI)
+    fServer = true;
+#endif
+
+    fPrintCheckPoint = GetBoolArg("-printcheckpoint");
+    fPrintToConsole = GetBoolArg("-printtoconsole");
+    fPrintToDebugger = GetBoolArg("-printtodebugger");
+    fLogTimestamps = GetBoolArg("-logtimestamps");
+
+    if (mapArgs.count("-timeout"))
+    {
+        int nNewTimeout = GetArg("-timeout", 5000);
+        if (nNewTimeout > 0 && nNewTimeout < 600000)
+            nConnectTimeout = nNewTi
