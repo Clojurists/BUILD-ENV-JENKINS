@@ -387,4 +387,36 @@ bool AppInit2()
     }
 
     if (mapArgs.count("-bind")) {
-        // when specifying an explicit binding address, you want to listen 
+        // when specifying an explicit binding address, you want to listen on it
+        // even when -connect or -proxy is specified
+        SoftSetBoolArg("-listen", true);
+    }
+
+    if (mapArgs.count("-connect") && mapMultiArgs["-connect"].size() > 0) {
+        // when only connecting to trusted nodes, do not seed via DNS, or listen by default
+        SoftSetBoolArg("-dnsseed", false);
+        SoftSetBoolArg("-listen", false);
+    }
+
+    if (mapArgs.count("-proxy")) {
+        // to protect privacy, do not listen by default if a proxy server is specified
+        SoftSetBoolArg("-listen", false);
+    }
+
+    if (!GetBoolArg("-listen", true)) {
+        // do not map ports or try to retrieve public IP when not listening (pointless)
+        SoftSetBoolArg("-upnp", false);
+        SoftSetBoolArg("-discover", false);
+    }
+
+    if (mapArgs.count("-externalip")) {
+        // if an explicit public IP is specified, do not try to find others
+        SoftSetBoolArg("-discover", false);
+    }
+
+    if (GetBoolArg("-salvagewallet")) {
+        // Rewrite just private keys: rescan to find transactions
+        SoftSetBoolArg("-rescan", true);
+    }
+
+    // ****************************************
