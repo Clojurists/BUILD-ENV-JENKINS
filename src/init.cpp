@@ -544,4 +544,26 @@ bool AppInit2()
 
     if (!bitdb.Open(GetDataDir()))
     {
-        string msg = strprintf(_("E
+        string msg = strprintf(_("Error initializing database environment %s!"
+                                 " To recover, BACKUP THAT DIRECTORY, then remove"
+                                 " everything from it except for wallet.dat."), strDataDir.c_str());
+        return InitError(msg);
+    }
+
+    if (GetBoolArg("-salvagewallet"))
+    {
+        // Recover readable keypairs:
+        if (!CWalletDB::Recover(bitdb, strWalletFileName, true))
+            return false;
+    }
+
+    if (filesystem::exists(GetDataDir() / strWalletFileName))
+    {
+        CDBEnv::VerifyResult r = bitdb.Verify(strWalletFileName, CWalletDB::Recover);
+        if (r == CDBEnv::RECOVER_OK)
+        {
+            string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
+                                     " Original wallet.dat saved as wallet.{timestamp}.bak in %s; if"
+                                     " your balance or transactions are incorrect you should"
+                                     " restore from a backup."), strDataDir.c_str());
+            uiInterface.ThreadSafeMessageBox(msg, _("JackpotCoin"), CClientUIInterface::OK | CC
