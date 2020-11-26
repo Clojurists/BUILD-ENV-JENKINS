@@ -743,4 +743,37 @@ bool AppInit2()
         for (map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.begin(); mi != mapBlockIndex.end(); ++mi)
         {
             uint256 hash = (*mi).first;
-            if (strncmp(hash.ToString().c_str(), strMatch.c_str(), strMatch.size()) =
+            if (strncmp(hash.ToString().c_str(), strMatch.c_str(), strMatch.size()) == 0)
+            {
+                CBlockIndex* pindex = (*mi).second;
+                CBlock block;
+                block.ReadFromDisk(pindex);
+                block.BuildMerkleTree();
+                block.print();
+                printf("\n");
+                nFound++;
+            }
+        }
+        if (nFound == 0)
+            printf("No blocks matching %s were found\n", strMatch.c_str());
+        return false;
+    }
+
+    // ********************************************************* Step 8: load wallet
+
+    uiInterface.InitMessage(_("Loading wallet..."));
+    printf("Loading wallet...\n");
+    nStart = GetTimeMillis();
+    bool fFirstRun = true;
+    pwalletMain = new CWallet(strWalletFileName);
+    DBErrors nLoadWalletRet = pwalletMain->LoadWallet(fFirstRun);
+    
+    if (nLoadWalletRet != DB_LOAD_OK)
+    {
+        if (nLoadWalletRet == DB_CORRUPT)
+        {
+            strErrors << _("Error loading wallet.dat: Wallet corrupted") << "\n";
+        }
+        else if (nLoadWalletRet == DB_NONCRITICAL_ERROR)
+        {
+            string msg(_("Warning: error rea
