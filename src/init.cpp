@@ -834,4 +834,35 @@ bool AppInit2()
         }
     }
 
-    printf("error while loadi
+    printf("error while loading wallet : (%s)\n", strErrors.str().c_str());
+    printf("wallet loading time : %15"PRI64d"ms\n", GetTimeMillis() - nStart);
+
+    RegisterWallet(pwalletMain);
+
+    CBlockIndex *pindexRescan = pindexBest;
+    if (GetBoolArg("-rescan"))
+    {
+        pindexRescan = pindexGenesisBlock;
+    }
+    else
+    {
+        CWalletDB walletdb(strWalletFileName);
+        CBlockLocator locator;
+        if (walletdb.ReadBestBlock(locator))
+        {
+            pindexRescan = locator.GetBlockIndex();
+        }
+    }
+
+    if ((pindexBest != pindexRescan) && pindexBest && pindexRescan && (pindexBest->nHeight > pindexRescan->nHeight))
+    {
+        uiInterface.InitMessage(_("Rescanning..."));
+        printf("Rescanning last %i blocks (from block %i)...\n", pindexBest->nHeight - pindexRescan->nHeight, pindexRescan->nHeight);
+        nStart = GetTimeMillis();
+        pwalletMain->ScanForWalletTransactions(pindexRescan, true);
+        printf(" rescan      %15"PRI64d"ms\n", GetTimeMillis() - nStart);
+    }
+
+    // ********************************************************* Step 9: import blocks
+
+    if (mapArgs.co
