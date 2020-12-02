@@ -802,4 +802,36 @@ bool AppInit2()
         // the -upgradewallet without argument case
         if (nMaxVersion == 0)
         {
-            pri
+            printf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
+            nMaxVersion = CLIENT_VERSION;
+            // permanently upgrade the wallet immediately
+            pwalletMain->SetMinVersion(FEATURE_LATEST);
+        }
+        else
+        {
+            printf("Allowing wallet upgrade up to %i\n", nMaxVersion);
+        }
+        if (nMaxVersion < pwalletMain->GetVersion())
+        {
+            strErrors << _("Cannot downgrade wallet") << "\n";
+        }
+        pwalletMain->SetMaxVersion(nMaxVersion);
+    }
+
+    if (fFirstRun)
+    {
+        // Create new keyUser and set as default key
+        RandAddSeedPerfmon();
+        CPubKey newDefaultKey;
+        if (!pwalletMain->GetKeyFromPool(newDefaultKey, false))
+        {
+            strErrors << _("Cannot initialize keypool") << "\n";
+        }
+        pwalletMain->SetDefaultKey(newDefaultKey);
+        if (!pwalletMain->SetAddressBookName(pwalletMain->vchDefaultKey.GetID(), ""))
+        {
+            strErrors << _("Cannot write default address") << "\n";
+        }
+    }
+
+    printf("error while loadi
