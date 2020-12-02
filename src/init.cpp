@@ -865,4 +865,36 @@ bool AppInit2()
 
     // ********************************************************* Step 9: import blocks
 
-    if (mapArgs.co
+    if (mapArgs.count("-loadblock"))
+    {
+        uiInterface.InitMessage(_("Importing blockchain data file."));
+
+        BOOST_FOREACH(string strFile, mapMultiArgs["-loadblock"])
+        {
+            FILE *file = fopen(strFile.c_str(), "rb");
+            if (file)
+                LoadExternalBlockFile(file);
+        }
+        exit(0);
+    }
+
+    filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
+    if (filesystem::exists(pathBootstrap)) {
+        uiInterface.InitMessage(_("Importing bootstrap blockchain data file."));
+
+        FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
+        if (file) {
+            filesystem::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
+            LoadExternalBlockFile(file);
+            RenameOver(pathBootstrap, pathBootstrapOld);
+        }
+    }
+
+    // ********************************************************* Step 10: load peers
+
+    uiInterface.InitMessage(_("Loading addresses..."));
+    printf("Loading addresses...\n");
+    nStart = GetTimeMillis();
+
+    {
+        CAddrDB ad
