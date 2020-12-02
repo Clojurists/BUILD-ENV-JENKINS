@@ -897,4 +897,34 @@ bool AppInit2()
     nStart = GetTimeMillis();
 
     {
-        CAddrDB ad
+        CAddrDB adb;
+        if (!adb.Read(addrman))
+            printf("Invalid or missing peers.dat; recreating\n");
+    }
+
+    printf("Loaded %i addresses from peers.dat  %"PRI64d"ms\n",
+           addrman.size(), GetTimeMillis() - nStart);
+
+    // ********************************************************* Step 11: start node
+
+    if (!CheckDiskSpace())
+    {
+        return false;
+    }
+    
+    RandAddSeedPerfmon();
+
+    //// debug print
+    printf("mapBlockIndex.size() = %"PRIszu"\n",   mapBlockIndex.size());
+    printf("nBestHeight = %d\n",            nBestHeight);
+    printf("setKeyPool.size() = %"PRIszu"\n",      pwalletMain->setKeyPool.size());
+    printf("mapWallet.size() = %"PRIszu"\n",       pwalletMain->mapWallet.size());
+    printf("mapAddressBook.size() = %"PRIszu"\n",  pwalletMain->mapAddressBook.size());
+
+    if (!NewThread(StartNode, NULL))
+        InitError(_("Error: could not start node"));
+
+    if (fServer)
+        NewThread(ThreadRPCServer, NULL);
+
+    // ****************************************************
