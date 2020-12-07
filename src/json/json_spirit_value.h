@@ -44,4 +44,33 @@ namespace json_spirit
         Value_impl( const Object&      value );
         Value_impl( const Array&       value );
         Value_impl( bool               value );
-        Valu
+        Value_impl( int                value );
+        Value_impl( boost::int64_t     value );
+        Value_impl( boost::uint64_t    value );
+        Value_impl( double             value );
+
+        Value_impl( const Value_impl& other );
+
+        bool operator==( const Value_impl& lhs ) const;
+
+        Value_impl& operator=( const Value_impl& lhs );
+
+        Value_type type() const;
+
+        bool is_uint64() const;
+        bool is_null() const;
+
+        const String_type& get_str()    const;
+        const Object&      get_obj()    const;
+        const Array&       get_array()  const;
+        bool               get_bool()   const;
+        int                get_int()    const;
+        boost::int64_t     get_int64()  const;
+        boost::uint64_t    get_uint64() const;
+        double             get_real()   const;
+
+        Object& get_obj();
+        Array&  get_array();
+
+        template< typename T > T get_value() const;  // example usage: int    i = value.get_value< int >();
+                                                     // or         
