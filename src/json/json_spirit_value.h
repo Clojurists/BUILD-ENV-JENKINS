@@ -113,4 +113,49 @@ namespace json_spirit
         typedef Value_impl< Config_vector > Value_type;
         typedef Pair_impl < Config_vector > Pair_type;
         typedef std::vector< Value_type > Array_type;
-        typedef std:
+        typedef std::vector< Pair_type > Object_type;
+
+        static Value_type& add( Object_type& obj, const String_type& name, const Value_type& value )
+        {
+            obj.push_back( Pair_type( name , value ) );
+
+            return obj.back().value_;
+        }
+                
+        static String_type get_name( const Pair_type& pair )
+        {
+            return pair.name_;
+        }
+                
+        static Value_type get_value( const Pair_type& pair )
+        {
+            return pair.value_;
+        }
+    };
+
+    // typedefs for ASCII
+
+    typedef Config_vector< std::string > Config;
+
+    typedef Config::Value_type  Value;
+    typedef Config::Pair_type   Pair;
+    typedef Config::Object_type Object;
+    typedef Config::Array_type  Array;
+
+    // typedefs for Unicode
+
+#ifndef BOOST_NO_STD_WSTRING
+
+    typedef Config_vector< std::wstring > wConfig;
+
+    typedef wConfig::Value_type  wValue;
+    typedef wConfig::Pair_type   wPair;
+    typedef wConfig::Object_type wObject;
+    typedef wConfig::Array_type  wArray;
+#endif
+
+    // map objects
+
+    template< class String >
+    struct Config_map
+    {
