@@ -73,4 +73,44 @@ namespace json_spirit
         Array&  get_array();
 
         template< typename T > T get_value() const;  // example usage: int    i = value.get_value< int >();
-                                                     // or         
+                                                     // or             double d = value.get_value< double >();
+
+        static const Value_impl null;
+
+    private:
+
+        void check_type( const Value_type vtype ) const;
+
+        typedef boost::variant< String_type, 
+                                boost::recursive_wrapper< Object >, boost::recursive_wrapper< Array >, 
+                                bool, boost::int64_t, double > Variant;
+
+        Value_type type_;
+        Variant v_;
+        bool is_uint64_;
+    };
+
+    // vector objects
+
+    template< class Config >
+    struct Pair_impl
+    {
+        typedef typename Config::String_type String_type;
+        typedef typename Config::Value_type Value_type;
+
+        Pair_impl( const String_type& name, const Value_type& value );
+
+        bool operator==( const Pair_impl& lhs ) const;
+
+        String_type name_;
+        Value_type value_;
+    };
+
+    template< class String >
+    struct Config_vector
+    {
+        typedef String String_type;
+        typedef Value_impl< Config_vector > Value_type;
+        typedef Pair_impl < Config_vector > Pair_type;
+        typedef std::vector< Value_type > Array_type;
+        typedef std:
