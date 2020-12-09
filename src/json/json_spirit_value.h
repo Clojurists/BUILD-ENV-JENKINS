@@ -196,4 +196,48 @@ namespace json_spirit
     typedef Config_map< std::wstring > wmConfig;
 
     typedef wmConfig::Value_type  wmValue;
-    typedef 
+    typedef wmConfig::Object_type wmObject;
+    typedef wmConfig::Array_type  wmArray;
+
+#endif
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // implementation
+
+    template< class Config >
+    const Value_impl< Config > Value_impl< Config >::null;
+
+    template< class Config >
+    Value_impl< Config >::Value_impl()
+    :   type_( null_type )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( const Const_str_ptr value )
+    :   type_( str_type )
+    ,   v_( String_type( value ) )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( const String_type& value )
+    :   type_( str_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( const Object& value )
+    :   type_( obj_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( const Array&
