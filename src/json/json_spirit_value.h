@@ -240,4 +240,52 @@ namespace json_spirit
     }
 
     template< class Config >
-    Value_impl< Config >::Value_impl( const Array&
+    Value_impl< Config >::Value_impl( const Array& value )
+    :   type_( array_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( bool value )
+    :   type_( bool_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( int value )
+    :   type_( int_type )
+    ,   v_( static_cast< boost::int64_t >( value ) )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( boost::int64_t value )
+    :   type_( int_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( boost::uint64_t value )
+    :   type_( int_type )
+    ,   v_( static_cast< boost::int64_t >( value ) )
+    ,   is_uint64_( true )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( double value )
+    :   type_( real_type )
+    ,   v_( value )
+    ,   is_uint64_( false )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >::Value_impl( 
