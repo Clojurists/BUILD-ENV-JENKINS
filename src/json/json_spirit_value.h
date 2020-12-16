@@ -370,4 +370,50 @@ namespace json_spirit
     {
         check_type(  array_type );
 
-        retur
+        return *boost::get< Array >( &v_ );
+    }
+     
+    template< class Config >
+    bool Value_impl< Config >::get_bool() const
+    {
+        check_type(  bool_type );
+
+        return boost::get< bool >( v_ );
+    }
+     
+    template< class Config >
+    int Value_impl< Config >::get_int() const
+    {
+        check_type(  int_type );
+
+        return static_cast< int >( get_int64() );
+    }
+    
+    template< class Config >
+    boost::int64_t Value_impl< Config >::get_int64() const
+    {
+        check_type(  int_type );
+
+        return boost::get< boost::int64_t >( v_ );
+    }
+    
+    template< class Config >
+    boost::uint64_t Value_impl< Config >::get_uint64() const
+    {
+        check_type(  int_type );
+
+        return static_cast< boost::uint64_t >( get_int64() );
+    }
+
+    template< class Config >
+    double Value_impl< Config >::get_real() const
+    {
+        if( type() == int_type )
+        {
+            return is_uint64() ? static_cast< double >( get_uint64() )
+                               : static_cast< double >( get_int64() );
+        }
+
+        check_type(  real_type );
+
+        return boost::get<
