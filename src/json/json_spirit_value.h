@@ -332,4 +332,42 @@ namespace json_spirit
     template< class Config >
     bool Value_impl< Config >::is_null() const
     {
-        return type() 
+        return type() == null_type;
+    }
+
+    template< class Config >
+    void Value_impl< Config >::check_type( const Value_type vtype ) const
+    {
+        if( type() != vtype ) 
+        {
+            std::ostringstream os;
+
+            ///// Bitcoin: Tell the types by name instead of by number
+            os << "value is type " << Value_type_name[type()] << ", expected " << Value_type_name[vtype];
+
+            throw std::runtime_error( os.str() );
+        }
+    }
+
+    template< class Config >
+    const typename Config::String_type& Value_impl< Config >::get_str() const
+    {
+        check_type(  str_type );
+
+        return *boost::get< String_type >( &v_ );
+    }
+
+    template< class Config >
+    const typename Value_impl< Config >::Object& Value_impl< Config >::get_obj() const
+    {
+        check_type( obj_type );
+
+        return *boost::get< Object >( &v_ );
+    }
+     
+    template< class Config >
+    const typename Value_impl< Config >::Array& Value_impl< Config >::get_array() const
+    {
+        check_type(  array_type );
+
+        retur
