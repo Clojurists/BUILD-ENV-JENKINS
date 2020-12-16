@@ -288,4 +288,48 @@ namespace json_spirit
     }
 
     template< class Config >
-    Value_impl< Config >::Value_impl( 
+    Value_impl< Config >::Value_impl( const Value_impl< Config >& other )
+    :   type_( other.type() )
+    ,   v_( other.v_ )
+    ,   is_uint64_( other.is_uint64_ )
+    {
+    }
+
+    template< class Config >
+    Value_impl< Config >& Value_impl< Config >::operator=( const Value_impl& lhs )
+    {
+        Value_impl tmp( lhs );
+
+        std::swap( type_, tmp.type_ );
+        std::swap( v_, tmp.v_ );
+        std::swap( is_uint64_, tmp.is_uint64_ );
+
+        return *this;
+    }
+
+    template< class Config >
+    bool Value_impl< Config >::operator==( const Value_impl& lhs ) const
+    {
+        if( this == &lhs ) return true;
+
+        if( type() != lhs.type() ) return false;
+
+        return v_ == lhs.v_; 
+    }
+
+    template< class Config >
+    Value_type Value_impl< Config >::type() const
+    {
+        return type_;
+    }
+
+    template< class Config >
+    bool Value_impl< Config >::is_uint64() const
+    {
+        return is_uint64_;
+    }
+
+    template< class Config >
+    bool Value_impl< Config >::is_null() const
+    {
+        return type() 
