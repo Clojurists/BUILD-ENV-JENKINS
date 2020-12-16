@@ -416,4 +416,45 @@ namespace json_spirit
 
         check_type(  real_type );
 
-        return boost::get<
+        return boost::get< double >( v_ );
+    }
+
+    template< class Config >
+    typename Value_impl< Config >::Object& Value_impl< Config >::get_obj()
+    {
+        check_type(  obj_type );
+
+        return *boost::get< Object >( &v_ );
+    }
+
+    template< class Config >
+    typename Value_impl< Config >::Array& Value_impl< Config >::get_array()
+    {
+        check_type(  array_type );
+
+        return *boost::get< Array >( &v_ );
+    }
+
+    template< class Config >
+    Pair_impl< Config >::Pair_impl( const String_type& name, const Value_type& value )
+    :   name_( name )
+    ,   value_( value )
+    {
+    }
+
+    template< class Config >
+    bool Pair_impl< Config >::operator==( const Pair_impl< Config >& lhs ) const
+    {
+        if( this == &lhs ) return true;
+
+        return ( name_ == lhs.name_ ) && ( value_ == lhs.value_ );
+    }
+
+    // converts a C string, ie. 8 bit char array, to a string object
+    //
+    template < class String_type >
+    String_type to_str( const char* c_str )
+    {
+        String_type result;
+
+     
