@@ -39,4 +39,12 @@ namespace json_spirit
 
 #ifndef BOOST_NO_STD_WSTRING
 
-    void         
+    void         write          ( const wmValue& value, std::wostream& os );
+    void         write_formatted( const wmValue& value, std::wostream& os );
+    std::wstring write          ( const wmValue& value );
+    std::wstring write_formatted( const wmValue& value );
+
+#endif
+}
+
+#endif
