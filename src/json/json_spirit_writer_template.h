@@ -34,4 +34,33 @@ namespace json_spirit
 
         result[1] = 'u';
 
-        result[ 5 ] = to_he
+        result[ 5 ] = to_hex_char( c & 0x000F ); c >>= 4;
+        result[ 4 ] = to_hex_char( c & 0x000F ); c >>= 4;
+        result[ 3 ] = to_hex_char( c & 0x000F ); c >>= 4;
+        result[ 2 ] = to_hex_char( c & 0x000F );
+
+        return result;
+    }
+
+    template< typename Char_type, class String_type >
+    bool add_esc_char( Char_type c, String_type& s )
+    {
+        switch( c )
+        {
+            case '"':  s += to_str< String_type >( "\\\"" ); return true;
+            case '\\': s += to_str< String_type >( "\\\\" ); return true;
+            case '\b': s += to_str< String_type >( "\\b"  ); return true;
+            case '\f': s += to_str< String_type >( "\\f"  ); return true;
+            case '\n': s += to_str< String_type >( "\\n"  ); return true;
+            case '\r': s += to_str< String_type >( "\\r"  ); return true;
+            case '\t': s += to_str< String_type >( "\\t"  ); return true;
+        }
+
+        return false;
+    }
+
+    template< class String_type >
+    String_type add_esc_chars( const String_type& s )
+    {
+        typedef typename String_type::const_iterator Iter_type;
+        typedef typename
