@@ -63,4 +63,41 @@ namespace json_spirit
     String_type add_esc_chars( const String_type& s )
     {
         typedef typename String_type::const_iterator Iter_type;
-        typedef typename
+        typedef typename String_type::value_type     Char_type;
+
+        String_type result;
+
+        const Iter_type end( s.end() );
+
+        for( Iter_type i = s.begin(); i != end; ++i )
+        {
+            const Char_type c( *i );
+
+            if( add_esc_char( c, result ) ) continue;
+
+            const wint_t unsigned_c( ( c >= 0 ) ? c : 256 + c );
+
+            if( iswprint( unsigned_c ) )
+            {
+                result += c;
+            }
+            else
+            {
+                result += non_printable_to_string< String_type >( unsigned_c );
+            }
+        }
+
+        return result;
+    }
+
+    // this class generates the JSON text,
+    // it keeps track of the indentation level etc.
+    //
+    template< class Value_type, class Ostream_type >
+    class Generator
+    {
+        typedef typename Value_type::Config_type Config_type;
+        typedef typename Config_type::String_type String_type;
+        typedef typename Config_type::Object_type Object_type;
+        typedef typename Config_type::Array_type Array_type;
+        typed
