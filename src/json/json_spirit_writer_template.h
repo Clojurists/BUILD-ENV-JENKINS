@@ -100,4 +100,34 @@ namespace json_spirit
         typedef typename Config_type::String_type String_type;
         typedef typename Config_type::Object_type Object_type;
         typedef typename Config_type::Array_type Array_type;
-        typed
+        typedef typename String_type::value_type Char_type;
+        typedef typename Object_type::value_type Obj_member_type;
+
+    public:
+
+        Generator( const Value_type& value, Ostream_type& os, bool pretty )
+        :   os_( os )
+        ,   indentation_level_( 0 )
+        ,   pretty_( pretty )
+        {
+            output( value );
+        }
+
+    private:
+
+        void output( const Value_type& value )
+        {
+            switch( value.type() )
+            {
+                case obj_type:   output( value.get_obj() );   break;
+                case array_type: output( value.get_array() ); break;
+                case str_type:   output( value.get_str() );   break;
+                case bool_type:  output( value.get_bool() );  break;
+                case int_type:   output_int( value );         break;
+
+                /// Bitcoin: Added std::fixed and changed precision from 16 to 8
+                case real_type:  os_ << std::showpoint << std::fixed << std::setprecision(8)
+                                     << value.get_real();     break;
+
+                case null_type:  os_ << "null";               break;
+            
