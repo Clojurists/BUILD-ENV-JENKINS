@@ -130,4 +130,48 @@ namespace json_spirit
                                      << value.get_real();     break;
 
                 case null_type:  os_ << "null";               break;
-            
+                default: assert( false );
+            }
+        }
+
+        void output( const Object_type& obj )
+        {
+            output_array_or_obj( obj, '{', '}' );
+        }
+
+        void output( const Array_type& arr )
+        {
+            output_array_or_obj( arr, '[', ']' );
+        }
+
+        void output( const Obj_member_type& member )
+        {
+            output( Config_type::get_name( member ) ); space(); 
+            os_ << ':'; space(); 
+            output( Config_type::get_value( member ) );
+        }
+
+        void output_int( const Value_type& value )
+        {
+            if( value.is_uint64() )
+            {
+                os_ << value.get_uint64();
+            }
+            else
+            {
+               os_ << value.get_int64();
+            }
+        }
+
+        void output( const String_type& s )
+        {
+            os_ << '"' << add_esc_chars( s ) << '"';
+        }
+
+        void output( bool b )
+        {
+            os_ << to_str< String_type >( b ? "true" : "false" );
+        }
+
+        template< class T >
+        void output_array_or_obj( const T& t, Char_type start
