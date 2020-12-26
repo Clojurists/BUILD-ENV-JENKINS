@@ -174,4 +174,52 @@ namespace json_spirit
         }
 
         template< class T >
-        void output_array_or_obj( const T& t, Char_type start
+        void output_array_or_obj( const T& t, Char_type start_char, Char_type end_char )
+        {
+            os_ << start_char; new_line();
+
+            ++indentation_level_;
+            
+            for( typename T::const_iterator i = t.begin(); i != t.end(); ++i )
+            {
+                indent(); output( *i );
+
+                typename T::const_iterator next = i;
+
+                if( ++next != t.end())
+                {
+                    os_ << ',';
+                }
+
+                new_line();
+            }
+
+            --indentation_level_;
+
+            indent(); os_ << end_char;
+        }
+        
+        void indent()
+        {
+            if( !pretty_ ) return;
+
+            for( int i = 0; i < indentation_level_; ++i )
+            { 
+                os_ << "    ";
+            }
+        }
+
+        void space()
+        {
+            if( pretty_ ) os_ << ' ';
+        }
+
+        void new_line()
+        {
+            if( pretty_ ) os_ << '\n';
+        }
+
+        Generator& operator=( const Generator& ); // to prevent "assignment operator could not be generated" warning
+
+        Ostream_type& os_;
+        int indentatio
