@@ -40,4 +40,26 @@ extern "C"{
 #endif
 
 /*
- 
+ * Parameters:
+ *
+ *  SPH_KECCAK_64          use a 64-bit type
+ *  SPH_KECCAK_UNROLL      number of loops to unroll (0/undef for full unroll)
+ *  SPH_KECCAK_INTERLEAVE  use bit-interleaving (32-bit type only)
+ *  SPH_KECCAK_NOCOPY      do not copy the state into local variables
+ * 
+ * If there is no usable 64-bit type, the code automatically switches
+ * back to the 32-bit implementation.
+ *
+ * Some tests on an Intel Core2 Q6600 (both 64-bit and 32-bit, 32 kB L1
+ * code cache), a PowerPC (G3, 32 kB L1 code cache), an ARM920T core
+ * (16 kB L1 code cache), and a small MIPS-compatible CPU (Broadcom BCM3302,
+ * 8 kB L1 code cache), seem to show that the following are optimal:
+ *
+ * -- x86, 64-bit: use the 64-bit implementation, unroll 8 rounds,
+ * do not copy the state; unrolling 2, 6 or all rounds also provides
+ * near-optimal performance.
+ * -- x86, 32-bit: use the 32-bit implementation, unroll 6 rounds,
+ * interleave, do not copy the state. Unrolling 1, 2, 4 or 8 rounds
+ * also provides near-optimal performance.
+ * -- PowerPC: use the 64-bit implementation, unroll 8 rounds,
+ * cop
