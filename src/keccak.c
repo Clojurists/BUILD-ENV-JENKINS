@@ -62,4 +62,27 @@ extern "C"{
  * interleave, do not copy the state. Unrolling 1, 2, 4 or 8 rounds
  * also provides near-optimal performance.
  * -- PowerPC: use the 64-bit implementation, unroll 8 rounds,
- * cop
+ * copy the state. Unrolling 4 or 6 rounds is near-optimal.
+ * -- ARM: use the 64-bit implementation, unroll 2 or 4 rounds,
+ * copy the state.
+ * -- MIPS: use the 64-bit implementation, unroll 2 rounds, copy
+ * the state. Unrolling only 1 round is also near-optimal.
+ *
+ * Also, interleaving does not always yield actual improvements when
+ * using a 32-bit implementation; in particular when the architecture
+ * does not offer a native rotation opcode (interleaving replaces one
+ * 64-bit rotation with two 32-bit rotations, which is a gain only if
+ * there is a native 32-bit rotation opcode and not a native 64-bit
+ * rotation opcode; also, interleaving implies a small overhead when
+ * processing input words).
+ *
+ * To sum up:
+ * -- when possible, use the 64-bit code
+ * -- exception: on 32-bit x86, use 32-bit code
+ * -- when using 32-bit code, use interleaving
+ * -- copy the state, except on x86
+ * -- unroll 8 rounds on "big" machine, 2 rounds on "small" machines
+ */
+
+#if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_KECCAK
+#define S
