@@ -157,4 +157,48 @@ static const sph_u64 RC[] = {
 #define a40   (kc->u.wide[ 4])
 #define a01   (kc->u.wide[ 5])
 #define a11   (kc->u.wide[ 6])
-#define a21   (kc->u.wide[
+#define a21   (kc->u.wide[ 7])
+#define a31   (kc->u.wide[ 8])
+#define a41   (kc->u.wide[ 9])
+#define a02   (kc->u.wide[10])
+#define a12   (kc->u.wide[11])
+#define a22   (kc->u.wide[12])
+#define a32   (kc->u.wide[13])
+#define a42   (kc->u.wide[14])
+#define a03   (kc->u.wide[15])
+#define a13   (kc->u.wide[16])
+#define a23   (kc->u.wide[17])
+#define a33   (kc->u.wide[18])
+#define a43   (kc->u.wide[19])
+#define a04   (kc->u.wide[20])
+#define a14   (kc->u.wide[21])
+#define a24   (kc->u.wide[22])
+#define a34   (kc->u.wide[23])
+#define a44   (kc->u.wide[24])
+
+#define DECL_STATE
+#define READ_STATE(sc)
+#define WRITE_STATE(sc)
+
+#define INPUT_BUF(size)   do { \
+		size_t j; \
+		for (j = 0; j < (size); j += 8) { \
+			kc->u.wide[j >> 3] ^= sph_dec64le_aligned(buf + j); \
+		} \
+	} while (0)
+
+#define INPUT_BUF144   INPUT_BUF(144)
+#define INPUT_BUF136   INPUT_BUF(136)
+#define INPUT_BUF104   INPUT_BUF(104)
+#define INPUT_BUF72    INPUT_BUF(72)
+
+#else
+
+#define DECL_STATE \
+	sph_u64 a00, a01, a02, a03, a04; \
+	sph_u64 a10, a11, a12, a13, a14; \
+	sph_u64 a20, a21, a22, a23, a24; \
+	sph_u64 a30, a31, a32, a33, a34; \
+	sph_u64 a40, a41, a42, a43, a44;
+
+#define READ_STATE(state)  
