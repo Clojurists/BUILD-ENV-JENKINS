@@ -85,4 +85,52 @@ extern "C"{
  */
 
 #if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_KECCAK
-#define S
+#define SPH_SMALL_FOOTPRINT_KECCAK   1
+#endif
+
+/*
+ * By default, we select the 64-bit implementation if a 64-bit type
+ * is available, unless a 32-bit x86 is detected.
+ */
+#if !defined SPH_KECCAK_64 && SPH_64 \
+	&& !(defined __i386__ || SPH_I386_GCC || SPH_I386_MSVC)
+#define SPH_KECCAK_64   1
+#endif
+
+/*
+ * If using a 32-bit implementation, we prefer to interleave.
+ */
+#if !SPH_KECCAK_64 && !defined SPH_KECCAK_INTERLEAVE
+#define SPH_KECCAK_INTERLEAVE   1
+#endif
+
+/*
+ * Unroll 8 rounds on big systems, 2 rounds on small systems.
+ */
+#ifndef SPH_KECCAK_UNROLL
+#if SPH_SMALL_FOOTPRINT_KECCAK
+#define SPH_KECCAK_UNROLL   2
+#else
+#define SPH_KECCAK_UNROLL   8
+#endif
+#endif
+
+/*
+ * We do not want to copy the state to local variables on x86 (32-bit
+ * and 64-bit alike).
+ */
+#ifndef SPH_KECCAK_NOCOPY
+#if defined __i386__ || defined __x86_64 || SPH_I386_MSVC || SPH_I386_GCC
+#define SPH_KECCAK_NOCOPY   1
+#else
+#define SPH_KECCAK_NOCOPY   0
+#endif
+#endif
+
+#ifdef _MSC_VER
+#pragma warning (disable: 4146)
+#endif
+
+#if SPH_KECCAK_64
+
+static const sph_u64 RC[
