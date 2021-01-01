@@ -201,4 +201,40 @@ static const sph_u64 RC[] = {
 	sph_u64 a30, a31, a32, a33, a34; \
 	sph_u64 a40, a41, a42, a43, a44;
 
-#define READ_STATE(state)  
+#define READ_STATE(state)   do { \
+		a00 = (state)->u.wide[ 0]; \
+		a10 = (state)->u.wide[ 1]; \
+		a20 = (state)->u.wide[ 2]; \
+		a30 = (state)->u.wide[ 3]; \
+		a40 = (state)->u.wide[ 4]; \
+		a01 = (state)->u.wide[ 5]; \
+		a11 = (state)->u.wide[ 6]; \
+		a21 = (state)->u.wide[ 7]; \
+		a31 = (state)->u.wide[ 8]; \
+		a41 = (state)->u.wide[ 9]; \
+		a02 = (state)->u.wide[10]; \
+		a12 = (state)->u.wide[11]; \
+		a22 = (state)->u.wide[12]; \
+		a32 = (state)->u.wide[13]; \
+		a42 = (state)->u.wide[14]; \
+		a03 = (state)->u.wide[15]; \
+		a13 = (state)->u.wide[16]; \
+		a23 = (state)->u.wide[17]; \
+		a33 = (state)->u.wide[18]; \
+		a43 = (state)->u.wide[19]; \
+		a04 = (state)->u.wide[20]; \
+		a14 = (state)->u.wide[21]; \
+		a24 = (state)->u.wide[22]; \
+		a34 = (state)->u.wide[23]; \
+		a44 = (state)->u.wide[24]; \
+	} while (0)
+
+#define WRITE_STATE(state)   do { \
+		(state)->u.wide[ 0] = a00; \
+		(state)->u.wide[ 1] = a10; \
+		(state)->u.wide[ 2] = a20; \
+		(state)->u.wide[ 3] = a30; \
+		(state)->u.wide[ 4] = a40; \
+		(state)->u.wide[ 5] = a01; \
+		(state)->u.wide[ 6] = a11; \
+		(state)->u.wide
