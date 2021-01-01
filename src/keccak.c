@@ -237,4 +237,35 @@ static const sph_u64 RC[] = {
 		(state)->u.wide[ 4] = a40; \
 		(state)->u.wide[ 5] = a01; \
 		(state)->u.wide[ 6] = a11; \
-		(state)->u.wide
+		(state)->u.wide[ 7] = a21; \
+		(state)->u.wide[ 8] = a31; \
+		(state)->u.wide[ 9] = a41; \
+		(state)->u.wide[10] = a02; \
+		(state)->u.wide[11] = a12; \
+		(state)->u.wide[12] = a22; \
+		(state)->u.wide[13] = a32; \
+		(state)->u.wide[14] = a42; \
+		(state)->u.wide[15] = a03; \
+		(state)->u.wide[16] = a13; \
+		(state)->u.wide[17] = a23; \
+		(state)->u.wide[18] = a33; \
+		(state)->u.wide[19] = a43; \
+		(state)->u.wide[20] = a04; \
+		(state)->u.wide[21] = a14; \
+		(state)->u.wide[22] = a24; \
+		(state)->u.wide[23] = a34; \
+		(state)->u.wide[24] = a44; \
+	} while (0)
+
+#define INPUT_BUF144   do { \
+		a00 ^= sph_dec64le_aligned(buf +   0); \
+		a10 ^= sph_dec64le_aligned(buf +   8); \
+		a20 ^= sph_dec64le_aligned(buf +  16); \
+		a30 ^= sph_dec64le_aligned(buf +  24); \
+		a40 ^= sph_dec64le_aligned(buf +  32); \
+		a01 ^= sph_dec64le_aligned(buf +  40); \
+		a11 ^= sph_dec64le_aligned(buf +  48); \
+		a21 ^= sph_dec64le_aligned(buf +  56); \
+		a31 ^= sph_dec64le_aligned(buf +  64); \
+		a41 ^= sph_dec64le_aligned(buf +  72); \
+		a02 ^= sph_dec64le_aligned(b
