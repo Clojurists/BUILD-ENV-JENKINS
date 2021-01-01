@@ -268,4 +268,34 @@ static const sph_u64 RC[] = {
 		a21 ^= sph_dec64le_aligned(buf +  56); \
 		a31 ^= sph_dec64le_aligned(buf +  64); \
 		a41 ^= sph_dec64le_aligned(buf +  72); \
-		a02 ^= sph_dec64le_aligned(b
+		a02 ^= sph_dec64le_aligned(buf +  80); \
+		a12 ^= sph_dec64le_aligned(buf +  88); \
+		a22 ^= sph_dec64le_aligned(buf +  96); \
+		a32 ^= sph_dec64le_aligned(buf + 104); \
+		a42 ^= sph_dec64le_aligned(buf + 112); \
+		a03 ^= sph_dec64le_aligned(buf + 120); \
+		a13 ^= sph_dec64le_aligned(buf + 128); \
+		a23 ^= sph_dec64le_aligned(buf + 136); \
+	} while (0)
+
+#define INPUT_BUF136   do { \
+		a00 ^= sph_dec64le_aligned(buf +   0); \
+		a10 ^= sph_dec64le_aligned(buf +   8); \
+		a20 ^= sph_dec64le_aligned(buf +  16); \
+		a30 ^= sph_dec64le_aligned(buf +  24); \
+		a40 ^= sph_dec64le_aligned(buf +  32); \
+		a01 ^= sph_dec64le_aligned(buf +  40); \
+		a11 ^= sph_dec64le_aligned(buf +  48); \
+		a21 ^= sph_dec64le_aligned(buf +  56); \
+		a31 ^= sph_dec64le_aligned(buf +  64); \
+		a41 ^= sph_dec64le_aligned(buf +  72); \
+		a02 ^= sph_dec64le_aligned(buf +  80); \
+		a12 ^= sph_dec64le_aligned(buf +  88); \
+		a22 ^= sph_dec64le_aligned(buf +  96); \
+		a32 ^= sph_dec64le_aligned(buf + 104); \
+		a42 ^= sph_dec64le_aligned(buf + 112); \
+		a03 ^= sph_dec64le_aligned(buf + 120); \
+		a13 ^= sph_dec64le_aligned(buf + 128); \
+	} while (0)
+
+#de
