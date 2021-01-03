@@ -414,4 +414,33 @@ static const struct {
 	{ SPH_C32(0x80000000), SPH_C32(0x00008002) },
 	{ SPH_C32(0x80000000), SPH_C32(0x00000080) },
 	{ SPH_C32(0x00000000), SPH_C32(0x0000800A) },
-	{ SPH_C32(0x80000
+	{ SPH_C32(0x80000000), SPH_C32(0x8000000A) },
+	{ SPH_C32(0x80000000), SPH_C32(0x80008081) },
+	{ SPH_C32(0x80000000), SPH_C32(0x00008080) },
+	{ SPH_C32(0x00000000), SPH_C32(0x80000001) },
+	{ SPH_C32(0x80000000), SPH_C32(0x80008008) }
+#endif
+};
+
+#if SPH_KECCAK_INTERLEAVE
+
+#define INTERLEAVE(xl, xh)   do { \
+		sph_u32 l, h, t; \
+		l = (xl); h = (xh); \
+		t = (l ^ (l >> 1)) & SPH_C32(0x22222222); l ^= t ^ (t << 1); \
+		t = (h ^ (h >> 1)) & SPH_C32(0x22222222); h ^= t ^ (t << 1); \
+		t = (l ^ (l >> 2)) & SPH_C32(0x0C0C0C0C); l ^= t ^ (t << 2); \
+		t = (h ^ (h >> 2)) & SPH_C32(0x0C0C0C0C); h ^= t ^ (t << 2); \
+		t = (l ^ (l >> 4)) & SPH_C32(0x00F000F0); l ^= t ^ (t << 4); \
+		t = (h ^ (h >> 4)) & SPH_C32(0x00F000F0); h ^= t ^ (t << 4); \
+		t = (l ^ (l >> 8)) & SPH_C32(0x0000FF00); l ^= t ^ (t << 8); \
+		t = (h ^ (h >> 8)) & SPH_C32(0x0000FF00); h ^= t ^ (t << 8); \
+		t = (l ^ SPH_T32(h << 16)) & SPH_C32(0xFFFF0000); \
+		l ^= t; h ^= t >> 16; \
+		(xl) = l; (xh) = h; \
+	} while (0)
+
+#define UNINTERLEAVE(xl, xh)   do { \
+		sph_u32 l, h, t; \
+		l = (xl); h = (xh); \
+		t = (l ^ SPH_T32(h << 16)) & S
