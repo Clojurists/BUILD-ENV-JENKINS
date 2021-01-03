@@ -327,4 +327,38 @@ static const sph_u64 RC[] = {
 	} while (0)
 
 #define INPUT_BUF(lim)   do { \
-		a00 ^= sph_dec64le_ali
+		a00 ^= sph_dec64le_aligned(buf +   0); \
+		a10 ^= sph_dec64le_aligned(buf +   8); \
+		a20 ^= sph_dec64le_aligned(buf +  16); \
+		a30 ^= sph_dec64le_aligned(buf +  24); \
+		a40 ^= sph_dec64le_aligned(buf +  32); \
+		a01 ^= sph_dec64le_aligned(buf +  40); \
+		a11 ^= sph_dec64le_aligned(buf +  48); \
+		a21 ^= sph_dec64le_aligned(buf +  56); \
+		a31 ^= sph_dec64le_aligned(buf +  64); \
+		if ((lim) == 72) \
+			break; \
+		a41 ^= sph_dec64le_aligned(buf +  72); \
+		a02 ^= sph_dec64le_aligned(buf +  80); \
+		a12 ^= sph_dec64le_aligned(buf +  88); \
+		a22 ^= sph_dec64le_aligned(buf +  96); \
+		if ((lim) == 104) \
+			break; \
+		a32 ^= sph_dec64le_aligned(buf + 104); \
+		a42 ^= sph_dec64le_aligned(buf + 112); \
+		a03 ^= sph_dec64le_aligned(buf + 120); \
+		a13 ^= sph_dec64le_aligned(buf + 128); \
+		if ((lim) == 136) \
+			break; \
+		a23 ^= sph_dec64le_aligned(buf + 136); \
+	} while (0)
+
+#endif
+
+#define DECL64(x)        sph_u64 x
+#define MOV64(d, s)      (d = s)
+#define XOR64(d, a, b)   (d = a ^ b)
+#define AND64(d, a, b)   (d = a & b)
+#define OR64(d, a, b)    (d = a | b)
+#define NOT64(d, s)      (d = SPH_T64(~s))
+#define ROL64(d
