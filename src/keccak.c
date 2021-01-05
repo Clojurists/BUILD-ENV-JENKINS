@@ -443,4 +443,34 @@ static const struct {
 #define UNINTERLEAVE(xl, xh)   do { \
 		sph_u32 l, h, t; \
 		l = (xl); h = (xh); \
-		t = (l ^ SPH_T32(h << 16)) & S
+		t = (l ^ SPH_T32(h << 16)) & SPH_C32(0xFFFF0000); \
+		l ^= t; h ^= t >> 16; \
+		t = (l ^ (l >> 8)) & SPH_C32(0x0000FF00); l ^= t ^ (t << 8); \
+		t = (h ^ (h >> 8)) & SPH_C32(0x0000FF00); h ^= t ^ (t << 8); \
+		t = (l ^ (l >> 4)) & SPH_C32(0x00F000F0); l ^= t ^ (t << 4); \
+		t = (h ^ (h >> 4)) & SPH_C32(0x00F000F0); h ^= t ^ (t << 4); \
+		t = (l ^ (l >> 2)) & SPH_C32(0x0C0C0C0C); l ^= t ^ (t << 2); \
+		t = (h ^ (h >> 2)) & SPH_C32(0x0C0C0C0C); h ^= t ^ (t << 2); \
+		t = (l ^ (l >> 1)) & SPH_C32(0x22222222); l ^= t ^ (t << 1); \
+		t = (h ^ (h >> 1)) & SPH_C32(0x22222222); h ^= t ^ (t << 1); \
+		(xl) = l; (xh) = h; \
+	} while (0)
+
+#else
+
+#define INTERLEAVE(l, h)
+#define UNINTERLEAVE(l, h)
+
+#endif
+
+#if SPH_KECCAK_NOCOPY
+
+#define a00l   (kc->u.narrow[2 *  0 + 0])
+#define a00h   (kc->u.narrow[2 *  0 + 1])
+#define a10l   (kc->u.narrow[2 *  1 + 0])
+#define a10h   (kc->u.narrow[2 *  1 + 1])
+#define a20l   (kc->u.narrow[2 *  2 + 0])
+#define a20h   (kc->u.narrow[2 *  2 + 1])
+#define a30l   (kc->u.narrow[2 *  3 + 0])
+#define a30h   (kc->u.narrow[2 *  3 + 1])
+#define a40l   (kc->u.narr
