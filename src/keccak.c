@@ -499,4 +499,38 @@ static const struct {
 #define a03h   (kc->u.narrow[2 * 15 + 1])
 #define a13l   (kc->u.narrow[2 * 16 + 0])
 #define a13h   (kc->u.narrow[2 * 16 + 1])
-#define a23l   (kc->u.narrow
+#define a23l   (kc->u.narrow[2 * 17 + 0])
+#define a23h   (kc->u.narrow[2 * 17 + 1])
+#define a33l   (kc->u.narrow[2 * 18 + 0])
+#define a33h   (kc->u.narrow[2 * 18 + 1])
+#define a43l   (kc->u.narrow[2 * 19 + 0])
+#define a43h   (kc->u.narrow[2 * 19 + 1])
+#define a04l   (kc->u.narrow[2 * 20 + 0])
+#define a04h   (kc->u.narrow[2 * 20 + 1])
+#define a14l   (kc->u.narrow[2 * 21 + 0])
+#define a14h   (kc->u.narrow[2 * 21 + 1])
+#define a24l   (kc->u.narrow[2 * 22 + 0])
+#define a24h   (kc->u.narrow[2 * 22 + 1])
+#define a34l   (kc->u.narrow[2 * 23 + 0])
+#define a34h   (kc->u.narrow[2 * 23 + 1])
+#define a44l   (kc->u.narrow[2 * 24 + 0])
+#define a44h   (kc->u.narrow[2 * 24 + 1])
+
+#define DECL_STATE
+#define READ_STATE(state)
+#define WRITE_STATE(state)
+
+#define INPUT_BUF(size)   do { \
+		size_t j; \
+		for (j = 0; j < (size); j += 8) { \
+			sph_u32 tl, th; \
+			tl = sph_dec32le_aligned(buf + j + 0); \
+			th = sph_dec32le_aligned(buf + j + 4); \
+			INTERLEAVE(tl, th); \
+			kc->u.narrow[(j >> 2) + 0] ^= tl; \
+			kc->u.narrow[(j >> 2) + 1] ^= th; \
+		} \
+	} while (0)
+
+#define INPUT_BUF144   INPUT_BUF(144)
+#define INPUT_BUF1
