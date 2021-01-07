@@ -533,4 +533,32 @@ static const struct {
 	} while (0)
 
 #define INPUT_BUF144   INPUT_BUF(144)
-#define INPUT_BUF1
+#define INPUT_BUF136   INPUT_BUF(136)
+#define INPUT_BUF104   INPUT_BUF(104)
+#define INPUT_BUF72    INPUT_BUF(72)
+
+#else
+
+#define DECL_STATE \
+	sph_u32 a00l, a00h, a01l, a01h, a02l, a02h, a03l, a03h, a04l, a04h; \
+	sph_u32 a10l, a10h, a11l, a11h, a12l, a12h, a13l, a13h, a14l, a14h; \
+	sph_u32 a20l, a20h, a21l, a21h, a22l, a22h, a23l, a23h, a24l, a24h; \
+	sph_u32 a30l, a30h, a31l, a31h, a32l, a32h, a33l, a33h, a34l, a34h; \
+	sph_u32 a40l, a40h, a41l, a41h, a42l, a42h, a43l, a43h, a44l, a44h;
+
+#define READ_STATE(state)   do { \
+		a00l = (state)->u.narrow[2 *  0 + 0]; \
+		a00h = (state)->u.narrow[2 *  0 + 1]; \
+		a10l = (state)->u.narrow[2 *  1 + 0]; \
+		a10h = (state)->u.narrow[2 *  1 + 1]; \
+		a20l = (state)->u.narrow[2 *  2 + 0]; \
+		a20h = (state)->u.narrow[2 *  2 + 1]; \
+		a30l = (state)->u.narrow[2 *  3 + 0]; \
+		a30h = (state)->u.narrow[2 *  3 + 1]; \
+		a40l = (state)->u.narrow[2 *  4 + 0]; \
+		a40h = (state)->u.narrow[2 *  4 + 1]; \
+		a01l = (state)->u.narrow[2 *  5 + 0]; \
+		a01h = (state)->u.narrow[2 *  5 + 1]; \
+		a11l = (state)->u.narrow[2 *  6 + 0]; \
+		a11h = (state)->u.narrow[2 *  6 + 1]; \
+		a21l 
