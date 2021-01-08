@@ -642,4 +642,45 @@ static const struct {
 		(state)->u.narrow[2 * 19 + 1] = a43h; \
 		(state)->u.narrow[2 * 20 + 0] = a04l; \
 		(state)->u.narrow[2 * 20 + 1] = a04h; \
-		(s
+		(state)->u.narrow[2 * 21 + 0] = a14l; \
+		(state)->u.narrow[2 * 21 + 1] = a14h; \
+		(state)->u.narrow[2 * 22 + 0] = a24l; \
+		(state)->u.narrow[2 * 22 + 1] = a24h; \
+		(state)->u.narrow[2 * 23 + 0] = a34l; \
+		(state)->u.narrow[2 * 23 + 1] = a34h; \
+		(state)->u.narrow[2 * 24 + 0] = a44l; \
+		(state)->u.narrow[2 * 24 + 1] = a44h; \
+	} while (0)
+
+#define READ64(d, off)   do { \
+		sph_u32 tl, th; \
+		tl = sph_dec32le_aligned(buf + (off)); \
+		th = sph_dec32le_aligned(buf + (off) + 4); \
+		INTERLEAVE(tl, th); \
+		d ## l ^= tl; \
+		d ## h ^= th; \
+	} while (0)
+
+#define INPUT_BUF144   do { \
+		READ64(a00,   0); \
+		READ64(a10,   8); \
+		READ64(a20,  16); \
+		READ64(a30,  24); \
+		READ64(a40,  32); \
+		READ64(a01,  40); \
+		READ64(a11,  48); \
+		READ64(a21,  56); \
+		READ64(a31,  64); \
+		READ64(a41,  72); \
+		READ64(a02,  80); \
+		READ64(a12,  88); \
+		READ64(a22,  96); \
+		READ64(a32, 104); \
+		READ64(a42, 112); \
+		READ64(a03, 120); \
+		READ64(a13, 128); \
+		READ64(a23, 136); \
+	} while (0)
+
+#define INPUT_BUF136   do { \
+		READ64(a00,   0); 
