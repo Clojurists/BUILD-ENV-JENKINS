@@ -586,4 +586,32 @@ static const struct {
 		a33l = (state)->u.narrow[2 * 18 + 0]; \
 		a33h = (state)->u.narrow[2 * 18 + 1]; \
 		a43l = (state)->u.narrow[2 * 19 + 0]; \
-		a43h = (sta
+		a43h = (state)->u.narrow[2 * 19 + 1]; \
+		a04l = (state)->u.narrow[2 * 20 + 0]; \
+		a04h = (state)->u.narrow[2 * 20 + 1]; \
+		a14l = (state)->u.narrow[2 * 21 + 0]; \
+		a14h = (state)->u.narrow[2 * 21 + 1]; \
+		a24l = (state)->u.narrow[2 * 22 + 0]; \
+		a24h = (state)->u.narrow[2 * 22 + 1]; \
+		a34l = (state)->u.narrow[2 * 23 + 0]; \
+		a34h = (state)->u.narrow[2 * 23 + 1]; \
+		a44l = (state)->u.narrow[2 * 24 + 0]; \
+		a44h = (state)->u.narrow[2 * 24 + 1]; \
+	} while (0)
+
+#define WRITE_STATE(state)   do { \
+		(state)->u.narrow[2 *  0 + 0] = a00l; \
+		(state)->u.narrow[2 *  0 + 1] = a00h; \
+		(state)->u.narrow[2 *  1 + 0] = a10l; \
+		(state)->u.narrow[2 *  1 + 1] = a10h; \
+		(state)->u.narrow[2 *  2 + 0] = a20l; \
+		(state)->u.narrow[2 *  2 + 1] = a20h; \
+		(state)->u.narrow[2 *  3 + 0] = a30l; \
+		(state)->u.narrow[2 *  3 + 1] = a30h; \
+		(state)->u.narrow[2 *  4 + 0] = a40l; \
+		(state)->u.narrow[2 *  4 + 1] = a40h; \
+		(state)->u.narrow[2 *  5 + 0] = a01l; \
+		(state)->u.narrow[2 *  5 + 1] = a01h; \
+		(state)->u.narrow[2 *  6 + 0] = a11l; \
+		(state)->u.narrow[2 *  6 + 1] = a11h; \
+		(state)->u.narrow[2 *  7 + 0] = 
