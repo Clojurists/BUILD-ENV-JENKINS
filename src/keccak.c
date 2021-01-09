@@ -683,4 +683,56 @@ static const struct {
 	} while (0)
 
 #define INPUT_BUF136   do { \
-		READ64(a00,   0); 
+		READ64(a00,   0); \
+		READ64(a10,   8); \
+		READ64(a20,  16); \
+		READ64(a30,  24); \
+		READ64(a40,  32); \
+		READ64(a01,  40); \
+		READ64(a11,  48); \
+		READ64(a21,  56); \
+		READ64(a31,  64); \
+		READ64(a41,  72); \
+		READ64(a02,  80); \
+		READ64(a12,  88); \
+		READ64(a22,  96); \
+		READ64(a32, 104); \
+		READ64(a42, 112); \
+		READ64(a03, 120); \
+		READ64(a13, 128); \
+	} while (0)
+
+#define INPUT_BUF104   do { \
+		READ64(a00,   0); \
+		READ64(a10,   8); \
+		READ64(a20,  16); \
+		READ64(a30,  24); \
+		READ64(a40,  32); \
+		READ64(a01,  40); \
+		READ64(a11,  48); \
+		READ64(a21,  56); \
+		READ64(a31,  64); \
+		READ64(a41,  72); \
+		READ64(a02,  80); \
+		READ64(a12,  88); \
+		READ64(a22,  96); \
+	} while (0)
+
+#define INPUT_BUF72   do { \
+		READ64(a00,   0); \
+		READ64(a10,   8); \
+		READ64(a20,  16); \
+		READ64(a30,  24); \
+		READ64(a40,  32); \
+		READ64(a01,  40); \
+		READ64(a11,  48); \
+		READ64(a21,  56); \
+		READ64(a31,  64); \
+	} while (0)
+
+#define INPUT_BUF(lim)   do { \
+		READ64(a00,   0); \
+		READ64(a10,   8); \
+		READ64(a20,  16); \
+		READ64(a30,  24); \
+		READ64(a40,  32);
