@@ -735,4 +735,47 @@ static const struct {
 		READ64(a10,   8); \
 		READ64(a20,  16); \
 		READ64(a30,  24); \
-		READ64(a40,  32);
+		READ64(a40,  32); \
+		READ64(a01,  40); \
+		READ64(a11,  48); \
+		READ64(a21,  56); \
+		READ64(a31,  64); \
+		if ((lim) == 72) \
+			break; \
+		READ64(a41,  72); \
+		READ64(a02,  80); \
+		READ64(a12,  88); \
+		READ64(a22,  96); \
+		if ((lim) == 104) \
+			break; \
+		READ64(a32, 104); \
+		READ64(a42, 112); \
+		READ64(a03, 120); \
+		READ64(a13, 128); \
+		if ((lim) == 136) \
+			break; \
+		READ64(a23, 136); \
+	} while (0)
+
+#endif
+
+#define DECL64(x)        sph_u64 x ## l, x ## h
+#define MOV64(d, s)      (d ## l = s ## l, d ## h = s ## h)
+#define XOR64(d, a, b)   (d ## l = a ## l ^ b ## l, d ## h = a ## h ^ b ## h)
+#define AND64(d, a, b)   (d ## l = a ## l & b ## l, d ## h = a ## h & b ## h)
+#define OR64(d, a, b)    (d ## l = a ## l | b ## l, d ## h = a ## h | b ## h)
+#define NOT64(d, s)      (d ## l = SPH_T32(~s ## l), d ## h = SPH_T32(~s ## h))
+#define ROL64(d, v, n)   ROL64_ ## n(d, v)
+
+#if SPH_KECCAK_INTERLEAVE
+
+#define ROL64_odd1(d, v)   do { \
+		sph_u32 tmp; \
+		tmp = v ## l; \
+		d ## l = SPH_T32(v ## h << 1) | (v ## h >> 31); \
+		d ## h = tmp; \
+	} while (0)
+
+#define ROL64_odd63(d, v)   do { \
+		sph_u32 tmp; \
+		tm
