@@ -778,4 +778,34 @@ static const struct {
 
 #define ROL64_odd63(d, v)   do { \
 		sph_u32 tmp; \
-		tm
+		tmp = SPH_T32(v ## l << 31) | (v ## l >> 1); \
+		d ## l = v ## h; \
+		d ## h = tmp; \
+	} while (0)
+
+#define ROL64_odd(d, v, n)   do { \
+		sph_u32 tmp; \
+		tmp = SPH_T32(v ## l << (n - 1)) | (v ## l >> (33 - n)); \
+		d ## l = SPH_T32(v ## h << n) | (v ## h >> (32 - n)); \
+		d ## h = tmp; \
+	} while (0)
+
+#define ROL64_even(d, v, n)   do { \
+		d ## l = SPH_T32(v ## l << n) | (v ## l >> (32 - n)); \
+		d ## h = SPH_T32(v ## h << n) | (v ## h >> (32 - n)); \
+	} while (0)
+
+#define ROL64_0(d, v)
+#define ROL64_1(d, v)    ROL64_odd1(d, v)
+#define ROL64_2(d, v)    ROL64_even(d, v,  1)
+#define ROL64_3(d, v)    ROL64_odd( d, v,  2)
+#define ROL64_4(d, v)    ROL64_even(d, v,  2)
+#define ROL64_5(d, v)    ROL64_odd( d, v,  3)
+#define ROL64_6(d, v)    ROL64_even(d, v,  3)
+#define ROL64_7(d, v)    ROL64_odd( d, v,  4)
+#define ROL64_8(d, v)    ROL64_even(d, v,  4)
+#define ROL64_9(d, v)    ROL64_odd( d, v,  5)
+#define ROL64_10(d, v)   ROL64_even(d, v,  5)
+#define ROL64_11(d, v)   ROL64_odd( d, v,  6)
+#define ROL64_12(d, v)   ROL64_even(d, v,  6)
+#define ROL64_13(d
