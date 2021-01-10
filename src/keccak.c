@@ -886,4 +886,37 @@ static const struct {
 #define ROL64_14(d, v)   ROL64_small(d, v, 14)
 #define ROL64_15(d, v)   ROL64_small(d, v, 15)
 #define ROL64_16(d, v)   ROL64_small(d, v, 16)
+#define ROL64_17(d, v)   ROL64_small(d, v, 17)
+#define ROL64_18(d, v)   ROL64_small(d, v, 18)
+#define ROL64_19(d, v)   ROL64_small(d, v, 19)
+#define ROL64_20(d, v)   ROL64_small(d, v, 20)
+#define ROL64_21(d, v)   ROL64_small(d, v, 21)
+#define ROL64_22(d, v)   ROL64_small(d, v, 22)
+#define ROL64_23(d, v)   ROL64_small(d, v, 23)
+#define ROL64_24(d, v)   ROL64_small(d, v, 24)
+#define ROL64_25(d, v)   ROL64_small(d, v, 25)
+#define ROL64_26(d, v)   ROL64_small(d, v, 26)
+#define ROL64_27(d, v)   ROL64_small(d, v, 27)
+#define ROL64_28(d, v)   ROL64_small(d, v, 28)
+#define ROL64_29(d, v)   ROL64_small(d, v, 29)
+#define ROL64_30(d, v)   ROL64_small(d, v, 30)
+#define ROL64_31(d, v)   ROL64_small(d, v, 31)
+
+#define ROL64_32(d, v)   do { \
+		sph_u32 tmp; \
+		tmp = v ## l; \
+		d ## l = v ## h; \
+		d ## h = tmp; \
+	} while (0)
+
+#define ROL64_big(d, v, n)   do { \
+		sph_u32 trl, trh; \
+		ROL64_small(tr, v, n); \
+		d ## h = trl; \
+		d ## l = trh; \
+	} while (0)
+
+#define ROL64_33(d, v)   ROL64_big(d, v, 1)
+#define ROL64_34(d, v)   ROL64_big(d, v, 2)
+#define ROL64_35(d, v)   ROL64_big(d, v, 3)
 #d
