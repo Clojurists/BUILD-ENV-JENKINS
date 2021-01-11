@@ -944,4 +944,44 @@ static const struct {
 #define ROL64_58(d, v)   ROL64_big(d, v, 26)
 #define ROL64_59(d, v)   ROL64_big(d, v, 27)
 #define ROL64_60(d, v)   ROL64_big(d, v, 28)
-#
+#define ROL64_61(d, v)   ROL64_big(d, v, 29)
+#define ROL64_62(d, v)   ROL64_big(d, v, 30)
+#define ROL64_63(d, v)   ROL64_big(d, v, 31)
+
+#endif
+
+#define XOR64_IOTA(d, s, k) \
+	(d ## l = s ## l ^ k.low, d ## h = s ## h ^ k.high)
+
+#endif
+
+#define TH_ELT(t, c0, c1, c2, c3, c4, d0, d1, d2, d3, d4)   do { \
+		DECL64(tt0); \
+		DECL64(tt1); \
+		DECL64(tt2); \
+		DECL64(tt3); \
+		XOR64(tt0, d0, d1); \
+		XOR64(tt1, d2, d3); \
+		XOR64(tt0, tt0, d4); \
+		XOR64(tt0, tt0, tt1); \
+		ROL64(tt0, tt0, 1); \
+		XOR64(tt2, c0, c1); \
+		XOR64(tt3, c2, c3); \
+		XOR64(tt0, tt0, c4); \
+		XOR64(tt2, tt2, tt3); \
+		XOR64(t, tt0, tt2); \
+	} while (0)
+
+#define THETA(b00, b01, b02, b03, b04, b10, b11, b12, b13, b14, \
+	b20, b21, b22, b23, b24, b30, b31, b32, b33, b34, \
+	b40, b41, b42, b43, b44) \
+	do { \
+		DECL64(t0); \
+		DECL64(t1); \
+		DECL64(t2); \
+		DECL64(t3); \
+		DECL64(t4); \
+		TH_ELT(t0, b40, b41, b42, b43, b44, b10, b11, b12, b13, b14); \
+		TH_ELT(t1, b00, b01, b02, b03, b04, b20, b21, b22, b23, b24); \
+		TH_ELT(t2, b10, b11, b12, b13, b14, b30, b31, b32, b33, b34); \
+		TH_ELT(t3, b20, b21, b
