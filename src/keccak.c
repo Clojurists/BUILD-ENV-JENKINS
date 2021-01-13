@@ -984,4 +984,42 @@ static const struct {
 		TH_ELT(t0, b40, b41, b42, b43, b44, b10, b11, b12, b13, b14); \
 		TH_ELT(t1, b00, b01, b02, b03, b04, b20, b21, b22, b23, b24); \
 		TH_ELT(t2, b10, b11, b12, b13, b14, b30, b31, b32, b33, b34); \
-		TH_ELT(t3, b20, b21, b
+		TH_ELT(t3, b20, b21, b22, b23, b24, b40, b41, b42, b43, b44); \
+		TH_ELT(t4, b30, b31, b32, b33, b34, b00, b01, b02, b03, b04); \
+		XOR64(b00, b00, t0); \
+		XOR64(b01, b01, t0); \
+		XOR64(b02, b02, t0); \
+		XOR64(b03, b03, t0); \
+		XOR64(b04, b04, t0); \
+		XOR64(b10, b10, t1); \
+		XOR64(b11, b11, t1); \
+		XOR64(b12, b12, t1); \
+		XOR64(b13, b13, t1); \
+		XOR64(b14, b14, t1); \
+		XOR64(b20, b20, t2); \
+		XOR64(b21, b21, t2); \
+		XOR64(b22, b22, t2); \
+		XOR64(b23, b23, t2); \
+		XOR64(b24, b24, t2); \
+		XOR64(b30, b30, t3); \
+		XOR64(b31, b31, t3); \
+		XOR64(b32, b32, t3); \
+		XOR64(b33, b33, t3); \
+		XOR64(b34, b34, t3); \
+		XOR64(b40, b40, t4); \
+		XOR64(b41, b41, t4); \
+		XOR64(b42, b42, t4); \
+		XOR64(b43, b43, t4); \
+		XOR64(b44, b44, t4); \
+	} while (0)
+
+#define RHO(b00, b01, b02, b03, b04, b10, b11, b12, b13, b14, \
+	b20, b21, b22, b23, b24, b30, b31, b32, b33, b34, \
+	b40, b41, b42, b43, b44) \
+	do { \
+		/* ROL64(b00, b00,  0); */ \
+		ROL64(b01, b01, 36); \
+		ROL64(b02, b02,  3); \
+		ROL64(b03, b03, 41); \
+		ROL64(b04, b04, 18); \
+	
