@@ -1063,4 +1063,50 @@ static const struct {
 
 #define KHI_XA(d, a, b, c)   do { \
 		DECL64(kt); \
-		AND64(kt, b
+		AND64(kt, b, c); \
+		XOR64(d, a, kt); \
+	} while (0)
+
+#define KHI(b00, b01, b02, b03, b04, b10, b11, b12, b13, b14, \
+	b20, b21, b22, b23, b24, b30, b31, b32, b33, b34, \
+	b40, b41, b42, b43, b44) \
+	do { \
+		DECL64(c0); \
+		DECL64(c1); \
+		DECL64(c2); \
+		DECL64(c3); \
+		DECL64(c4); \
+		DECL64(bnn); \
+		NOT64(bnn, b20); \
+		KHI_XO(c0, b00, b10, b20); \
+		KHI_XO(c1, b10, bnn, b30); \
+		KHI_XA(c2, b20, b30, b40); \
+		KHI_XO(c3, b30, b40, b00); \
+		KHI_XA(c4, b40, b00, b10); \
+		MOV64(b00, c0); \
+		MOV64(b10, c1); \
+		MOV64(b20, c2); \
+		MOV64(b30, c3); \
+		MOV64(b40, c4); \
+		NOT64(bnn, b41); \
+		KHI_XO(c0, b01, b11, b21); \
+		KHI_XA(c1, b11, b21, b31); \
+		KHI_XO(c2, b21, b31, bnn); \
+		KHI_XO(c3, b31, b41, b01); \
+		KHI_XA(c4, b41, b01, b11); \
+		MOV64(b01, c0); \
+		MOV64(b11, c1); \
+		MOV64(b21, c2); \
+		MOV64(b31, c3); \
+		MOV64(b41, c4); \
+		NOT64(bnn, b32); \
+		KHI_XO(c0, b02, b12, b22); \
+		KHI_XA(c1, b12, b22, b32); \
+		KHI_XA(c2, b22, bnn, b42); \
+		KHI_XO(c3, bnn, b42, b02); \
+		KHI_XA(c4, b42, b02, b12); \
+		MOV64(b02, c0); \
+		MOV64(b12, c1); \
+		MOV64(b22, c2); \
+		MOV64(b32, c3); \
+		MOV64(b
