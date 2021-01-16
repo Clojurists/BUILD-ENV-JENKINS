@@ -1022,4 +1022,45 @@ static const struct {
 		ROL64(b02, b02,  3); \
 		ROL64(b03, b03, 41); \
 		ROL64(b04, b04, 18); \
-	
+		ROL64(b10, b10,  1); \
+		ROL64(b11, b11, 44); \
+		ROL64(b12, b12, 10); \
+		ROL64(b13, b13, 45); \
+		ROL64(b14, b14,  2); \
+		ROL64(b20, b20, 62); \
+		ROL64(b21, b21,  6); \
+		ROL64(b22, b22, 43); \
+		ROL64(b23, b23, 15); \
+		ROL64(b24, b24, 61); \
+		ROL64(b30, b30, 28); \
+		ROL64(b31, b31, 55); \
+		ROL64(b32, b32, 25); \
+		ROL64(b33, b33, 21); \
+		ROL64(b34, b34, 56); \
+		ROL64(b40, b40, 27); \
+		ROL64(b41, b41, 20); \
+		ROL64(b42, b42, 39); \
+		ROL64(b43, b43,  8); \
+		ROL64(b44, b44, 14); \
+	} while (0)
+
+/*
+ * The KHI macro integrates the "lane complement" optimization. On input,
+ * some words are complemented:
+ *    a00 a01 a02 a04 a13 a20 a21 a22 a30 a33 a34 a43
+ * On output, the following words are complemented:
+ *    a04 a10 a20 a22 a23 a31
+ *
+ * The (implicit) permutation and the theta expansion will bring back
+ * the input mask for the next round.
+ */
+
+#define KHI_XO(d, a, b, c)   do { \
+		DECL64(kt); \
+		OR64(kt, b, c); \
+		XOR64(d, a, kt); \
+	} while (0)
+
+#define KHI_XA(d, a, b, c)   do { \
+		DECL64(kt); \
+		AND64(kt, b
