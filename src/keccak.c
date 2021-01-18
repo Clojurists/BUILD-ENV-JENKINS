@@ -1109,4 +1109,37 @@ static const struct {
 		MOV64(b12, c1); \
 		MOV64(b22, c2); \
 		MOV64(b32, c3); \
-		MOV64(b
+		MOV64(b42, c4); \
+		NOT64(bnn, b33); \
+		KHI_XA(c0, b03, b13, b23); \
+		KHI_XO(c1, b13, b23, b33); \
+		KHI_XO(c2, b23, bnn, b43); \
+		KHI_XA(c3, bnn, b43, b03); \
+		KHI_XO(c4, b43, b03, b13); \
+		MOV64(b03, c0); \
+		MOV64(b13, c1); \
+		MOV64(b23, c2); \
+		MOV64(b33, c3); \
+		MOV64(b43, c4); \
+		NOT64(bnn, b14); \
+		KHI_XA(c0, b04, bnn, b24); \
+		KHI_XO(c1, bnn, b24, b34); \
+		KHI_XA(c2, b24, b34, b44); \
+		KHI_XO(c3, b34, b44, b04); \
+		KHI_XA(c4, b44, b04, b14); \
+		MOV64(b04, c0); \
+		MOV64(b14, c1); \
+		MOV64(b24, c2); \
+		MOV64(b34, c3); \
+		MOV64(b44, c4); \
+	} while (0)
+
+#define IOTA(r)   XOR64_IOTA(a00, a00, r)
+
+#define P0    a00, a01, a02, a03, a04, a10, a11, a12, a13, a14, a20, a21, \
+              a22, a23, a24, a30, a31, a32, a33, a34, a40, a41, a42, a43, a44
+#define P1    a00, a30, a10, a40, a20, a11, a41, a21, a01, a31, a22, a02, \
+              a32, a12, a42, a33, a13, a43, a23, a03, a44, a24, a04, a34, a14
+#define P2    a00, a33, a11, a44, a22, a41, a24, a02, a30, a13, a32, a10, \
+              a43, a21, a04, a23, a01, a34, a12, a40, a14, a42, a20, a03, a31
+#define P3   
