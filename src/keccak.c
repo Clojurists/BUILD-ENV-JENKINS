@@ -1182,4 +1182,56 @@ static const struct {
               a42, a01, a10, a31, a40, a04, a13, a22, a43, a02, a11, a20, a34
 #define P22   a00, a31, a12, a43, a24, a21, a02, a33, a14, a40, a42, a23, \
               a04, a30, a11, a13, a44, a20, a01, a32, a34, a10, a41, a22, a03
-#define P23   a00, a13, a21, a34, a42, a02, a10, a23, a31, a44, a04, a12
+#define P23   a00, a13, a21, a34, a42, a02, a10, a23, a31, a44, a04, a12, \
+              a20, a33, a41, a01, a14, a22, a30, a43, a03, a11, a24, a32, a40
+
+#define P1_TO_P0   do { \
+		DECL64(t); \
+		MOV64(t, a01); \
+		MOV64(a01, a30); \
+		MOV64(a30, a33); \
+		MOV64(a33, a23); \
+		MOV64(a23, a12); \
+		MOV64(a12, a21); \
+		MOV64(a21, a02); \
+		MOV64(a02, a10); \
+		MOV64(a10, a11); \
+		MOV64(a11, a41); \
+		MOV64(a41, a24); \
+		MOV64(a24, a42); \
+		MOV64(a42, a04); \
+		MOV64(a04, a20); \
+		MOV64(a20, a22); \
+		MOV64(a22, a32); \
+		MOV64(a32, a43); \
+		MOV64(a43, a34); \
+		MOV64(a34, a03); \
+		MOV64(a03, a40); \
+		MOV64(a40, a44); \
+		MOV64(a44, a14); \
+		MOV64(a14, a31); \
+		MOV64(a31, a13); \
+		MOV64(a13, t); \
+	} while (0)
+
+#define P2_TO_P0   do { \
+		DECL64(t); \
+		MOV64(t, a01); \
+		MOV64(a01, a33); \
+		MOV64(a33, a12); \
+		MOV64(a12, a02); \
+		MOV64(a02, a11); \
+		MOV64(a11, a24); \
+		MOV64(a24, a04); \
+		MOV64(a04, a22); \
+		MOV64(a22, a43); \
+		MOV64(a43, a03); \
+		MOV64(a03, a44); \
+		MOV64(a44, a31); \
+		MOV64(a31, t); \
+		MOV64(t, a10); \
+		MOV64(a10, a41); \
+		MOV64(a41, a42); \
+		MOV64(a42, a20); \
+		MOV64(a20, a32); \
+		MOV64
