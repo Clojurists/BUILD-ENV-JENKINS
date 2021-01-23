@@ -1456,4 +1456,48 @@ static const struct {
 		for (j = 0; j < 24; j += 8) { \
 			KF_ELT( 0,  1, RC[j + 0]); \
 			KF_ELT( 1,  2, RC[j + 1]); \
-			KF_ELT
+			KF_ELT( 2,  3, RC[j + 2]); \
+			KF_ELT( 3,  4, RC[j + 3]); \
+			KF_ELT( 4,  5, RC[j + 4]); \
+			KF_ELT( 5,  6, RC[j + 5]); \
+			KF_ELT( 6,  7, RC[j + 6]); \
+			KF_ELT( 7,  8, RC[j + 7]); \
+			P8_TO_P0; \
+		} \
+	} while (0)
+
+#elif SPH_KECCAK_UNROLL == 12
+
+#define KECCAK_F_1600_   do { \
+		int j; \
+		for (j = 0; j < 24; j += 12) { \
+			KF_ELT( 0,  1, RC[j +  0]); \
+			KF_ELT( 1,  2, RC[j +  1]); \
+			KF_ELT( 2,  3, RC[j +  2]); \
+			KF_ELT( 3,  4, RC[j +  3]); \
+			KF_ELT( 4,  5, RC[j +  4]); \
+			KF_ELT( 5,  6, RC[j +  5]); \
+			KF_ELT( 6,  7, RC[j +  6]); \
+			KF_ELT( 7,  8, RC[j +  7]); \
+			KF_ELT( 8,  9, RC[j +  8]); \
+			KF_ELT( 9, 10, RC[j +  9]); \
+			KF_ELT(10, 11, RC[j + 10]); \
+			KF_ELT(11, 12, RC[j + 11]); \
+			P12_TO_P0; \
+		} \
+	} while (0)
+
+#elif SPH_KECCAK_UNROLL == 0
+
+#define KECCAK_F_1600_   do { \
+		KF_ELT( 0,  1, RC[ 0]); \
+		KF_ELT( 1,  2, RC[ 1]); \
+		KF_ELT( 2,  3, RC[ 2]); \
+		KF_ELT( 3,  4, RC[ 3]); \
+		KF_ELT( 4,  5, RC[ 4]); \
+		KF_ELT( 5,  6, RC[ 5]); \
+		KF_ELT( 6,  7, RC[ 6]); \
+		KF_ELT( 7,  8, RC[ 7]); \
+		KF_ELT( 8,  9, RC[ 8]); \
+		KF_ELT( 9, 10, RC[ 9]); \
+		KF_ELT(10, 11, RC
