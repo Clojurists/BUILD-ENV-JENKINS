@@ -1500,4 +1500,50 @@ static const struct {
 		KF_ELT( 7,  8, RC[ 7]); \
 		KF_ELT( 8,  9, RC[ 8]); \
 		KF_ELT( 9, 10, RC[ 9]); \
-		KF_ELT(10, 11, RC
+		KF_ELT(10, 11, RC[10]); \
+		KF_ELT(11, 12, RC[11]); \
+		KF_ELT(12, 13, RC[12]); \
+		KF_ELT(13, 14, RC[13]); \
+		KF_ELT(14, 15, RC[14]); \
+		KF_ELT(15, 16, RC[15]); \
+		KF_ELT(16, 17, RC[16]); \
+		KF_ELT(17, 18, RC[17]); \
+		KF_ELT(18, 19, RC[18]); \
+		KF_ELT(19, 20, RC[19]); \
+		KF_ELT(20, 21, RC[20]); \
+		KF_ELT(21, 22, RC[21]); \
+		KF_ELT(22, 23, RC[22]); \
+		KF_ELT(23,  0, RC[23]); \
+	} while (0)
+
+#else
+
+#error Unimplemented unroll count for Keccak.
+
+#endif
+
+static void
+keccak_init(sph_keccak_context *kc, unsigned out_size)
+{
+	int i;
+
+#if SPH_KECCAK_64
+	for (i = 0; i < 25; i ++)
+		kc->u.wide[i] = 0;
+	/*
+	 * Initialization for the "lane complement".
+	 */
+	kc->u.wide[ 1] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+	kc->u.wide[ 2] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+	kc->u.wide[ 8] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+	kc->u.wide[12] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+	kc->u.wide[17] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+	kc->u.wide[20] = SPH_C64(0xFFFFFFFFFFFFFFFF);
+#else
+
+	for (i = 0; i < 50; i ++)
+		kc->u.narrow[i] = 0;
+	/*
+	 * Initialization for the "lane complement".
+	 * Note: since we set to all-one full 64-bit words,
+	 * interleaving (if
