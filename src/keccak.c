@@ -1348,4 +1348,61 @@ static const struct {
 
 #define P12_TO_P0   do { \
 		DECL64(t); \
-	
+		MOV64(t, a01); \
+		MOV64(a01, a04); \
+		MOV64(a04, t); \
+		MOV64(t, a02); \
+		MOV64(a02, a03); \
+		MOV64(a03, t); \
+		MOV64(t, a10); \
+		MOV64(a10, a40); \
+		MOV64(a40, t); \
+		MOV64(t, a11); \
+		MOV64(a11, a44); \
+		MOV64(a44, t); \
+		MOV64(t, a12); \
+		MOV64(a12, a43); \
+		MOV64(a43, t); \
+		MOV64(t, a13); \
+		MOV64(a13, a42); \
+		MOV64(a42, t); \
+		MOV64(t, a14); \
+		MOV64(a14, a41); \
+		MOV64(a41, t); \
+		MOV64(t, a20); \
+		MOV64(a20, a30); \
+		MOV64(a30, t); \
+		MOV64(t, a21); \
+		MOV64(a21, a34); \
+		MOV64(a34, t); \
+		MOV64(t, a22); \
+		MOV64(a22, a33); \
+		MOV64(a33, t); \
+		MOV64(t, a23); \
+		MOV64(a23, a32); \
+		MOV64(a32, t); \
+		MOV64(t, a24); \
+		MOV64(a24, a31); \
+		MOV64(a31, t); \
+	} while (0)
+
+#define LPAR   (
+#define RPAR   )
+
+#define KF_ELT(r, s, k)   do { \
+		THETA LPAR P ## r RPAR; \
+		RHO LPAR P ## r RPAR; \
+		KHI LPAR P ## s RPAR; \
+		IOTA(k); \
+	} while (0)
+
+#define DO(x)   x
+
+#define KECCAK_F_1600   DO(KECCAK_F_1600_)
+
+#if SPH_KECCAK_UNROLL == 1
+
+#define KECCAK_F_1600_   do { \
+		int j; \
+		for (j = 0; j < 24; j ++) { \
+			KF_ELT(
