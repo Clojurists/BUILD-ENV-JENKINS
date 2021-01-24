@@ -1546,4 +1546,50 @@ keccak_init(sph_keccak_context *kc, unsigned out_size)
 	/*
 	 * Initialization for the "lane complement".
 	 * Note: since we set to all-one full 64-bit words,
-	 * interleaving (if
+	 * interleaving (if applicable) is a no-op.
+	 */
+	kc->u.narrow[ 2] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[ 3] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[ 4] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[ 5] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[16] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[17] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[24] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[25] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[34] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[35] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[40] = SPH_C32(0xFFFFFFFF);
+	kc->u.narrow[41] = SPH_C32(0xFFFFFFFF);
+#endif
+	kc->ptr = 0;
+	kc->lim = 200 - (out_size >> 2);
+}
+
+static void
+keccak_core(sph_keccak_context *kc, const void *data, size_t len, size_t lim)
+{
+	unsigned char *buf;
+	size_t ptr;
+	DECL_STATE
+
+	buf = kc->buf;
+	ptr = kc->ptr;
+
+	if (len < (lim - ptr)) {
+		memcpy(buf + ptr, data, len);
+		kc->ptr = ptr + len;
+		return;
+	}
+
+	READ_STATE(kc);
+	while (len > 0) {
+		size_t clen;
+
+		clen = (lim - ptr);
+		if (clen > len)
+			clen = len;
+		memcpy(buf + ptr, data, clen);
+		ptr += clen;
+		data = (const unsigned char *)data + clen;
+		len -= clen;
+		i
