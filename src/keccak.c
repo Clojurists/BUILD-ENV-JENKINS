@@ -1592,4 +1592,53 @@ keccak_core(sph_keccak_context *kc, const void *data, size_t len, size_t lim)
 		ptr += clen;
 		data = (const unsigned char *)data + clen;
 		len -= clen;
-		i
+		if (ptr == lim) {
+			INPUT_BUF(lim);
+			KECCAK_F_1600;
+			ptr = 0;
+		}
+	}
+	WRITE_STATE(kc);
+	kc->ptr = ptr;
+}
+
+#if SPH_KECCAK_64
+
+#define DEFCLOSE(d, lim) \
+	static void keccak_close ## d( \
+		sph_keccak_context *kc, unsigned ub, unsigned n, void *dst) \
+	{ \
+		unsigned eb; \
+		union { \
+			unsigned char tmp[lim + 1]; \
+			sph_u64 dummy;   /* for alignment */ \
+		} u; \
+		size_t j; \
+ \
+		eb = (0x100 | (ub & 0xFF)) >> (8 - n); \
+		if (kc->ptr == (lim - 1)) { \
+			if (n == 7) { \
+				u.tmp[0] = eb; \
+				memset(u.tmp + 1, 0, lim - 1); \
+				u.tmp[lim] = 0x80; \
+				j = 1 + lim; \
+			} else { \
+				u.tmp[0] = eb | 0x80; \
+				j = 1; \
+			} \
+		} else { \
+			j = lim - kc->ptr; \
+			u.tmp[0] = eb; \
+			memset(u.tmp + 1, 0, j - 2); \
+			u.tmp[j - 1] = 0x80; \
+		} \
+		keccak_core(kc, u.tmp, j, lim); \
+		/* Finalize the "lane complement" */ \
+		kc->u.wide[ 1] = ~kc->u.wide[ 1]; \
+		kc->u.wide[ 2] = ~kc->u.wide[ 2]; \
+		kc->u.wide[ 8] = ~kc->u.wide[ 8]; \
+		kc->u.wide[12] = ~kc->u.wide[12]; \
+		kc->u.wide[17] = ~kc->u.wide[17]; \
+		kc->u.wide[20] = ~kc->u.wide[20]; \
+		for (j = 0; j < d; j += 8) \
+			sph_enc
