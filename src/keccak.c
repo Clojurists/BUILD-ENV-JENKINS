@@ -1799,4 +1799,26 @@ sph_keccak512_init(void *cc)
 
 /* see sph_keccak.h */
 void
-sph_keccak512(void *cc, const void *data, size_
+sph_keccak512(void *cc, const void *data, size_t len)
+{
+	keccak_core(cc, data, len, 72);
+}
+
+/* see sph_keccak.h */
+void
+sph_keccak512_close(void *cc, void *dst)
+{
+	sph_keccak512_addbits_and_close(cc, 0, 0, dst);
+}
+
+/* see sph_keccak.h */
+void
+sph_keccak512_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
+{
+	keccak_close64(cc, ub, n, dst);
+}
+
+
+#ifdef __cplusplus
+}
+#endif
