@@ -50,4 +50,35 @@ static bool GetLastStakeModifier(const CBlockIndex* pindex, uint64& nStakeModifi
         return error("GetLastStakeModifier: null pindex");
     while (pindex && pindex->pprev && !pindex->GeneratedStakeModifier())
         pindex = pindex->pprev;
- 
+    if (!pindex->GeneratedStakeModifier())
+        return error("GetLastStakeModifier: no generation at genesis block");
+    nStakeModifier = pindex->nStakeModifier;
+    nModifierTime = pindex->GetBlockTime();
+    return true;
+}
+
+// Get selection interval section (in seconds)
+static int64 GetStakeModifierSelectionIntervalSection(int nSection)
+{
+    assert (nSection >= 0 && nSection < 64);
+    return (nModifierInterval * 63 / (63 + ((63 - nSection) * (MODIFIER_INTERVAL_RATIO - 1))));
+}
+
+// Get stake modifier selection interval (in seconds)
+static int64 GetStakeModifierSelectionInterval()
+{
+    int64 nSelectionInterval = 0;
+    for (int nSection=0; nSection<64; nSection++)
+	{
+        nSelectionInterval += GetStakeModifierSelectionIntervalSection(nSection);
+	}
+    return nSelectionInterval;
+}
+
+// select a block from the candidate blocks in vSortedByTimestamp, excluding
+// already selected blocks in vSelectedBlocks, and with timestamp up to
+// nSelectionIntervalStop.
+static bool SelectBlockFromCandidates(
+    vector<pair<int64, uint256> >& vSortedByTimestamp,
+    map<uint256, const CBlockIndex*>& mapSelectedBlocks,
+    int64 
