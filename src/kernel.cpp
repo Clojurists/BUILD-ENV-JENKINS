@@ -81,4 +81,24 @@ static int64 GetStakeModifierSelectionInterval()
 static bool SelectBlockFromCandidates(
     vector<pair<int64, uint256> >& vSortedByTimestamp,
     map<uint256, const CBlockIndex*>& mapSelectedBlocks,
-    int64 
+    int64 nSelectionIntervalStop, uint64 nStakeModifierPrev,
+    const CBlockIndex** pindexSelected)
+{
+    bool fSelected = false;
+    uint256 hashBest = 0;
+    *pindexSelected = (const CBlockIndex*) 0;
+    BOOST_FOREACH(const PAIRTYPE(int64, uint256)& item, vSortedByTimestamp)
+    {
+        if (!mapBlockIndex.count(item.second))
+            return error("SelectBlockFromCandidates: failed to find block index for candidate block %s", item.second.ToString().c_str());
+        const CBlockIndex* pindex = mapBlockIndex[item.second];
+        if (fSelected && pindex->GetBlockTime() > nSelectionIntervalStop)
+            break;
+        if (mapSelectedBlocks.count(pindex->GetBlockHash()) > 0)
+            continue;
+        // compute the selection hash by hashing its proof-hash and the
+        // previous proof-of-stake modifier
+        uint256 hashProof = pindex->IsProofOfStake()? pindex->hashProofOfStake : pindex->GetBlockHash();
+        CDataStream ss(SER_GETHASH, 0);
+        ss << hashProof << nStakeModifierPrev;
+        uint256 hashSelection = Ha
