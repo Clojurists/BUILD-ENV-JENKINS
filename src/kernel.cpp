@@ -156,4 +156,25 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
     int64 nModifierTime = 0;
     if (!GetLastStakeModifier(pindexPrev, nStakeModifier, nModifierTime))
     {
-        return e
+        return error("ComputeNextStakeModifier() : unable to get last modifier");
+    }
+    if (fDebugHigh)
+    {
+        printf("ComputeNextStakeModifier() : prev modifier=0x%016"PRI64x" time=%s epoch=%u\n", nStakeModifier, DateTimeStrFormat(nModifierTime).c_str(), (unsigned int)nModifierTime);
+    }
+    if (nModifierTime / nModifierInterval >= pindexPrev->GetBlockTime() / nModifierInterval)
+    {
+        if (fDebugHigh)
+        {
+            printf("ComputeNextStakeModifier() : no new interval keep current modifier: pindexPrev nHeight=%d nTime=%u\n", pindexPrev->nHeight, (unsigned int)pindexPrev->GetBlockTime());
+        }
+        return true;
+    }
+
+    // Sort candidate blocks by timestamp
+    vector<pair<int64, uint256> > vSortedByTimestamp;
+    vSortedByTimestamp.reserve(64 * nModifierInterval / nStakeTargetSpacing);
+    int64 nSelectionInterval = GetStakeModifierSelectionInterval();
+    int64 nSelectionIntervalStart = (pindexPrev->GetBlockTime() / nModifierInterval) * nModifierInterval - nSelectionInterval;
+    const CBlockIndex* pindex = pindexPrev;
+    while (pindex && pindex->Ge
