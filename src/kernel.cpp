@@ -177,4 +177,24 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
     int64 nSelectionInterval = GetStakeModifierSelectionInterval();
     int64 nSelectionIntervalStart = (pindexPrev->GetBlockTime() / nModifierInterval) * nModifierInterval - nSelectionInterval;
     const CBlockIndex* pindex = pindexPrev;
-    while (pindex && pindex->Ge
+    while (pindex && pindex->GetBlockTime() >= nSelectionIntervalStart)
+    {
+        vSortedByTimestamp.push_back(make_pair(pindex->GetBlockTime(), pindex->GetBlockHash()));
+        pindex = pindex->pprev;
+    }
+    int nHeightFirstCandidate = pindex ? (pindex->nHeight + 1) : 0;
+    reverse(vSortedByTimestamp.begin(), vSortedByTimestamp.end());
+    sort(vSortedByTimestamp.begin(), vSortedByTimestamp.end());
+
+    // Select 64 blocks from candidate blocks to generate stake modifier
+    uint64 nStakeModifierNew = 0;
+    int64 nSelectionIntervalStop = nSelectionIntervalStart;
+    map<uint256, const CBlockIndex*> mapSelectedBlocks;
+    for (int nRound = 0; nRound < min(64, (int)vSortedByTimestamp.size()); nRound++)
+    {
+        // add an interval section to the current selection round
+        nSelectionIntervalStop += GetStakeModifierSelectionIntervalSection(nRound);
+        // select a block from the candidates of current round
+        if (!SelectBlockFromCandidates(vSortedByTimestamp, mapSelectedBlocks, nSelectionIntervalStop, nStakeModifier, &pindex))
+        {
+            ret
