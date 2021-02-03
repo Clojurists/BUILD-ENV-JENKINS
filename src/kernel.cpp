@@ -219,4 +219,29 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
         pindex = pindexPrev;
         while (pindex && pindex->nHeight >= nHeightFirstCandidate)
         {
-            // '=' indicates proof-of-stake blocks 
+            // '=' indicates proof-of-stake blocks not selected
+            if (pindex->IsProofOfStake())
+            {
+                strSelectionMap.replace(pindex->nHeight - nHeightFirstCandidate, 1, "=");
+            }
+            pindex = pindex->pprev;
+        }
+        BOOST_FOREACH (const PAIRTYPE(uint256, const CBlockIndex*)& item, mapSelectedBlocks)
+        {
+            // 'S' indicates selected proof-of-stake blocks
+            // 'W' indicates selected proof-of-work blocks
+            strSelectionMap.replace(item.second->nHeight - nHeightFirstCandidate, 1, item.second->IsProofOfStake()? "S" : "W");
+        }
+        printf("ComputeNextStakeModifier() : selection height [%d, %d] map %s\n", nHeightFirstCandidate, pindexPrev->nHeight, strSelectionMap.c_str());
+    }
+    if (fDebug)
+    {
+        printf("ComputeNextStakeModifier() : new modifier=0x%016"PRI64x" time=%s\n", nStakeModifierNew, DateTimeStrFormat(pindexPrev->GetBlockTime()).c_str());
+    }
+
+    nStakeModifier = nStakeModifierNew;
+    fGeneratedStakeModifier = true;
+    return true;
+}
+
+// The stake modifier used to hash for a stake 
