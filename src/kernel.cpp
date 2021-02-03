@@ -197,4 +197,26 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64& nStakeModif
         // select a block from the candidates of current round
         if (!SelectBlockFromCandidates(vSortedByTimestamp, mapSelectedBlocks, nSelectionIntervalStop, nStakeModifier, &pindex))
         {
-            ret
+            return error("ComputeNextStakeModifier: unable to select block at round %d", nRound);
+        }
+        // write the entropy bit of the selected block
+        nStakeModifierNew |= (((uint64)pindex->GetStakeEntropyBit()) << nRound);
+        // add the selected block from candidates to selected list
+        mapSelectedBlocks.insert(make_pair(pindex->GetBlockHash(), pindex));
+        if (fDebugHigh)
+        {
+            printf("ComputeNextStakeModifier() : selected round %d stop=%s height=%d bit=%d\n",
+                nRound, DateTimeStrFormat(nSelectionIntervalStop).c_str(), pindex->nHeight, pindex->GetStakeEntropyBit());
+        }
+    }
+
+    // Print selection map for visualization of the selected blocks
+    if (fDebugHigh)
+    {
+        string strSelectionMap = "";
+        // '-' indicates proof-of-work blocks not selected
+        strSelectionMap.insert(0, pindexPrev->nHeight - nHeightFirstCandidate + 1, '-');
+        pindex = pindexPrev;
+        while (pindex && pindex->nHeight >= nHeightFirstCandidate)
+        {
+            // '=' indicates proof-of-stake blocks 
