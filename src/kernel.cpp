@@ -264,4 +264,27 @@ static bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64& nStakeModifier
     {
         if (!pindex->pnext)
         {   // reached best block; may happen if node is behind on block chain
-            if (fDebugHigh || ((pi
+            if (fDebugHigh || ((pindex->GetBlockTime() + nStakeMinAge - nStakeModifierSelectionInterval) > GetAdjustedTime()))
+            {
+                return error("GetKernelStakeModifier() : reached best block %s at height %d from block %s",
+                    pindex->GetBlockHash().ToString().c_str(), pindex->nHeight, hashBlockFrom.ToString().c_str());
+            }
+            else
+			{
+                if (fDebugHigh) 
+                { 
+				    printf("GetKernelStakeModifier() : nStakeModifierTime = %"PRI64d", pindexFrom->GetBlockTime() = %"PRI64d", nStakeModifierSelectionInterval = %"PRI64d"\n",
+				         nStakeModifierTime, pindexFrom->GetBlockTime(), nStakeModifierSelectionInterval);
+                }
+                return false;
+			}
+        }
+        pindex = pindex->pnext;
+        if (pindex->GeneratedStakeModifier())
+        {
+            nStakeModifierHeight = pindex->nHeight;
+            nStakeModifierTime = pindex->GetBlockTime();
+        }
+    }
+    nStakeModifier = pindex->nStakeModifier;
+    return 
