@@ -334,4 +334,35 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
 
     uint256 hashBlockFrom = blockFrom.GetHash();
 
-    int64 nTimeWeight = min((int64)
+    int64 nTimeWeight = min((int64)nTimeTx - txPrev.nTime, (int64)nStakeMaxAge) - nStakeMinAge;
+    CBigNum bnCoinDayWeight = CBigNum(nValueIn) * nTimeWeight / COIN / (24 * 60 * 60);
+
+    if (fDebugHigh)
+    {
+	    printf ("CheckStakeKernelHash() : nTimeWeight = %"PRI64d" bnCoinDayWeight = %"PRI64d"\n", nTimeWeight, bnCoinDayWeight.getuint64());
+    }
+
+    // Calculate hash
+    CDataStream ss(SER_GETHASH, 0);
+    uint64 nStakeModifier = 0;
+    int nStakeModifierHeight = 0;
+    int64 nStakeModifierTime = 0;
+
+    if (!GetKernelStakeModifier(hashBlockFrom, nStakeModifier, nStakeModifierHeight, nStakeModifierTime, fPrintProofOfStake))
+	{
+		if (fDebugHigh) 
+        {
+           printf("CheckStakeKernelHash() : GetKernelStakeModifier return false\n");
+        }
+        return false;
+	}
+    if (fDebugHigh) 
+    {
+	   printf("CheckStakeKernelHash() : passed GetKernelStakeModifier\n");
+    }
+    ss << nStakeModifier;
+    ss << nTimeBlockFrom << nTxPrevOffset << txPrev.nTime << prevout.n << nTimeTx;
+    hashProofOfStake = Hash(ss.begin(), ss.end());
+    if (fDebugHigh)
+    {
+        printf("CheckStakeKernelHash() : using modifie
