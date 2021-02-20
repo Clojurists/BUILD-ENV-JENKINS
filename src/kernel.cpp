@@ -287,4 +287,24 @@ static bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64& nStakeModifier
         }
     }
     nStakeModifier = pindex->nStakeModifier;
-    return 
+    return true;
+}
+
+// ppcoin kernel protocol
+// coinstake must meet hash target according to the protocol:
+// kernel (input 0) must meet the formula
+//     hash(nStakeModifier + txPrev.block.nTime + txPrev.offset + txPrev.nTime + txPrev.vout.n + nTime) < bnTarget * nCoinDayWeight
+// this ensures that the chance of getting a coinstake is proportional to the
+// amount of coin age one owns.
+// The reason this hash is chosen is the following:
+//   nStakeModifier:
+//       (v0.4) listed block split
+//       (v0.3) scrambles computation to make it very difficult to precompute
+//              future proof-of-stake at the time of the coin's confirmation
+//       (v0.2) nBits (deprecated): encodes all past block timestamps
+//   txPrev.block.nTime: prevent nodes from guessing a good timestamp to
+//                       generate transaction for future advantage
+//   txPrev.offset: offset of txPrev inside block, to reduce the chance of
+//                  nodes generating coinstake at the same time
+//   txPrev.nTime: reduce the chance of nodes generating coinstake at the same
+//              
