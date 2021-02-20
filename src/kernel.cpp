@@ -365,4 +365,24 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
     hashProofOfStake = Hash(ss.begin(), ss.end());
     if (fDebugHigh)
     {
-        printf("CheckStakeKernelHash() : using modifie
+        printf("CheckStakeKernelHash() : using modifier 0x%016"PRI64x" at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
+            nStakeModifier, nStakeModifierHeight,
+            DateTimeStrFormat(nStakeModifierTime).c_str(),
+            mapBlockIndex[hashBlockFrom]->nHeight,
+            DateTimeStrFormat(blockFrom.GetBlockTime()).c_str());
+        printf("CheckStakeKernelHash() : check protocol=%s modifier=0x%016"PRI64x" nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+            "0.4",
+            nStakeModifier,
+            nTimeBlockFrom, nTxPrevOffset, txPrev.nTime, prevout.n, nTimeTx,
+            hashProofOfStake.ToString().c_str());
+    }
+
+    // Now check if proof-of-stake hash meets target protocol
+    if (CBigNum(hashProofOfStake) > (bnCoinDayWeight * bnTargetPerCoinDay))
+	{
+        if (fDebugHigh)
+        {
+		   printf("CheckStakeKernelHash() : bnCoinDayWeight = %s, bnTargetPerCoinDay=%s\n", bnCoinDayWeight.ToString().c_str(), bnTargetPerCoinDay.ToString().c_str());
+		   printf("CheckStakeKernelHash() : hashProofOfStake too much\n");
+        }
+        return false;
