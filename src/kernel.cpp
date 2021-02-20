@@ -307,4 +307,31 @@ static bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64& nStakeModifier
 //   txPrev.offset: offset of txPrev inside block, to reduce the chance of
 //                  nodes generating coinstake at the same time
 //   txPrev.nTime: reduce the chance of nodes generating coinstake at the same
-//              
+//                 time
+//   txPrev.vout.n: output number of txPrev, to reduce the chance of nodes
+//                  generating coinstake at the same time
+//   block/tx hash should not be used here as they can be generated in vast
+//   quantities so as to generate blocks faster, degrading the system back into
+//   a proof-of-work situation.
+//
+bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned int nTxPrevOffset, const CTransaction& txPrev, const COutPoint& prevout, unsigned int nTimeTx, uint256& hashProofOfStake, bool fPrintProofOfStake)
+{
+
+    if (nTimeTx < txPrev.nTime)
+    {
+        return error("CheckStakeKernelHash() : nTime violation");
+    }
+
+    unsigned int nTimeBlockFrom = blockFrom.GetBlockTime();
+    if ((nTimeBlockFrom + nStakeMinAge) > nTimeTx) 
+    {
+        return error("CheckStakeKernelHash() : min age violation");
+    }
+
+    CBigNum bnTargetPerCoinDay;
+    bnTargetPerCoinDay.SetCompact(nBits);
+    int64 nValueIn = txPrev.vout[prevout.n].nValue;
+
+    uint256 hashBlockFrom = blockFrom.GetHash();
+
+    int64 nTimeWeight = min((int64)
