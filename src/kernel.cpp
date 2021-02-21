@@ -386,3 +386,28 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
 		   printf("CheckStakeKernelHash() : hashProofOfStake too much\n");
         }
         return false;
+	}
+
+    if (fDebugHigh)
+    {
+        printf("CheckStakeKernelHash() : using modifier 0x%016"PRI64x" at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
+            nStakeModifier, nStakeModifierHeight,
+            DateTimeStrFormat(nStakeModifierTime).c_str(),
+            mapBlockIndex[hashBlockFrom]->nHeight,
+            DateTimeStrFormat(blockFrom.GetBlockTime()).c_str());
+        printf("CheckStakeKernelHash() : pass protocol=%s modifier=0x%016"PRI64x" nTimeBlockFrom=%u nTxPrevOffset=%u nTimeTxPrev=%u nPrevout=%u nTimeTx=%u hashProof=%s\n",
+            "0.4",
+            nStakeModifier,
+            nTimeBlockFrom, nTxPrevOffset, txPrev.nTime, prevout.n, nTimeTx,
+            hashProofOfStake.ToString().c_str());
+    }
+    return true;
+}
+
+// Check kernel hash target and coinstake signature
+bool CheckProofOfStake(const CTransaction& tx, unsigned int nBits, uint256& hashProofOfStake)
+{
+    if (!tx.IsCoinStake())
+        return error("CheckProofOfStake() : called on non-coinstake %s", tx.GetHash().ToString().c_str());
+
+    // Kernel (input 0) must match the stake hash ta
