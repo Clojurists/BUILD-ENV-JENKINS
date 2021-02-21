@@ -436,4 +436,29 @@ bool CheckProofOfStake(const CTransaction& tx, unsigned int nBits, uint256& hash
         // unable to read block of previous transaction
         return fDebug? error("CheckProofOfStake() : read block failed") : false; 
     }
-    if (!CheckStakeKernelHash(nBits, block, txindex.pos.nTxPos - txi
+    if (!CheckStakeKernelHash(nBits, block, txindex.pos.nTxPos - txindex.pos.nBlockPos, txPrev, txin.prevout, tx.nTime, hashProofOfStake, fDebug))
+    {
+        return tx.DoS(1, error("CheckProofOfStake() : INFO: check kernel failed on coinstake %s, hashProof=%s", tx.GetHash().ToString().c_str(), hashProofOfStake.ToString().c_str())); // may occur during initial download or if behind on block chain sync
+    }  
+    return true;
+}
+
+// Check whether the coinstake timestamp meets protocol
+bool CheckCoinStakeTimestamp(int64 nTimeBlock, int64 nTimeTx)
+{
+    return (nTimeBlock == nTimeTx);
+}
+
+// Get stake modifier checksum
+unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
+{
+    assert (pindex->pprev || pindex->GetBlockHash() == (!fTestNet ? hashGenesisBlock : hashGenesisBlockTestNet));
+    // Hash previous checksum with flags, hashProofOfStake and nStakeModifier
+    CDataStream ss(SER_GETHASH, 0);
+    if (pindex->pprev)
+    {
+        ss << pindex->pprev->nStakeModifierChecksum;
+    }
+    ss << pindex->nFlags << pindex->hashProofOfStake << pindex->nStakeModifier;
+    uint256 hashChecksum = Hash(ss.begin(), ss.end());
+    ha
