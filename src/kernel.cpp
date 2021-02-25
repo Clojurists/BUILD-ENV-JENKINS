@@ -461,4 +461,25 @@ unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
     }
     ss << pindex->nFlags << pindex->hashProofOfStake << pindex->nStakeModifier;
     uint256 hashChecksum = Hash(ss.begin(), ss.end());
-    ha
+    hashChecksum >>= (256 - 32);
+    return hashChecksum.Get64();
+}
+
+// Check stake modifier hard checkpoints
+bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierChecksum)
+{
+    if (fTestNet) 
+    {
+       // Testnet has no checkpoints
+       return true; 
+    }
+    if (mapStakeModifierCheckpoints.count(nHeight))
+	{
+        if (fPrintCheckPoint)
+        {
+	       printf("CheckStakeModifierCheckpoints() : nHeight = %d  nStakeModifierChecksum = %x\n", nHeight, nStakeModifierChecksum);
+        }
+        return nStakeModifierChecksum == mapStakeModifierCheckpoints[nHeight];
+	}
+    return true;
+}
