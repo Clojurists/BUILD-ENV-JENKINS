@@ -1,0 +1,35 @@
+# Copyright (c) 2009-2010 Satoshi Nakamoto
+# Distributed under the MIT/X11 software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+DEPSDIR:=/usr/i586-mingw32msvc
+
+USE_UPNP:=0
+USE_IPV6:=1
+
+INCLUDEPATHS= \
+ -I"$(CURDIR)" \
+ -I"$(CURDIR)"/obj \
+ -I"$(DEPSDIR)/boost_1_50_0" \
+ -I"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
+ -I"$(DEPSDIR)/openssl-1.0.1c/include" \
+ -I"$(DEPSDIR)"
+
+LIBPATHS= \
+ -L"$(DEPSDIR)/boost_1_50_0/stage/lib" \
+ -L"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
+ -L"$(DEPSDIR)/openssl-1.0.1c"
+
+LIBS= \
+ -l boost_system-mt-s \
+ -l boost_filesystem-mt-s \
+ -l boost_program_options-mt-s \
+ -l boost_thread_win32-mt-s \
+ -l boost_chrono-mt-s \
+ -l db_cxx \
+ -l ssl \
+ -l crypto
+
+DEFS=-D_MT -DWIN32 -D_WINDOWS -DBOOST_THREAD_USE_LIB -DBOOST_SPIRIT_THREADSAFE
+DEBUGFLAGS=-g
+CFLAGS=-O2 -msse2 -w -Wall -Wextra -Wformat -Wformat-security -Wno-unused-parameter $(DEBUGF
