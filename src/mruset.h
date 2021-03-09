@@ -24,4 +24,28 @@ protected:
 
 public:
     mruset(size_type nMaxSizeIn = 0) { nMaxSize = nMaxSizeIn; }
-    iterator begin() c
+    iterator begin() const { return set.begin(); }
+    iterator end() const { return set.end(); }
+    size_type size() const { return set.size(); }
+    bool empty() const { return set.empty(); }
+    iterator find(const key_type& k) const { return set.find(k); }
+    size_type count(const key_type& k) const { return set.count(k); }
+    bool inline friend operator==(const mruset<T>& a, const mruset<T>& b) { return a.set == b.set; }
+    bool inline friend operator==(const mruset<T>& a, const std::set<T>& b) { return a.set == b; }
+    bool inline friend operator<(const mruset<T>& a, const mruset<T>& b) { return a.set < b.set; }
+    std::pair<iterator, bool> insert(const key_type& x)
+    {
+        std::pair<iterator, bool> ret = set.insert(x);
+        if (ret.second)
+        {
+            if (nMaxSize && queue.size() == nMaxSize)
+            {
+                set.erase(queue.front());
+                queue.pop_front();
+            }
+            queue.push_back(x);
+        }
+        return ret;
+    }
+    size_type max_size() const { return nMaxSize; }
+   
