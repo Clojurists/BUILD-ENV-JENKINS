@@ -71,4 +71,45 @@ OBJS= \
     obj/rpcmining.o \
     obj/rpcwallet.o \
     obj/rpcblockchain.o \
-    obj
+    obj/rpcrawtransaction.o \
+    obj/script.o \
+    obj/sync.o \
+    obj/util.o \
+    obj/wallet.o \
+    obj/walletdb.o \
+    obj/noui.o \
+    obj/kernel.o \
+    obj/blake.o \
+    obj/groestl.o \
+    obj/keccak.o \
+    obj/skein.o \
+    obj/jh.o
+
+all: jackpotcoind.exe
+
+test check: test_jackpotcoin.exe FORCE
+	test_jackpotcoin.exe
+
+obj/%.o: %.cpp $(HEADERS)
+	g++ -c $(CFLAGS) -o $@ $<
+
+obj/%.o: %.c $(HEADERS)
+	$(CXX) -c $(CFLAGS) -o $@ $<
+
+jackpotcoind.exe: $(OBJS:obj/%=obj/%)
+	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
+
+TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
+
+obj-test/%.o: test/%.cpp $(HEADERS)
+	g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
+
+test_jackpotcoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
+
+clean:
+	-del /Q jackpotcoin test_jackpotcoin
+	-del /Q obj\*
+	-del /Q obj-test\*
+
+FORCE:
