@@ -48,4 +48,17 @@ public:
         return ret;
     }
     size_type max_size() const { return nMaxSize; }
-   
+    size_type max_size(size_type s)
+    {
+        if (s)
+            while (queue.size() > s)
+            {
+                set.erase(queue.front());
+                queue.pop_front();
+            }
+        nMaxSize = s;
+        return nMaxSize;
+    }
+};
+
+#endif
