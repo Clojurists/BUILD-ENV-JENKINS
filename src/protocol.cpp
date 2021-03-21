@@ -134,4 +134,17 @@ bool CInv::IsKnownType() const
 const char* CInv::GetCommand() const
 {
     if (!IsKnownType())
-        throw std::out_of_range(s
+        throw std::out_of_range(strprintf("CInv::GetCommand() : type=%d unknown type", type));
+    return ppszTypeName[type];
+}
+
+std::string CInv::ToString() const
+{
+    return strprintf("%s %s", GetCommand(), hash.ToString().substr(0,20).c_str());
+}
+
+void CInv::print() const
+{
+    printf("CInv(%s)\n", ToString().c_str());
+}
+
