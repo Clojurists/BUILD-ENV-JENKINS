@@ -80,4 +80,58 @@ CAddress::CAddress() : CService()
     Init();
 }
 
-CAddress
+CAddress::CAddress(CService ipIn, uint64 nServicesIn) : CService(ipIn)
+{
+    Init();
+    nServices = nServicesIn;
+}
+
+void CAddress::Init()
+{
+    nServices = NODE_NETWORK;
+    nTime = 100000000;
+    nLastTry = 0;
+}
+
+CInv::CInv()
+{
+    type = 0;
+    hash = 0;
+}
+
+CInv::CInv(int typeIn, const uint256& hashIn)
+{
+    type = typeIn;
+    hash = hashIn;
+}
+
+CInv::CInv(const std::string& strType, const uint256& hashIn)
+{
+    unsigned int i;
+    for (i = 1; i < ARRAYLEN(ppszTypeName); i++)
+    {
+        if (strType == ppszTypeName[i])
+        {
+            type = i;
+            break;
+        }
+    }
+    if (i == ARRAYLEN(ppszTypeName))
+        throw std::out_of_range(strprintf("CInv::CInv(string, uint256) : unknown type '%s'", strType.c_str()));
+    hash = hashIn;
+}
+
+bool operator<(const CInv& a, const CInv& b)
+{
+    return (a.type < b.type || (a.type == b.type && a.hash < b.hash));
+}
+
+bool CInv::IsKnownType() const
+{
+    return (type >= 1 && type < (int)ARRAYLEN(ppszTypeName));
+}
+
+const char* CInv::GetCommand() const
+{
+    if (!IsKnownType())
+        throw std::out_of_range(s
