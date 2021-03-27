@@ -64,4 +64,32 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     // Context menu actions
     QAction *copyLabelAction = new QAction(tr("Copy &Label"), this);
     QAction *copyAddressAction = new QAction(ui->copyAddress->text(), this);
-    QAction *editActi
+    QAction *editAction = new QAction(tr("&Edit"), this);
+    QAction *showQRCodeAction = new QAction(ui->showQRCode->text(), this);
+    QAction *signMessageAction = new QAction(ui->signMessage->text(), this);
+    QAction *verifyMessageAction = new QAction(ui->verifyMessage->text(), this);
+    deleteAction = new QAction(ui->deleteAddress->text(), this);
+
+    // Build context menu
+    contextMenu = new QMenu();
+    contextMenu->addAction(copyAddressAction);
+    contextMenu->addAction(copyLabelAction);
+    contextMenu->addAction(editAction);
+    if (tab == SendingTab)
+    {
+        contextMenu->addAction(deleteAction);
+    }
+    contextMenu->addSeparator();
+    contextMenu->addAction(showQRCodeAction);
+    if (tab == ReceivingTab)
+    {
+        contextMenu->addAction(signMessageAction);
+    }
+    else if (tab == SendingTab)
+    {
+        contextMenu->addAction(verifyMessageAction);
+    }
+
+    // Connect signals for context menu actions
+    connect(copyAddressAction, SIGNAL(triggered()), this, SLOT(on_copyAddress_clicked()));
+    connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabe
