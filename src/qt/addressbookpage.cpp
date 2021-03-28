@@ -92,4 +92,39 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
 
     // Connect signals for context menu actions
     connect(copyAddressAction, SIGNAL(triggered()), this, SLOT(on_copyAddress_clicked()));
-    connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabe
+    connect(copyLabelAction, SIGNAL(triggered()), this, SLOT(onCopyLabelAction()));
+    connect(editAction, SIGNAL(triggered()), this, SLOT(onEditAction()));
+    connect(deleteAction, SIGNAL(triggered()), this, SLOT(on_deleteAddress_clicked()));
+    connect(showQRCodeAction, SIGNAL(triggered()), this, SLOT(on_showQRCode_clicked()));
+    connect(signMessageAction, SIGNAL(triggered()), this, SLOT(on_signMessage_clicked()));
+    connect(verifyMessageAction, SIGNAL(triggered()), this, SLOT(on_verifyMessage_clicked()));
+
+    connect(ui->tableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextualMenu(QPoint)));
+
+    // Pass through accept action from button box
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+}
+
+
+AddressBookPage::~AddressBookPage()
+{
+    delete ui;
+}
+
+
+void AddressBookPage::setModel(AddressTableModel *model)
+{
+    this->model = model;
+    if (!model)
+    {
+        return;
+    }
+    proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setSourceModel(model);
+    proxyModel->setDynamicSortFilter(true);
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    switch(tab)
+    {
+      case ReceivingTab:
+    
