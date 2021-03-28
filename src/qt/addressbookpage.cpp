@@ -127,4 +127,32 @@ void AddressBookPage::setModel(AddressTableModel *model)
     switch(tab)
     {
       case ReceivingTab:
-    
+           // Receive filter
+           proxyModel->setFilterRole(AddressTableModel::TypeRole);
+           proxyModel->setFilterFixedString(AddressTableModel::Receive);
+           break;
+      case SendingTab:
+           // Send filter
+           proxyModel->setFilterRole(AddressTableModel::TypeRole);
+           proxyModel->setFilterFixedString(AddressTableModel::Send);
+           break;
+    }
+    ui->tableView->setModel(proxyModel);
+    ui->tableView->sortByColumn(0, Qt::AscendingOrder);
+
+    // Set column widths
+    ui->tableView->horizontalHeader()->resizeSection(AddressTableModel::Address, 320);
+    ui->tableView->horizontalHeader()->setResizeMode(AddressTableModel::Label, QHeaderView::Stretch);
+
+    connect(ui->tableView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+            this, SLOT(selectionChanged()));
+
+    // Select row for newly created address
+    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
+            this, SLOT(selectNewAddress(QModelIndex,int,int)));
+
+    selectionChanged();
+}
+
+
+void AddressBookPage
