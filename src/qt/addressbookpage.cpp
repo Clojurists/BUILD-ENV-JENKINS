@@ -155,4 +155,50 @@ void AddressBookPage::setModel(AddressTableModel *model)
 }
 
 
-void AddressBookPage
+void AddressBookPage::setOptionsModel(OptionsModel *optionsModel)
+{
+    this->optionsModel = optionsModel;
+}
+
+
+void AddressBookPage::on_copyAddress_clicked()
+{
+    GUIUtil::copyEntryData(ui->tableView, AddressTableModel::Address);
+}
+
+
+void AddressBookPage::onCopyLabelAction()
+{
+    GUIUtil::copyEntryData(ui->tableView, AddressTableModel::Label);
+}
+
+
+void AddressBookPage::onEditAction()
+{
+    if (!ui->tableView->selectionModel())
+    {
+        return;
+    }
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
+    if (indexes.isEmpty())
+    {
+        return;
+    }
+    EditAddressDialog dlg(
+            tab == SendingTab ?
+            EditAddressDialog::EditSendingAddress :
+            EditAddressDialog::EditReceivingAddress);
+    dlg.setModel(model);
+    QModelIndex origIndex = proxyModel->mapToSource(indexes.at(0));
+    dlg.loadRow(origIndex.row());
+    dlg.exec();
+}
+
+
+void AddressBookPage::on_signMessage_clicked()
+{
+    QTableView *table = ui->tableView;
+    QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
+    QString addr;
+
+   
