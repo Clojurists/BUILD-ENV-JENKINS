@@ -201,4 +201,51 @@ void AddressBookPage::on_signMessage_clicked()
     QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
     QString addr;
 
-   
+    foreach (QModelIndex index, indexes)
+    {
+        QVariant address = index.data();
+        addr = address.toString();
+    }
+
+    emit signMessage(addr);
+}
+
+
+void AddressBookPage::on_verifyMessage_clicked()
+{
+    QTableView *table = ui->tableView;
+    QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
+    QString addr;
+
+    foreach (QModelIndex index, indexes)
+    {
+        QVariant address = index.data();
+        addr = address.toString();
+    }
+
+    emit verifyMessage(addr);
+}
+
+
+void AddressBookPage::on_newAddress_clicked()
+{
+    if (model) {
+        EditAddressDialog dlg(
+                tab == SendingTab ?
+                EditAddressDialog::NewSendingAddress :
+                EditAddressDialog::NewReceivingAddress, this);
+        dlg.setModel(model);
+        if (dlg.exec())
+        {
+            newAddressToSelect = dlg.getAddress();
+        }
+    }
+}
+
+
+void AddressBookPage::on_deleteAddress_clicked()
+{
+    QTableView *table = ui->tableView;
+    if (table->selectionModel())
+    {
+        QMo
