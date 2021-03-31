@@ -248,4 +248,34 @@ void AddressBookPage::on_deleteAddress_clicked()
     QTableView *table = ui->tableView;
     if (table->selectionModel())
     {
-        QMo
+        QModelIndexList indexes = table->selectionModel()->selectedRows();  
+        if (!indexes.isEmpty())
+        {
+            table->model()->removeRow(indexes.at(0).row());
+        }
+    }
+}
+
+
+void AddressBookPage::selectionChanged()
+{
+    // Set button states based on selected tab and selection
+    QTableView *table = ui->tableView;
+    if (table->selectionModel())
+    {
+        if (table->selectionModel()->hasSelection())
+        {
+            switch(tab)
+            {
+              case SendingTab:
+                   // In sending tab, allow deletion of selection
+                   ui->deleteAddress->setEnabled(true);
+                   ui->deleteAddress->setVisible(true);
+                   deleteAction->setEnabled(true);
+                   ui->signMessage->setEnabled(false);
+                   ui->signMessage->setVisible(false);
+                   ui->verifyMessage->setEnabled(true);
+                   ui->verifyMessage->setVisible(true);
+                   break;
+              case ReceivingTab:
+                   // Deleting receiving addresses, however, is not allowed
