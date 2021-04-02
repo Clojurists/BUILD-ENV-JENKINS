@@ -351,4 +351,44 @@ void AddressBookPage::exportClicked()
     // name, column, role
     writer.setModel(proxyModel);
     writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
-    writer.addColumn("Address", AddressTableModel::Address, Qt::EditRol
+    writer.addColumn("Address", AddressTableModel::Address, Qt::EditRole);
+
+    if (!writer.write())
+    {
+        QMessageBox::critical(this, tr("Error exporting"), tr("Could not write to file %1.").arg(filename),
+                              QMessageBox::Abort, QMessageBox::Abort);
+    }
+}
+
+
+void AddressBookPage::on_showQRCode_clicked()
+{
+#ifdef USE_QRCODE
+    QTableView *table = ui->tableView;
+    QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
+
+    foreach (QModelIndex index, indexes)
+    {
+        QString address = index.data().toString(), label = index.sibling(index.row(), 0).data(Qt::EditRole).toString();
+
+        QRCodeDialog *dialog = new QRCodeDialog(address, label, tab == ReceivingTab, this);
+        if(optionsModel)
+            dialog->setModel(optionsModel);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+        dialog->show();
+    }
+#endif
+}
+
+
+void AddressBookPage::contextualMenu(const QPoint &point)
+{
+    QModelIndex index = ui->tableView->indexAt(point);
+    if (index.isValid())
+    {
+        contextMenu->exec(QCursor::pos());
+    }
+}
+
+
+void AddressBook
