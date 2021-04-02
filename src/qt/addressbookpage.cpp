@@ -279,3 +279,35 @@ void AddressBookPage::selectionChanged()
                    break;
               case ReceivingTab:
                    // Deleting receiving addresses, however, is not allowed
+                   ui->deleteAddress->setEnabled(false);
+                   ui->deleteAddress->setVisible(false);
+                   deleteAction->setEnabled(false);
+                   ui->signMessage->setEnabled(true);
+                   ui->signMessage->setVisible(true);
+                   ui->verifyMessage->setEnabled(false);
+                   ui->verifyMessage->setVisible(false);
+                   break;
+            }
+            ui->copyAddress->setEnabled(true);
+            ui->showQRCode->setEnabled(true);
+        }
+        else
+        {
+            ui->deleteAddress->setEnabled(false);
+            ui->showQRCode->setEnabled(false);
+            ui->copyAddress->setEnabled(false);
+            ui->signMessage->setEnabled(false);
+            ui->verifyMessage->setEnabled(false);
+        }
+    }
+}
+
+
+void AddressBookPage::done(int retval)
+{
+    QTableView *table = ui->tableView;
+    if (!table->selectionModel() || !table->model()) 
+    {
+        return;
+    }
+    // When this is a tab/widget and not a model dialog, ignore "done
