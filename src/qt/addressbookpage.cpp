@@ -310,4 +310,45 @@ void AddressBookPage::done(int retval)
     {
         return;
     }
-    // When this is a tab/widget and not a model dialog, ignore "done
+    // When this is a tab/widget and not a model dialog, ignore "done"
+    if (mode == ForEditing)
+    {
+        return;
+    }
+    // Figure out which address was selected, and return it
+    QModelIndexList indexes = table->selectionModel()->selectedRows(AddressTableModel::Address);
+
+    foreach (QModelIndex index, indexes)
+    {
+        QVariant address = table->model()->data(index);
+        returnValue = address.toString();
+    }
+
+    if (returnValue.isEmpty())
+    {
+        // If no address entry selected, return rejected
+        retval = Rejected;
+    }
+
+    QDialog::done(retval);
+}
+
+
+void AddressBookPage::exportClicked()
+{
+    // CSV is currently the only supported format
+    QString filename = GUIUtil::getSaveFileName(
+            this,
+            tr("Export Address Book Data"), QString(),
+            tr("Comma separated file (*.csv)"));
+
+    if (filename.isNull()) 
+    {
+        return;
+    }
+    CSVModelWriter writer(filename);
+
+    // name, column, role
+    writer.setModel(proxyModel);
+    writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
+    writer.addColumn("Address", AddressTableModel::Address, Qt::EditRol
