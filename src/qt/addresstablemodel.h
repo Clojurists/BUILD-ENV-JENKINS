@@ -56,4 +56,31 @@ public:
     // Look up label for address in address book, if not found return empty string.
     QString labelForAddress(const QString &address) const;
 
-    // Look up row inde
+    // Look up row index of an address in the model.
+    // Return -1 if not found.
+    int lookupAddress(const QString &address) const;
+
+    EditStatus getEditStatus() const { return editStatus; }
+
+private:
+    WalletModel *walletModel;
+    CWallet *wallet;
+    AddressTablePriv *priv;
+    QStringList columns;
+    EditStatus editStatus;
+
+    // Notify listeners that data changed.
+    void emitDataChanged(int index);
+
+signals:
+    void defaultAddressChanged(const QString &address);
+
+public slots:
+    // Update address list from core.
+    void updateEntry(const QString &address, const QString &label, bool isMine, int status);
+
+    friend class AddressTablePriv;
+
+};
+
+#endif // ADDRESSTABLEMODEL_H
