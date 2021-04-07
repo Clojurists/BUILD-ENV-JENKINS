@@ -46,4 +46,73 @@ BitcoinAmountField::BitcoinAmountField(QWidget *parent):
 }
 
 
-void BitcoinAmountField::setText(co
+void BitcoinAmountField::setText(const QString &text)
+{
+    if (text.isEmpty())
+    {
+        amount->clear();
+    }
+    else
+    {
+        amount->setValue(text.toDouble());
+    }
+}
+
+
+void BitcoinAmountField::clear()
+{
+    amount->clear();
+    unit->setCurrentIndex(0);
+}
+
+
+bool BitcoinAmountField::validate()
+{
+    bool valid = true;
+    if (amount->value() == 0.0)
+    {
+        valid = false;
+    }
+    if (valid && !BitcoinUnits::parse(currentUnit, text(), 0))
+    {
+        valid = false;
+    }
+    setValid(valid);
+    return valid;
+}
+
+
+void BitcoinAmountField::setValid(bool valid)
+{
+    if (valid)
+    {
+        amount->setStyleSheet("");
+    }
+    else
+    {
+        amount->setStyleSheet(STYLE_INVALID);
+    }
+}
+
+
+QString BitcoinAmountField::text() const
+{
+    if (amount->text().isEmpty())
+    {
+        return QString();
+    }
+    else
+    {
+        return amount->text();
+    }
+}
+
+
+bool BitcoinAmountField::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn)
+    {
+        // Clear invalid flag on focus
+        setValid(true);
+    }
+    else if (event->type() == QEvent::KeyPress || ev
