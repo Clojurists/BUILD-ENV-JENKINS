@@ -67,3 +67,17 @@ QValidator::State BitcoinAddressValidator::validate(QString &input, int &pos) co
         {
             // Alphanumeric and not a 'forbidden' character
         }
+        else
+        {
+            state = QValidator::Invalid;
+        }
+    }
+
+    // Empty address is "intermediate" input
+    if (input.isEmpty())
+    {
+        state = QValidator::Intermediate;
+    }
+
+    return state;
+}
