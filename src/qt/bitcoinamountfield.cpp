@@ -157,4 +157,37 @@ void BitcoinAmountField::setValue(qint64 value)
 
 void BitcoinAmountField::unitChanged(int idx)
 {
-    // Use description tooltip for curre
+    // Use description tooltip for current unit for the combobox
+    unit->setToolTip(unit->itemData(idx, Qt::ToolTipRole).toString());
+
+    // Determine new unit ID
+    int newUnit = unit->itemData(idx, BitcoinUnits::UnitRole).toInt();
+
+    // Parse current value and convert to new unit
+    bool valid = false;
+    qint64 currentValue = value(&valid);
+
+    currentUnit = newUnit;
+
+    // Set max length after retrieving the value, to prevent truncation
+    amount->setDecimals(BitcoinUnits::decimals(currentUnit));
+    amount->setMaximum(qPow(10, BitcoinUnits::amountDigits(currentUnit)) - qPow(10, -amount->decimals()));
+
+    if (valid)
+    {
+        // If value was valid, re-place it in the widget with the new unit
+        setValue(currentValue);
+    }
+    else
+    {
+        // If current value is invalid, just clear field
+        setText("");
+    }
+    setValid(true);
+}
+
+
+void BitcoinAmountField::setDisplayUnit(int newUnit)
+{
+    unit->setValue(newUnit);
+}
