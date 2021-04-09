@@ -115,4 +115,46 @@ bool BitcoinAmountField::eventFilter(QObject *object, QEvent *event)
         // Clear invalid flag on focus
         setValid(true);
     }
-    else if (event->type() == QEvent::KeyPress || ev
+    else if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+        if (keyEvent->key() == Qt::Key_Comma)
+        {
+            // Translate a comma into a period
+            QKeyEvent periodKeyEvent(event->type(), Qt::Key_Period, keyEvent->modifiers(), ".", keyEvent->isAutoRepeat(), keyEvent->count());
+            qApp->sendEvent(object, &periodKeyEvent);
+            return true;
+        }
+    }
+    return QWidget::eventFilter(object, event);
+}
+
+
+QWidget *BitcoinAmountField::setupTabChain(QWidget *prev)
+{
+    QWidget::setTabOrder(prev, amount);
+    return amount;
+}
+
+
+qint64 BitcoinAmountField::value(bool *valid_out) const
+{
+    qint64 val_out = 0;
+    bool valid = BitcoinUnits::parse(currentUnit, text(), &val_out);
+    if (valid_out)
+    {
+        *valid_out = valid;
+    }
+    return val_out;
+}
+
+
+void BitcoinAmountField::setValue(qint64 value)
+{
+    setText(BitcoinUnits::format(currentUnit, value));
+}
+
+
+void BitcoinAmountField::unitChanged(int idx)
+{
+    // Use description tooltip for curre
