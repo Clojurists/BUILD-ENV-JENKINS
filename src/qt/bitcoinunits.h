@@ -45,4 +45,21 @@ public:
     // Parse string to coin amount
     static bool parse(int unit, const QString &value, qint64 *val_out);
 
-    // AbstractListModel implementati
+    // AbstractListModel implementation
+    // List model for unit drop-down selection box.
+    enum RoleIndex
+    {
+        // Unit identifier
+        UnitRole = Qt::UserRole
+    };
+    int rowCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+ 
+private:
+    QList<BitcoinUnits::Unit> unitlist;
+        
+};
+
+typedef BitcoinUnits::Unit BitcoinUnit;
+
+#endif // BITCOINUNITS_H
