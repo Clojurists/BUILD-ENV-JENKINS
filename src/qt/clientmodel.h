@@ -25,4 +25,41 @@ public:
     OptionsModel *getOptionsModel();
 
     int getNumConnections() const;
-    int getNumBlocks() co
+    int getNumBlocks() const;
+    int getNumBlocksAtStartup();
+
+    QDateTime getLastBlockDate() const;
+
+    // Return true if client connected to testnet
+    bool isTestNet() const;
+    // Return true if core is doing initial block download
+    bool inInitialBlockDownload() const;
+    // Return conservative estimate of total number of blocks, or 0 if unknown
+    int getNumBlocksOfPeers() const;
+    // Return warnings to be displayed in status bar
+    QString getStatusBarWarnings() const;
+
+    QString formatFullVersion() const;
+    QString formatBuildDate() const;
+    QString clientName() const;
+    QString formatClientStartupTime() const;
+	double GetDifficulty() const;
+
+private:
+    OptionsModel *optionsModel;
+
+    int cachedNumBlocks;
+    int cachedNumBlocksOfPeers;
+
+    int numBlocksAtStartup;
+
+    QTimer *pollTimer;
+
+    void subscribeToCoreSignals();
+    void unsubscribeFromCoreSignals();
+    
+signals:
+    void numConnectionsChanged(int count);
+    void numBlocksChanged(int count, int countOfPeers);
+
+    // Asynchronous error noti
