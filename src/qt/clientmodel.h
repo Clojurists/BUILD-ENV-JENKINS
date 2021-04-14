@@ -62,4 +62,14 @@ signals:
     void numConnectionsChanged(int count);
     void numBlocksChanged(int count, int countOfPeers);
 
-    // Asynchronous error noti
+    // Asynchronous error notification
+    void error(const QString &title, const QString &message, bool modal);
+
+public slots:
+    void updateTimer();
+    void updateNumConnections(int numConnections);
+    void updateAlert(const QString &hash, int status);
+    
+};
+
+#endif // CLIENTMODEL_H
