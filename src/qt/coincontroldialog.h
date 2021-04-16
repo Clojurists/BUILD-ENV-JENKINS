@@ -51,3 +51,39 @@ private:
     enum
     {
         COLUMN_CHECKBOX,
+        COLUMN_AMOUNT,
+        COLUMN_LABEL,
+        COLUMN_ADDRESS,
+        COLUMN_DATE,
+        COLUMN_CONFIRMATIONS,
+        COLUMN_PRIORITY,
+        COLUMN_TXHASH,
+        COLUMN_VOUT_INDEX,
+        COLUMN_AMOUNT_INT64,
+        COLUMN_PRIORITY_INT64
+    };
+
+private slots:
+    void showMenu(const QPoint &);
+    void copyAmount();
+    void copyLabel();
+    void copyAddress();
+    void copyTransactionHash();
+    void clipboardQuantity();
+    void clipboardAmount();
+    void clipboardFee();
+    void clipboardAfterFee();
+    void clipboardBytes();
+    void clipboardPriority();
+    void clipboardLowOutput();
+    void clipboardChange();
+    void radioTreeMode(bool);
+    void radioListMode(bool);
+    void viewItemChanged(QTreeWidgetItem*, int);
+    void headerSectionClicked(int);
+    void buttonBoxClicked(QAbstractButton*);
+    void buttonSelectAllClicked();
+    
+};
+
+#endif // COINCONTROLDIALOG_H
