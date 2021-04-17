@@ -12,4 +12,8 @@ public:
    explicit CoinControlTreeWidget(QWidget *parent = 0);
     
 protected:
-   vir
+   virtual void  keyPressEvent(QKeyEvent *event);
+   
+};
+
+#endif // COINCONTROLTREEWIDGET_H
