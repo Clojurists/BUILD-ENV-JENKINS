@@ -39,4 +39,35 @@
        <item row="0" column="0">
         <widget class="QLabel" name="labelCoinControlQuantityText">
          <property name="styleSheet">
-          <string
+          <string notr="true">font-weight:bold;</string>
+         </property>
+         <property name="text">
+          <string>Quantity:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLabel" name="labelCoinControlQuantity">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="cursor">
+          <cursorShape>IBeamCursor</cursorShape>
+         </property>
+         <property name="contextMenuPolicy">
+          <enum>Qt::ActionsContextMenu</enum>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="textInteractionFlags">
+          <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelCoinControlBytesText">
+         <prop
