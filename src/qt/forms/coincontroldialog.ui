@@ -5,4 +5,38 @@
   <property name="geometry">
    <rect>
     <x>0</x>
-    
+    <y>0</y>
+    <width>1000</width>
+    <height>500</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Coin Control</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayoutTop" stretch="0,0,0,0">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>10</number>
+     </property>
+     <item>
+      <layout class="QFormLayout" name="formLayoutCoinControl1">
+       <property name="horizontalSpacing">
+        <number>10</number>
+       </property>
+       <property name="verticalSpacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelCoinControlQuantityText">
+         <property name="styleSheet">
+          <string
