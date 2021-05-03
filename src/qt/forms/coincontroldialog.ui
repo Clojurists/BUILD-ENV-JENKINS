@@ -530,4 +530,20 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="standardButto
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CoinControlTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>coincontroltreewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
