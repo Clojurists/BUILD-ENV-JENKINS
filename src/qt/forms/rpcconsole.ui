@@ -378,4 +378,41 @@
        <string>&amp;Console</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
-       <property
+       <property name="spacing">
+        <number>3</number>
+       </property>
+       <item>
+        <widget class="QTextEdit" name="messagesWidget">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="tabKeyNavigation" stdset="0">
+          <bool>false</bool>
+         </property>
+         <property name="columnCount" stdset="0">
+          <number>2</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>3</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string notr="true">&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit"/>
+         </item>
+         <item>
