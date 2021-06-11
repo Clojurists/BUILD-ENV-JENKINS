@@ -373,3 +373,224 @@ bool SetStartOnSystemStartup(bool fAutoStart)
             psl->SetWorkingDirectory(pszExePath);
             psl->SetShowCmd(SW_SHOWMINNOACTIVE);
             psl->SetArguments(pszArgs);
+
+            // Query IShellLink for the IPersistFile interface for
+            // saving the shortcut in persistent storage.
+            IPersistFile* ppf = NULL;
+            hres = psl->QueryInterface(IID_IPersistFile,
+                                       reinterpret_cast<void**>(&ppf));
+            if (SUCCEEDED(hres))
+            {
+                WCHAR pwsz[MAX_PATH];
+                // Ensure that the string is ANSI.
+                MultiByteToWideChar(CP_ACP, 0, StartupShortcutPath().string().c_str(), -1, pwsz, MAX_PATH);
+                // Save the link by calling IPersistFile::Save.
+                hres = ppf->Save(pwsz, TRUE);
+                ppf->Release();
+                psl->Release();
+                CoUninitialize();
+                return true;
+            }
+            psl->Release();
+        }
+        CoUninitialize();
+        return false;
+    }
+    return true;
+}
+
+#elif defined(LINUX)
+
+// Follow the Desktop Application Autostart Spec:
+//  http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
+
+boost::filesystem::path static GetAutostartDir()
+{
+    namespace fs = boost::filesystem;
+
+    char* pszConfigHome = getenv("XDG_CONFIG_HOME");
+    if (pszConfigHome)
+    { 
+        return fs::path(pszConfigHome) / "autostart";
+    }
+    char* pszHome = getenv("HOME");
+    if (pszHome) 
+    { 
+        return fs::path(pszHome) / ".config" / "autostart";
+    }
+    return fs::path();
+}
+
+
+boost::filesystem::path static GetAutostartFilePath()
+{
+    return GetAutostartDir() / "JackpotCoin.desktop";
+}
+
+
+bool GetStartOnSystemStartup()
+{
+    boost::filesystem::ifstream optionFile(GetAutostartFilePath());
+    if (!optionFile.good())
+    {
+        return false;
+    }
+    // Scan through file for "Hidden=true":
+    std::string line;
+    while (!optionFile.eof())
+    {
+        getline(optionFile, line);
+        if ((line.find("Hidden") != std::string::npos) && (line.find("true") != std::string::npos))
+        {
+            return false;
+        }
+    }
+    optionFile.close();
+
+    return true;
+}
+
+
+bool SetStartOnSystemStartup(bool fAutoStart)
+{
+    if (!fAutoStart)
+    {
+        boost::filesystem::remove(GetAutostartFilePath());
+    }
+    else
+    {
+        char pszExePath[MAX_PATH+1];
+        memset(pszExePath, 0, sizeof(pszExePath));
+        if (readlink("/proc/self/exe", pszExePath, sizeof(pszExePath)-1) == -1)
+        {
+            return false;
+        }
+        
+        boost::filesystem::create_directories(GetAutostartDir());
+        boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out|std::ios_base::trunc);
+        if (!optionFile.good())
+        {
+            return false;
+        }
+        // Write a bitcoin.desktop file to the autostart directory:
+        optionFile << "[Desktop Entry]\n";
+        optionFile << "Type=Application\n";
+        optionFile << "Name=JackpotCoin\n";
+        optionFile << "Exec=" << pszExePath << " -min\n";
+        optionFile << "Terminal=false\n";
+        optionFile << "Hidden=false\n";
+        optionFile.close();
+    }
+    return true;
+}
+
+
+#elif defined(Q_OS_MAC)
+// based on: https://github.com/Mozketo/LaunchAtLoginController/blob/master/LaunchAtLoginController.m
+
+#include <CoreFoundation/CoreFoundation.h>
+#include <CoreServices/CoreServices.h>
+
+LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl);
+LSSharedFileListItemRef findStartupItemInList(LSSharedFileListRef list, CFURLRef findUrl)
+{
+    // loop through the list of startup items and try to find the bitcoin app
+    CFArrayRef listSnapshot = LSSharedFileListCopySnapshot(list, NULL);
+    for (int i = 0; i < CFArrayGetCount(listSnapshot); i++) 
+    {
+        LSSharedFileListItemRef item = (LSSharedFileListItemRef)CFArrayGetValueAtIndex(listSnapshot, i);
+        UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
+        CFURLRef currentItemURL = NULL;
+        LSSharedFileListItemResolve(item, resolutionFlags, &currentItemURL, NULL);
+        if (currentItemURL && CFEqual(currentItemURL, findUrl)) 
+        {
+            // found
+            CFRelease(currentItemURL);
+            return item;
+        }
+        if(currentItemURL) 
+        {
+            CFRelease(currentItemURL);
+        }
+    }
+    return NULL;
+}
+
+
+bool GetStartOnSystemStartup()
+{
+    CFURLRef bitcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
+    return !!foundItem; // return boolified object
+}
+
+
+bool SetStartOnSystemStartup(bool fAutoStart)
+{
+    CFURLRef bitcoinAppUrl = CFBundleCopyBundleURL(CFBundleGetMainBundle());
+    LSSharedFileListRef loginItems = LSSharedFileListCreate(NULL, kLSSharedFileListSessionLoginItems, NULL);
+    LSSharedFileListItemRef foundItem = findStartupItemInList(loginItems, bitcoinAppUrl);
+
+    if (fAutoStart && !foundItem) 
+    {
+        // add bitcoin app to startup item list
+        LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, NULL, NULL, bitcoinAppUrl, NULL, NULL);
+    }
+    else if(!fAutoStart && foundItem) 
+    {
+        // remove item
+        LSSharedFileListItemRemove(loginItems, foundItem);
+    }
+    return true;
+}
+#else
+
+bool GetStartOnSystemStartup() { return false; }
+bool SetStartOnSystemStartup(bool fAutoStart) { return false; }
+
+#endif
+
+HelpMessageBox::HelpMessageBox(QWidget *parent) :
+    QMessageBox(parent)
+{
+    header = tr("JackpotCoin-Qt") + " " + tr("version") + " " +
+        QString::fromStdString(FormatFullVersion()) + "\n\n" +
+        tr("Usage:") + "\n" +
+        "  JackpotCoin-qt [" + tr("command-line options") + "]                     " + "\n";
+
+    coreOptions = QString::fromStdString(HelpMessage());
+
+    uiOptions = tr("UI options") + ":\n" +
+        "  -lang=<lang>           " + tr("Set language, for example \"de_DE\" (default: system locale)") + "\n" +
+        "  -min                   " + tr("Start minimized") + "\n" +
+        "  -splash                " + tr("Show splash screen on startup (default: 1)") + "\n";
+
+    setWindowTitle(tr("JackpotCoin-Qt"));
+    setTextFormat(Qt::PlainText);
+    // setMinimumWidth is ignored for QMessageBox so put in non-breaking spaces to make it wider.
+    setText(header + QString(QChar(0x2003)).repeated(50));
+    setDetailedText(coreOptions + "\n" + uiOptions);
+}
+
+
+void HelpMessageBox::printToConsole()
+{
+    // On other operating systems, the expected action is to print the message to the console.
+    QString strUsage = header + "\n" + coreOptions + "\n" + uiOptions;
+    fprintf(stdout, "%s", strUsage.toStdString().c_str());
+}
+
+
+void HelpMessageBox::showOrPrint()
+{
+#if defined(WIN32)
+        // On Windows, show a message box, as there is no stderr/stdout in windowed applications
+        exec();
+#else
+        // On other operating systems, print help text to console
+        printToConsole();
+#endif
+}
+
+} // namespace GUIUtil
