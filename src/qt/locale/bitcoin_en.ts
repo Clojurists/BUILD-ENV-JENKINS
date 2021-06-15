@@ -1782,3 +1782,970 @@ Address: %4
         <source>Amount</source>
         <translation>Amount</translation>
     </message>
+    <message>
+        <location line="+1"/>
+        <source>true</source>
+        <translation>true</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>false</source>
+        <translation>false</translation>
+    </message>
+    <message>
+        <location line="-211"/>
+        <source>, has not been successfully broadcast yet</source>
+        <translation>, has not been successfully broadcast yet</translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>unknown</source>
+        <translation>unknown</translation>
+    </message>
+</context>
+<context>
+    <name>TransactionDescDialog</name>
+    <message>
+        <location filename="../forms/transactiondescdialog.ui" line="+14"/>
+        <source>Transaction details</source>
+        <translation>Transaction details</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>This pane shows a detailed description of the transaction</source>
+        <translation>This pane shows a detailed description of the transaction</translation>
+    </message>
+</context>
+<context>
+    <name>TransactionTableModel</name>
+    <message>
+        <location filename="../transactiontablemodel.cpp" line="+226"/>
+        <source>Date</source>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Address</source>
+        <translation>Address</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Amount</source>
+        <translation>Amount</translation>
+    </message>
+    <message numerus="yes">
+        <location line="+57"/>
+        <source>Open for %n block(s)</source>
+        <translation>
+            <numerusform>Open for %n block</numerusform>
+            <numerusform>Open for %n blocks</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Open until %1</source>
+        <translation>Open until %1</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Offline (%1 confirmations)</source>
+        <translation>Offline (%1 confirmations)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Unconfirmed (%1 of %2 confirmations)</source>
+        <translation>Unconfirmed (%1 of %2 confirmations)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Confirmed (%1 confirmations)</source>
+        <translation>Confirmed (%1 confirmations)</translation>
+    </message>
+    <message numerus="yes">
+        <location line="+8"/>
+        <source>Mined balance will be available when it matures in %n more block(s)</source>
+        <translation>
+            <numerusform>Mined balance will be available when it matures in %n more block</numerusform>
+            <numerusform>Mined balance will be available when it matures in %n more blocks</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>This block was not received by any other nodes and will probably not be accepted!</source>
+        <translation>This block was not received by any other nodes and will probably not be accepted!</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Generated but not accepted</source>
+        <translation>Generated but not accepted</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>Received with</source>
+        <translation>Received with</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Received from</source>
+        <translation>Received from</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Sent to</source>
+        <translation>Sent to</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Payment to yourself</source>
+        <translation>Payment to yourself</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Mined</source>
+        <translation>Mined</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Minted</source>
+        <translation>Minted</translation>
+    </message>
+    <message>
+        <location line="+38"/>
+        <source>(n/a)</source>
+        <translation>(n/a)</translation>
+    </message>
+    <message>
+        <location line="+199"/>
+        <source>Transaction status. Hover over this field to show number of confirmations.</source>
+        <translation>Transaction status. Hover over this field to show number of confirmations.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Date and time that the transaction was received.</source>
+        <translation>Date and time that the transaction was received.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Type of transaction.</source>
+        <translation>Type of transaction.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Destination address of transaction.</source>
+        <translation>Destination address of transaction.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Amount removed from or added to balance.</source>
+        <translation>Amount removed from or added to balance.</translation>
+    </message>
+</context>
+<context>
+    <name>TransactionView</name>
+    <message>
+        <location filename="../transactionview.cpp" line="+55"/>
+        <location line="+16"/>
+        <source>All</source>
+        <translation>All</translation>
+    </message>
+    <message>
+        <location line="-15"/>
+        <source>Today</source>
+        <translation>Today</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This week</source>
+        <translation>This week</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This month</source>
+        <translation>This month</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Last month</source>
+        <translation>Last month</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>This year</source>
+        <translation>This year</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Range...</source>
+        <translation>Range...</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Received with</source>
+        <translation>Received with</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Sent to</source>
+        <translation>Sent to</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>To yourself</source>
+        <translation>To yourself</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mined</source>
+        <translation>Mined</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minted</source>
+        <translation>Minted</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Other</source>
+        <translation>Other</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Enter address or label to search</source>
+        <translation>Enter address or label to search</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Min amount</source>
+        <translation>Min amount</translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Copy address</source>
+        <translation>Copy address</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy label</source>
+        <translation>Copy label</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy amount</source>
+        <translation>Copy amount</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Edit label</source>
+        <translation>Edit label</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Show transaction details</source>
+        <translation>Show transaction details</translation>
+    </message>
+    <message>
+        <location line="+142"/>
+        <source>Export Transaction Data</source>
+        <translation>Export Transaction Data</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Comma separated file (*.csv)</source>
+        <translation>Comma separated file (*.csv)</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Confirmed</source>
+        <translation>Confirmed</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Date</source>
+        <translation>Date</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Label</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Address</source>
+        <translation>Address</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Amount</source>
+        <translation>Amount</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Error exporting</source>
+        <translation>Error exporting</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Could not write to file %1.</source>
+        <translation>Could not write to file %1.</translation>
+    </message>
+    <message>
+        <location line="+95"/>
+        <source>Range:</source>
+        <translation>Range:</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>to</source>
+        <translation>to</translation>
+    </message>
+</context>
+<context>
+    <name>WalletModel</name>
+    <message>
+        <location filename="../walletmodel.cpp" line="+192"/>
+        <source>Sending...</source>
+        <translation>Sending...</translation>
+    </message>
+</context>
+<context>
+    <name>bitcoin-core</name>
+    <message>
+        <location filename="../bitcoinstrings.cpp" line="+82"/>
+        <source>JackpotCoin version</source>
+        <translation>JackpotCoin version</translation>
+    </message>
+    <message>
+        <location line="+82"/>
+        <source>Usage:</source>
+        <translation>Usage:</translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>Send command to -server or bitcoind</source>
+        <translation>Send command to -server or bitcoind</translation>
+    </message>
+    <message>
+        <location line="-19"/>
+        <source>List commands</source>
+        <translation>List commands</translation>
+    </message>
+    <message>
+        <location line="-11"/>
+        <source>Get help for a command</source>
+        <translation>Get help for a command</translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Options:</source>
+        <translation>Options:</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Specify configuration file (default: JackpotCoin.conf)</source>
+        <translation>Specify configuration file (default: JackpotCoin.conf)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Specify pid file (default: JackpotCoind.pid)</source>
+        <translation>Specify pid file (default: JackpotCoind.pid)</translation>
+    </message>
+    <message>
+        <location line="-47"/>
+        <source>Generate coins</source>
+        <translation>Generate coins</translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Don&apos;t generate coins</source>
+        <translation>Don&apos;t generate coins</translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>Specify data directory</source>
+        <translation>Specify data directory</translation>
+    </message>
+    <message>
+        <location line="-8"/>
+        <source>Set database cache size in megabytes (default: 25)</source>
+        <translation>Set database cache size in megabytes (default: 25)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Set database disk log size in megabytes (default: 100)</source>
+        <translation>Set database disk log size in megabytes (default: 100)</translation>
+    </message>
+    <message>
+        <location line="-26"/>
+        <source>Listen for connections on &lt;port&gt; (default: 7777 or testnet: 17777)</source>
+        <translation>Listen for connections on &lt;port&gt; (default: 8333 or testnet: 18333)</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Maintain at most &lt;n&gt; connections to peers (default: 125)</source>
+        <translation>Maintain at most &lt;n&gt; connections to peers (default: 125)</translation>
+    </message>
+    <message>
+        <location line="-33"/>
+        <source>Connect to a node to retrieve peer addresses, and disconnect</source>
+        <translation>Connect to a node to retrieve peer addresses, and disconnect</translation>
+    </message>
+    <message>
+        <location line="+64"/>
+        <source>Specify your own public address</source>
+        <translation>Specify your own public address</translation>
+    </message>
+    <message>
+        <location line="-75"/>
+        <source>Bind to given address. Use [host]:port notation for IPv6</source>
+        <translation>Bind to given address. Use [host]:port notation for IPv6</translation>
+    </message>
+    <message>
+        <location line="+77"/>
+        <source>Threshold for disconnecting misbehaving peers (default: 100)</source>
+        <translation>Threshold for disconnecting misbehaving peers (default: 100)</translation>
+    </message>
+    <message>
+        <location line="-112"/>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: 86400)</source>
+        <translation>Number of seconds to keep misbehaving peers from reconnecting (default: 86400)</translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>An error occurred while setting up the RPC port %u for listening on IPv4: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Detach block and address databases. Increases shutdown time (default: 0)</source>
+        <translation>Detach block and address databases. Increases shutdown time (default: 0)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Error: The transaction was rejected.  This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: 8344 or testnet: 18344)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Accept command line and JSON-RPC commands</source>
+        <translation>Accept command line and JSON-RPC commands</translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Error: Transaction creation failed  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Error: Wallet locked, unable to create transaction  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Importing blockchain data file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Importing bootstrap blockchain data file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Run in the background as a daemon and accept commands</source>
+        <translation>Run in the background as a daemon and accept commands</translation>
+    </message>
+    <message>
+        <location line="+33"/>
+        <source>Use the test network</source>
+        <translation>Use the test network</translation>
+    </message>
+    <message>
+        <location line="-93"/>
+        <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
+        <translation>Accept connections from outside (default: 1 if no -proxy or -connect)</translation>
+    </message>
+    <message>
+        <location line="-53"/>
+        <source>An error occurred while setting up the RPC port %u for listening on IPv6, falling back to IPv4: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Error initializing database environment %s! To recover, BACKUP THAT DIRECTORY, then remove everything from it except for wallet.dat.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
+        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</source>
+        <translation>Set maximum size of high-priority/low-fee transactions in bytes (default: 27000)</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
+        <translation>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.</source>
+        <translation>Warning: Displayed transactions may not be correct! You may need to upgrade, or other nodes may need to upgrade.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong JackpotCoin will not work properly.</source>
+        <translation>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong JackpotCoin will not work properly.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
+        <translation>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
+        <translation>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
+        <translation>Attempt to recover private keys from a corrupt wallet.dat</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Block creation options:</source>
+        <translation>Block creation options:</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Connect only to the specified node(s)</source>
+        <translation>Connect only to the specified node(s)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
+        <translation>Discover own IP address (default: 1 when listening and no -externalip)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
+        <translation>Failed to listen on any port. Use -listen=0 if you want this.</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Find peers using DNS lookup (default: 0)</source>
+        <translation>Find peers using DNS lookup (default: 0)</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Invalid -tor address: &apos;%s&apos;</source>
+        <translation>Invalid -tor address: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</source>
+        <translation>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: 5000)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: 1000)</source>
+        <translation>Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: 1000)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</source>
+        <translation>Only connect to nodes in network &lt;net&gt; (IPv4, IPv6 or Tor)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Output extra debugging information. Implies all other -debug* options</source>
+        <translation>Output extra debugging information. Implies all other -debug* options</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Output extra network debugging information</source>
+        <translation>Output extra network debugging information</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Prepend debug output with timestamp</source>
+        <translation>Prepend debug output with timestamp</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
+        <translation>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Select the version of socks proxy to use (4-5, default: 5)</source>
+        <translation>Select the version of socks proxy to use (4-5, default: 5)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Send trace/debug info to console instead of debug.log file</source>
+        <translation>Send trace/debug info to console instead of debug.log file</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Send trace/debug info to debugger</source>
+        <translation>Send trace/debug info to debugger</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Set maximum block size in bytes (default: 250000)</source>
+        <translation>Set maximum block size in bytes (default: 250000)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Set minimum block size in bytes (default: 0)</source>
+        <translation>Set minimum block size in bytes (default: 0)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
+        <translation>Shrink debug.log file on client startup (default: 1 when no -debug)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Specify connection timeout in milliseconds (default: 5000)</source>
+        <translation>Specify connection timeout in milliseconds (default: 5000)</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Use UPnP to map the listening port (default: 0)</source>
+        <translation>Use UPnP to map the listening port (default: 0)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
+        <translation>Use UPnP to map the listening port (default: 1 when listening)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Use proxy to reach tor hidden services (default: same as -proxy)</source>
+        <translation>Use proxy to reach tor hidden services (default: same as -proxy)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Username for JSON-RPC connections</source>
+        <translation>Username for JSON-RPC connections</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Verifying database integrity...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Warning: Disk space is low!</source>
+        <translation>Warning: Disk space is low!</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Warning: This version is obsolete, upgrade required!</source>
+        <translation>Warning: This version is obsolete, upgrade required!</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>wallet.dat corrupt, salvage failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-43"/>
+        <source>Password for JSON-RPC connections</source>
+        <translation>Password for JSON-RPC connections</translation>
+    </message>
+    <message>
+        <location line="-53"/>
+        <source>Allow JSON-RPC connections from specified IP address</source>
+        <translation>Allow JSON-RPC connections from specified IP address</translation>
+    </message>
+    <message>
+        <location line="+61"/>
+        <source>Send commands to node running on &lt;ip&gt; (default: 127.0.0.1)</source>
+        <translation>Send commands to node running on &lt;ip&gt; (default: 127.0.0.1)</translation>
+    </message>
+    <message>
+        <location line="-99"/>
+        <source>Execute command when the best block changes (%s in cmd is replaced by block hash)</source>
+        <translation>Execute command when the best block changes (%s in cmd is replaced by block hash)</translation>
+    </message>
+    <message>
+        <location line="+122"/>
+        <source>Upgrade wallet to latest format</source>
+        <translation>Upgrade wallet to latest format</translation>
+    </message>
+    <message>
+        <location line="-15"/>
+        <source>Set key pool size to &lt;n&gt; (default: 100)</source>
+        <translation>Set key pool size to &lt;n&gt; (default: 100)</translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Rescan the block chain for missing wallet transactions</source>
+        <translation>Rescan the block chain for missing wallet transactions</translation>
+    </message>
+    <message>
+        <location line="-24"/>
+        <source>How many blocks to check at startup (default: 2500, 0 = all)</source>
+        <translation>How many blocks to check at startup (default: 2500, 0 = all)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>How thorough the block verification is (0-6, default: 1)</source>
+        <translation>How thorough the block verification is (0-6, default: 1)</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Imports blocks from external blk000?.dat file</source>
+        <translation>Imports blocks from external blk000?.dat file</translation>
+    </message>
+    <message>
+        <location line="+51"/>
+        <source>Use OpenSSL (https) for JSON-RPC connections</source>
+        <translation>Use OpenSSL (https) for JSON-RPC connections</translation>
+    </message>
+    <message>
+        <location line="-21"/>
+        <source>Server certificate file (default: server.cert)</source>
+        <translation>Server certificate file (default: server.cert)</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Server private key (default: server.pem)</source>
+        <translation>Server private key (default: server.pem)</translation>
+    </message>
+    <message>
+        <location line="-127"/>
+        <source>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</source>
+        <translation>Acceptable ciphers (default: TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!AH:!3DES:@STRENGTH)</translation>
+    </message>
+    <message>
+        <location line="+139"/>
+        <source>This help message</source>
+        <translation>This help message</translation>
+    </message>
+    <message>
+        <location line="-131"/>
+        <source>Cannot obtain a lock on data directory %s.  JackpotCoin is probably already running.</source>
+        <translation>Cannot obtain a lock on data directory %s.  JackpotCoin is probably already running.</translation>
+    </message>
+    <message>
+        <location line="+57"/>
+        <source>JackpotCoin</source>
+        <translation>JackpotCoin</translation>
+    </message>
+    <message>
+        <location line="+77"/>
+        <source>Unable to bind to %s on this computer (bind returned error %d, %s)</source>
+        <translation>Unable to bind to %s on this computer (bind returned error %d, %s)</translation>
+    </message>
+    <message>
+        <location line="-69"/>
+        <source>Connect through socks proxy</source>
+        <translation>Connect through socks proxy</translation>
+    </message>
+    <message>
+        <location line="-13"/>
+        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
+        <translation>Allow DNS lookups for -addnode, -seednode and -connect</translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Loading addresses...</source>
+        <translation>Loading addresses...</translation>
+    </message>
+    <message>
+        <location line="-26"/>
+        <source>Error loading blkindex.dat</source>
+        <translation>Error loading blkindex.dat</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Error loading wallet.dat: Wallet corrupted</source>
+        <translation>Error loading wallet.dat: Wallet corrupted</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Error loading wallet.dat: Wallet requires newer version of JackpotCoin</source>
+        <translation>Error loading wallet.dat: Wallet requires newer version of JackpotCoin</translation>
+    </message>
+    <message>
+        <location line="+73"/>
+        <source>Wallet needed to be rewritten: restart JackpotCoin to complete</source>
+        <translation>Wallet needed to be rewritten: restart JackpotCoin to complete</translation>
+    </message>
+    <message>
+        <location line="-75"/>
+        <source>Error loading wallet.dat</source>
+        <translation>Error loading wallet.dat</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Invalid -proxy address: &apos;%s&apos;</source>
+        <translation>Invalid -proxy address: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Unknown network specified in -onlynet: &apos;%s&apos;</source>
+        <translation>Unknown network specified in -onlynet: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="-1"/>
+        <source>Unknown -socks proxy version requested: %i</source>
+        <translation>Unknown -socks proxy version requested: %i</translation>
+    </message>
+    <message>
+        <location line="-74"/>
+        <source>Cannot resolve -bind address: &apos;%s&apos;</source>
+        <translation>Cannot resolve -bind address: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cannot resolve -externalip address: &apos;%s&apos;</source>
+        <translation>Cannot resolve -externalip address: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+30"/>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="-15"/>
+        <source>Error: could not start node</source>
+        <translation>Error: could not start node</translation>
+    </message>
+    <message>
+        <location line="+40"/>
+        <source>Sending...</source>
+        <translation>Sending...</translation>
+    </message>
+    <message>
+        <location line="-24"/>
+        <source>Invalid amount</source>
+        <translation>Invalid amount</translation>
+    </message>
+    <message>
+        <location line="-4"/>
+        <source>Insufficient funds</source>
+        <translation>Insufficient funds</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Loading block index...</source>
+        <translation>Loading block index...</translation>
+    </message>
+    <message>
+        <location line="-46"/>
+        <source>Add a node to connect to and attempt to keep the connection open</source>
+        <translation>Add a node to connect to and attempt to keep the connection open</translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>Unable to bind to %s on this computer. JackpotCoin is probably already running.</source>
+        <translation>Unable to bind to %s on this computer. JackpotCoin is probably already running.</translation>
+    </message>
+    <message>
+        <location line="+55"/>
+        <source>Find peers using internet relay chat (default: 1)</source>
+        <translation>Find peers using internet relay chat (default: 1)</translation>
+    </message>
+    <message>
+        <location line="-2"/>
+        <source>Fee per KB to add to transactions you send</source>
+        <translation>Fee per KB to add to transactions you send</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Loading wallet...</source>
+        <translation>Loading wallet...</translation>
+    </message>
+    <message>
+        <location line="-39"/>
+        <source>Cannot downgrade wallet</source>
+        <translation>Cannot downgrade wallet</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cannot initialize keypool</source>
+        <translation>Cannot initialize keypool</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Cannot write default address</source>
+        <translation>Cannot write default address</translation>
+    </message>
+    <message>
+        <location line="+46"/>
+        <source>Rescanning...</source>
+        <translation>Rescanning...</translation>
+    </message>
+    <message>
+        <location line="-40"/>
+        <source>Done loading</source>
+        <translation>Done loading</translation>
+    </message>
+    <message>
+        <location line="+64"/>
+        <source>To use the %s option</source>
+        <translation>To use the %s option</translation>
+    </message>
+    <message>
+        <location line="-150"/>
+        <source>%s, you must set a rpcpassword in the configuration file:
+ %s
+It is recommended you use the following random password:
+rpcuser=bitcoinrpc
+rpcpassword=%s
+(you do not need to remember this password)
+If the file does not exist, create it with owner-readable-only file permissions.
+</source>
+        <translation>%s, you must set a rpcpassword in the configuration file:
+ %s
+It is recommended you use the following random password:
+rpcuser=bitcoinrpc
+rpcpassword=%s
+(you do not need to remember this password)
+If the file does not exist, create it with owner-readable-only file permissions.
+</translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location line="-30"/>
+        <source>You must set rpcpassword=&lt;password&gt; in the configuration file:
+%s
+If the file does not exist, create it with owner-readable-only file permissions.</source>
+        <translation>You must set rpcpassword=&lt;password&gt; in the configuration file:
+%s
+If the file does not exist, create it with owner-readable-only file permissions.</translation>
+    </message>
+</context>
+</TS>
