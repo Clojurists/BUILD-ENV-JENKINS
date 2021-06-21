@@ -100,4 +100,39 @@ void MacDockIconHandler::setIcon(const QIcon &icon)
         if (!pixmap.isNull() && notificationIconFile.open()) {
             QImageWriter writer(&notificationIconFile, "PNG");
             if (writer.write(pixmap.toImage())) {
-                const char *cStri
+                const char *cString = notificationIconFile.fileName().toUtf8().data();
+                NSString *macString = [NSString stringWithCString:cString encoding:NSUTF8StringEncoding];
+                image =  [[NSImage alloc] initWithContentsOfFile:macString];
+            }
+        }
+
+        if(!image) {
+            // if testnet image could not be created, load std. app icon
+            image = [[NSImage imageNamed:@"NSApplicationIcon"] retain];
+        }
+    }
+
+    [NSApp setApplicationIconImage:image];
+    [image release];
+    [pool release];
+}
+
+MacDockIconHandler *MacDockIconHandler::instance()
+{
+    static MacDockIconHandler *s_instance = NULL;
+    if (!s_instance) 
+    {
+        s_instance = new MacDockIconHandler();
+    }
+    return s_instance;
+}
+
+void MacDockIconHandler::handleDockIconClickEvent()
+{
+    if (this->mainWindow)
+    {
+        this->mainWindow->activateWindow();
+        this->mainWindow->show();
+    }
+    emit this->dockIconClicked();
+}
