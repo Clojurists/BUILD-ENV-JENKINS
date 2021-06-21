@@ -63,4 +63,41 @@ MacDockIconHandler::MacDockIconHandler() : QObject()
 }
 
 void MacDockIconHandler::setMainWindow(QMainWindow *window) {
-    this
+    this->mainWindow = window;
+}
+
+MacDockIconHandler::~MacDockIconHandler()
+{
+    [this->m_dockIconClickEventHandler release];
+    delete this->m_dummyWidget;
+    this->setMainWindow(NULL);
+}
+
+QMenu *MacDockIconHandler::dockMenu()
+{
+    return this->m_dockMenu;
+}
+
+void MacDockIconHandler::setIcon(const QIcon &icon)
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSImage *image = nil;
+    if (icon.isNull()) 
+    {
+        image = [[NSImage imageNamed:@"NSApplicationIcon"] retain];
+    }
+    else 
+    {
+        QSize size = icon.actualSize(QSize(128, 128));
+        QPixmap pixmap = icon.pixmap(size);
+
+//      CGImageRef cgImage = pixmap.toMacCGImageRef();
+//      image = [[NSImage alloc] initWithCGImage:cgImage size:NSZeroSize];
+//      CFRelease(cgImage);
+
+        // write temp file DRM (could also be done through QIODevice [memory])
+        QTemporaryFile notificationIconFile;
+        if (!pixmap.isNull() && notificationIconFile.open()) {
+            QImageWriter writer(&notificationIconFile, "PNG");
+            if (writer.write(pixmap.toImage())) {
+                const char *cStri
