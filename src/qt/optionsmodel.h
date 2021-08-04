@@ -4,4 +4,39 @@
 #include <QAbstractListModel>
 
 // Interface from Qt to configuration data structure for Bitcoin client.
-// To Qt, the options are presented as a list 
+// To Qt, the options are presented as a list with the different options
+// laid out vertically.
+// This can be changed to a tree once the settings become sufficiently
+// complex.
+
+class OptionsModel : public QAbstractListModel
+{
+    Q_OBJECT
+
+public:
+    explicit OptionsModel(QObject *parent = 0);
+
+    enum OptionID {
+        StartAtStartup,      // bool
+        MinimizeToTray,      // bool
+        MapPortUPnP,         // bool
+        MinimizeOnClose,     // bool
+        ProxyUse,            // bool
+        ProxyIP,             // QString
+        ProxyPort,           // int
+        ProxySocksVersion,   // int
+        Fee,                 // qint64
+        DisplayUnit,         // BitcoinUnits::Unit
+        DisplayAddresses,    // bool
+        DetachDatabases,     // bool
+        Language,            // QString
+		CoinControlFeatures, // bool
+        ReserveBalance,      // qint64
+        HideNotification,    // Bool
+        HideInvalid,         // Bool
+        OptionIDRowCount,    // Used to define the number of options, should be end of enum.
+    };
+
+    void Init();
+
+    // Migrate settings from wal
