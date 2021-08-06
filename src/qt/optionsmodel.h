@@ -39,4 +39,40 @@ public:
 
     void Init();
 
-    // Migrate settings from wal
+    // Migrate settings from wallet.dat after app initialization
+    // returns true if settings upgraded
+    bool Upgrade(); 
+
+    int rowCount(const QModelIndex & parent = QModelIndex()) const;
+    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
+
+    // Explicit getters
+    qint64 getTransactionFee();
+    qint64 getReserveBalance();
+    bool getMinimizeToTray();
+    bool getMinimizeOnClose();
+    int getDisplayUnit();
+    bool getDisplayAddresses();
+    bool getHideNotification();
+    bool getHideInvalid();
+    QString getLanguage() { return language; }
+	bool getCoinControlFeatures();
+
+private:
+    int nDisplayUnit;
+    bool fDisplayAddresses;
+    bool fMinimizeToTray;
+    bool fMinimizeOnClose;
+    bool fHideNotification;
+    bool fHideInvalid;
+	bool fCoinControlFeatures;
+    QString language;
+
+signals:
+    void displayUnitChanged(int unit);
+	void transactionFeeChanged(qint64);
+    void coinControlFeaturesChanged(bool);
+    void reserveBalanceChanged(qint64);
+    
+}
