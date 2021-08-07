@@ -75,4 +75,6 @@ signals:
     void coinControlFeaturesChanged(bool);
     void reserveBalanceChanged(qint64);
     
-}
+};
+
+#endif // OPTIONSMODEL_H
