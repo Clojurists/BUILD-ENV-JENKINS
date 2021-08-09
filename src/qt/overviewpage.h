@@ -38,3 +38,21 @@ signals:
     void transactionClicked(const QModelIndex &index);
 
 private:
+    Ui::OverviewPage *ui;
+    WalletModel *model;
+    qint64 currentBalance;
+    qint64 currentStake;
+    qint64 currentUnconfirmedBalance;
+    qint64 currentImmatureBalance;
+    qint64 currentJackpot;
+
+    TxViewDelegate *txdelegate;
+    TransactionFilterProxy *filter;
+
+private slots:
+    void updateDisplayUnit();
+    void handleTransactionClicked(const QModelIndex &index);
+    
+};
+
+#endif // OVERVIEWPAGE_H
