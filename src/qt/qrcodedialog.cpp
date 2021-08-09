@@ -71,4 +71,37 @@ void QRCodeDialog::genCode()
         {
             for (int x = 0; x < code->width; x++)
             {
-       
+                myImage.setPixel(x + 4, y + 4, ((*p & 1) ? 0x0 : 0xffffff));
+                p++;
+            }
+        }
+        QRcode_free(code);
+        ui->lblQRCode->setPixmap(QPixmap::fromImage(myImage).scaled(300, 300));
+        ui->outUri->setPlainText(uri);
+    }
+}
+
+
+QString QRCodeDialog::getURI()
+{
+    QString ret = QString("jackpotcoin:%1").arg(address);
+    int paramCount = 0;
+    ui->outUri->clear();
+    if (ui->chkReqPayment->isChecked())
+    {
+        if (ui->lnReqAmount->validate())
+        {
+            // even if we allow a non BTC unit input in lnReqAmount, we generate the URI with BTC as unit (as defined in BIP21)
+            ret += QString("?amount=%1").arg(BitcoinUnits::format(BitcoinUnits::BTC, ui->lnReqAmount->value()));
+            paramCount++;
+        }
+        else
+        {
+            ui->btnSaveAs->setEnabled(false);
+            ui->lblQRCode->setText(tr("The entered amount is invalid, please check."));
+            return QString("");
+        }
+    }
+    if (!ui->lnLabel->text().isEmpty())
+    {
+        QString lbl(QU
