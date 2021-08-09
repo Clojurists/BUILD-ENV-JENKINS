@@ -23,4 +23,52 @@ QRCodeDialog::QRCodeDialog(const QString &addr, const QString &label, bool enabl
 
     ui->chkReqPayment->setVisible(enableReq);
     ui->lblAmount->setVisible(enableReq);
-    ui
+    ui->lnReqAmount->setVisible(enableReq);
+
+    ui->lnLabel->setText(label);
+
+    ui->btnSaveAs->setEnabled(false);
+
+    genCode();
+}
+
+
+QRCodeDialog::~QRCodeDialog()
+{
+    delete ui;
+}
+
+
+void QRCodeDialog::setModel(OptionsModel *model)
+{
+    this->model = model;
+
+    if (model)
+    {
+        connect(model, SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
+    }
+    // update the display unit, to not use the default ("BTC")
+    updateDisplayUnit();
+}
+
+
+void QRCodeDialog::genCode()
+{
+    QString uri = getURI();
+    if (uri != "")
+    {
+        ui->lblQRCode->setText("");
+        QRcode *code = QRcode_encodeString(uri.toUtf8().constData(), 0, QR_ECLEVEL_L, QR_MODE_8, 1);
+        if (!code)
+        {
+            ui->lblQRCode->setText(tr("Error encoding URI into QR Code."));
+            return;
+        }
+        myImage = QImage(code->width + 8, code->width + 8, QImage::Format_RGB32);
+        myImage.fill(0xffffff);
+        unsigned char *p = code->data;
+        for (int y = 0; y < code->width; y++)
+        {
+            for (int x = 0; x < code->width; x++)
+            {
+       
