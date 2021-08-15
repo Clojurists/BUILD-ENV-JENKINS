@@ -150,4 +150,27 @@ void QRCodeDialog::on_btnSaveAs_clicked()
     QString fn = GUIUtil::getSaveFileName(this, tr("Save QR Code"), QString(), tr("PNG Images (*.png)"));
     if (!fn.isEmpty())
     {
-        m
+        myImage.scaled(EXPORT_IMAGE_SIZE, EXPORT_IMAGE_SIZE).save(fn);
+    }
+}
+
+
+void QRCodeDialog::on_chkReqPayment_toggled(bool fChecked)
+{
+    if (!fChecked)
+    {
+        // if chkReqPayment is not active, don't display lnReqAmount as invalid
+        ui->lnReqAmount->setValid(true);
+    }
+    genCode();
+}
+
+
+void QRCodeDialog::updateDisplayUnit()
+{
+    if (model)
+    {
+        // Update lnReqAmount with the current unit
+        ui->lnReqAmount->setDisplayUnit(model->getDisplayUnit());
+    }
+}
