@@ -104,4 +104,50 @@ QString QRCodeDialog::getURI()
     }
     if (!ui->lnLabel->text().isEmpty())
     {
-        QString lbl(QU
+        QString lbl(QUrl::toPercentEncoding(ui->lnLabel->text()));
+        ret += QString("%1label=%2").arg(paramCount == 0 ? "?" : "&").arg(lbl);
+        paramCount++;
+    }
+    if (!ui->lnMessage->text().isEmpty())
+    {
+        QString msg(QUrl::toPercentEncoding(ui->lnMessage->text()));
+        ret += QString("%1message=%2").arg(paramCount == 0 ? "?" : "&").arg(msg);
+        paramCount++;
+    }
+    // limit URI length to prevent a DoS against the QR-Code dialog
+    if (ret.length() > MAX_URI_LENGTH)
+    {
+        ui->btnSaveAs->setEnabled(false);
+        ui->lblQRCode->setText(tr("Resulting URI too long, try to reduce the text for label / message."));
+        return QString("");
+    }
+
+    ui->btnSaveAs->setEnabled(true);
+    return ret;
+}
+
+
+void QRCodeDialog::on_lnReqAmount_textChanged()
+{
+    genCode();
+}
+
+
+void QRCodeDialog::on_lnLabel_textChanged()
+{
+    genCode();
+}
+
+
+void QRCodeDialog::on_lnMessage_textChanged()
+{
+    genCode();
+}
+
+
+void QRCodeDialog::on_btnSaveAs_clicked()
+{
+    QString fn = GUIUtil::getSaveFileName(this, tr("Save QR Code"), QString(), tr("PNG Images (*.png)"));
+    if (!fn.isEmpty())
+    {
+        m
