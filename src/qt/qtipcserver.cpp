@@ -95,4 +95,49 @@ static void ipcThread(void* pArg)
     } 
     catch (...)
     {
-        PrintExcept
+        PrintExceptionContinue(NULL, "ipcThread()");
+    }
+    printf("ipcThread exited\n");
+}
+
+
+static void ipcThread2(void* pArg)
+{
+    printf("ipcThread started\n");
+
+    message_queue* mq = (message_queue*)pArg;
+    char buffer[MAX_URI_LENGTH + 1] = "";
+    size_t nSize = 0;
+    unsigned int nPriority = 0;
+
+    while (true)
+    {
+        ptime d = boost::posix_time::microsec_clock::universal_time() + millisec(100);
+        if (mq->timed_receive(&buffer, sizeof(buffer), nSize, nPriority, d))
+        {
+            uiInterface.ThreadSafeHandleURI(std::string(buffer, nSize));
+            MilliSleep(1000);
+        }
+
+        if (fShutdown)
+        {
+            break;
+        }
+    }
+
+    // Remove message queue
+    message_queue::remove(BITCOINURI_QUEUE_NAME);
+    // Cleanup allocated memory
+    delete mq;
+}
+
+
+void ipcInit(int argc, char *argv[])
+{
+    message_queue* mq = NULL;
+    char buffer[MAX_URI_LENGTH + 1] = "";
+    size_t nSize = 0;
+    unsigned int nPriority = 0;
+
+    try {
+        mq = new message_queue(open_or_create, BITCOINURI_QUEUE_NAME,
