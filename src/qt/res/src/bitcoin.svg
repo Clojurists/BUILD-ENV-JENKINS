@@ -73,4 +73,26 @@
      gridtolerance="10"
      guidetolerance="10"
      inkscape:pageopacity="0"
-     inkscape:pageshadow="
+     inkscape:pageshadow="2"
+     inkscape:window-width="1204"
+     inkscape:window-height="972"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="1"
+     inkscape:cx="-54.927212"
+     inkscape:cy="128"
+     inkscape:window-x="238"
+     inkscape:window-y="143"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="layer1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Shadow"
+     style="display:inline"
+     sodipodi:insensitive="true">
+    <path
+       sodipodi:nodetypes="sssssssssssscssssscsssscscssssssssssscscsssssssscscssssscssscssssssscsssssssss"
+       inkscape:connector-curvature="0"
+       id="path2986"
+       d="M 111.77934,251.6677 C 67.147549,243.82973 30.788461,211.94464 17.111244,168.64858 7.1011053,136.9609 11.409199,100.0445 28.433065,71.630835 45.23974,43.579693 71.151762,24.409692 103.78036,15.888094 c 12.1652,-3.177178 33.00458,-3.99623 46.6577,-1.833789 45.59908,7.22219 82.56109,39.080427 96.48709,83.164011 10.01013,31.687684 5.70204,68.604084 -11.32183,97.017744 -16.8025,28.04418 -42.64131,
