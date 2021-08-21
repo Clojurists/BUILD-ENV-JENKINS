@@ -25,4 +25,19 @@ private slots:
     void on_lnLabel_textChanged();
     void on_lnMessage_textChanged();
     void on_btnSaveAs_clicked();
-    void on_chkReqPayment_toggled(bool fChecked)
+    void on_chkReqPayment_toggled(bool fChecked);
+    
+    void updateDisplayUnit();
+
+private:
+    Ui::QRCodeDialog *ui;
+    OptionsModel *model;
+    QString address;
+    QImage myImage;
+    
+    void genCode();
+    QString getURI();
+    
+};
+
+#endif // QRCODEDIALOG_H
