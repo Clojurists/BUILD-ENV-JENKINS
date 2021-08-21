@@ -140,4 +140,41 @@ void ipcInit(int argc, char *argv[])
     unsigned int nPriority = 0;
 
     try {
-        mq = new message_queue(open_or_create, BITCOINURI_QUEUE_NAME,
+        mq = new message_queue(open_or_create, BITCOINURI_QUEUE_NAME, 2, MAX_URI_LENGTH);
+
+        // Make sure we don't lose any bitcoin: URIs
+        for (int i = 0; i < 2; i++)
+        {
+            ptime d = boost::posix_time::microsec_clock::universal_time() + millisec(1);
+            if (mq->timed_receive(&buffer, sizeof(buffer), nSize, nPriority, d))
+            {
+                uiInterface.ThreadSafeHandleURI(std::string(buffer, nSize));
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // Make sure only one bitcoin instance is listening
+        message_queue::remove(BITCOINURI_QUEUE_NAME);
+        delete mq;
+
+        mq = new message_queue(open_or_create, BITCOINURI_QUEUE_NAME, 2, MAX_URI_LENGTH);
+    }
+    catch (interprocess_exception &ex) 
+    {
+        printf("ipcInit() - boost interprocess exception #%d: %s\n", ex.get_error_code(), ex.what());
+        return;
+    }
+
+    if (!NewThread(ipcThread, mq))
+    {
+        delete mq;
+        return;
+    }
+
+    ipcScanCmd(argc, argv, false);
+}
+
+#endif
