@@ -51,4 +51,48 @@ static bool ipcScanCmd(int argc, char *argv[], bool fRelay)
                 {
                     fSent = true;
                 }
-          
+                else if (fRelay)
+                {
+                    break;
+                }
+            }
+            catch (boost::interprocess::interprocess_exception &ex) {
+                // don't log the "file not found" exception, because that's normal for
+                // the first start of the first instance
+                if ((ex.get_error_code() != boost::interprocess::not_found_error) || (!fRelay))
+                {
+                    printf("main() - boost interprocess exception #%d: %s\n", ex.get_error_code(), ex.what());
+                    break;
+                }
+            }
+        }
+    }
+    return fSent;
+}
+
+
+void ipcScanRelay(int argc, char *argv[])
+{
+    if (ipcScanCmd(argc, argv, true))
+    {
+        exit(0);
+    }
+}
+
+
+static void ipcThread(void* pArg)
+{
+    // Make this thread recognisable as the GUI-IPC thread
+    RenameThread("jackpotcoin-gui-ipc");
+	
+    try
+    {
+        ipcThread2(pArg);
+    }
+    catch (std::exception& e) 
+    {
+        PrintExceptionContinue(&e, "ipcThread()");
+    } 
+    catch (...)
+    {
+        PrintExcept
