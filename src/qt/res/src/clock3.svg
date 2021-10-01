@@ -79,4 +79,41 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       x
+       xlink:href="#linearGradient4347"
+       id="linearGradient3779"
+       x1="2.224874"
+       y1="2.8301363"
+       x2="14.038582"
+       y2="13.171574"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       id="filter4339">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.3240906"
+         id="feGaussianBlur4341" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3767"
+       id="linearGradient4345"
+       gradientUnits="userSpaceOnUse"
+       x1="2.224874"
+       y1="2.8301363"
+       x2="14.038582"
+       y2="13.171574" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4424"
+       id="linearGradient4430"
+       x1="10.740074"
+       y1="16.148634"
+       x2="6.3055735"
+       y2="-1.2798394"
+       gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4357"
+       id="radialGradient4440"
+      
