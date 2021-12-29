@@ -34,4 +34,53 @@ SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget *parent) :
     GUIUtil::setupAddressWidget(ui->addressIn_VM, this);
 
     ui->addressIn_SM->installEventFilter(this);
-    u
+    ui->messageIn_SM->installEventFilter(this);
+    ui->signatureOut_SM->installEventFilter(this);
+    ui->addressIn_VM->installEventFilter(this);
+    ui->messageIn_VM->installEventFilter(this);
+    ui->signatureIn_VM->installEventFilter(this);
+
+    ui->signatureOut_SM->setFont(GUIUtil::bitcoinAddressFont());
+    ui->signatureIn_VM->setFont(GUIUtil::bitcoinAddressFont());
+}
+
+
+SignVerifyMessageDialog::~SignVerifyMessageDialog()
+{
+    delete ui;
+}
+
+
+void SignVerifyMessageDialog::setModel(WalletModel *model)
+{
+    this->model = model;
+}
+
+
+void SignVerifyMessageDialog::setAddress_SM(QString address)
+{
+    ui->addressIn_SM->setText(address);
+    ui->messageIn_SM->setFocus();
+}
+
+
+void SignVerifyMessageDialog::setAddress_VM(QString address)
+{
+    ui->addressIn_VM->setText(address);
+    ui->messageIn_VM->setFocus();
+}
+
+
+void SignVerifyMessageDialog::showTab_SM(bool fShow)
+{
+    ui->tabWidget->setCurrentIndex(0);
+    if (fShow)
+    {
+        this->show();
+    }
+}
+
+
+void SignVerifyMessageDialog::showTab_VM(bool fShow)
+{
+    ui->tabWidget->setCurre
