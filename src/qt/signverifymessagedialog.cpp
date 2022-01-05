@@ -83,4 +83,42 @@ void SignVerifyMessageDialog::showTab_SM(bool fShow)
 
 void SignVerifyMessageDialog::showTab_VM(bool fShow)
 {
-    ui->tabWidget->setCurre
+    ui->tabWidget->setCurrentIndex(1);
+    if (fShow)
+    {
+        this->show();
+    }
+}
+
+
+void SignVerifyMessageDialog::on_addressBookButton_SM_clicked()
+{
+    if (model && model->getAddressTableModel())
+    {
+        AddressBookPage dlg(AddressBookPage::ForSending, AddressBookPage::ReceivingTab, this);
+        dlg.setModel(model->getAddressTableModel());
+        if (dlg.exec())
+        {
+            setAddress_SM(dlg.getReturnValue());
+        }
+    }
+}
+
+
+void SignVerifyMessageDialog::on_pasteButton_SM_clicked()
+{
+    setAddress_SM(QApplication::clipboard()->text());
+}
+
+
+void SignVerifyMessageDialog::on_signMessageButton_SM_clicked()
+{
+    // Clear old signature to ensure users don't get confused on error with an old signature displayed
+    ui->signatureOut_SM->clear();
+
+    CBitcoinAddress addr(ui->addressIn_SM->text().toStdString());
+    if (!addr.IsValid())
+    {
+        ui->addressIn_SM->setValid(false);
+        ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_SM->setText(tr("The entered address is invalid.") + QString(" ") + tr("P
