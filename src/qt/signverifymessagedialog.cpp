@@ -190,4 +190,36 @@ void SignVerifyMessageDialog::on_addressBookButton_VM_clicked()
     if (model && model->getAddressTableModel())
     {
         AddressBookPage dlg(AddressBookPage::ForSending, AddressBookPage::SendingTab, this);
-        dlg.setModel(m
+        dlg.setModel(model->getAddressTableModel());
+        if (dlg.exec())
+        {
+            setAddress_VM(dlg.getReturnValue());
+        }
+    }
+}
+
+void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
+{
+    CBitcoinAddress addr(ui->addressIn_VM->text().toStdString());
+    if (!addr.IsValid())
+    {
+        ui->addressIn_VM->setValid(false);
+        ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_VM->setText(tr("The entered address is invalid.") + QString(" ") + tr("Please check the address and try again."));
+        return;
+    }
+    
+    CKeyID keyID;
+    if (!addr.GetKeyID(keyID))
+    {
+        ui->addressIn_VM->setValid(false);
+        ui->statusLabel_VM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_VM->setText(tr("The entered address does not refer to a key.") + QString(" ") + tr("Please check the address and try again."));
+        return;
+    }
+
+    bool fInvalid = false;
+    std::vector<unsigned char> vchSig = DecodeBase64(ui->signatureIn_VM->text().toStdString().c_str(), &fInvalid);
+    if (fInvalid)
+    {
+      
