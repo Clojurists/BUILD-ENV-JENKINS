@@ -154,4 +154,40 @@ void SignVerifyMessageDialog::on_signMessageButton_SM_clicked()
     ss << strMessageMagic;
     ss << ui->messageIn_SM->document()->toPlainText().toStdString();
 
-    std::vector<unsigned char>
+    std::vector<unsigned char> vchSig;
+    if (!key.SignCompact(Hash(ss.begin(), ss.end()), vchSig))
+    {
+        ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_SM->setText(QString("<nobr>") + tr("Message signing failed.") + QString("</nobr>"));
+        return;
+    }
+
+    ui->statusLabel_SM->setStyleSheet("QLabel { color: green; }");
+    ui->statusLabel_SM->setText(QString("<nobr>") + tr("Message signed.") + QString("</nobr>"));
+
+    ui->signatureOut_SM->setText(QString::fromStdString(EncodeBase64(&vchSig[0], vchSig.size())));
+}
+
+
+void SignVerifyMessageDialog::on_copySignatureButton_SM_clicked()
+{
+    QApplication::clipboard()->setText(ui->signatureOut_SM->text());
+}
+
+
+void SignVerifyMessageDialog::on_clearButton_SM_clicked()
+{
+    ui->addressIn_SM->clear();
+    ui->messageIn_SM->clear();
+    ui->signatureOut_SM->clear();
+    ui->statusLabel_SM->clear();
+    ui->addressIn_SM->setFocus();
+}
+
+
+void SignVerifyMessageDialog::on_addressBookButton_VM_clicked()
+{
+    if (model && model->getAddressTableModel())
+    {
+        AddressBookPage dlg(AddressBookPage::ForSending, AddressBookPage::SendingTab, this);
+        dlg.setModel(m
