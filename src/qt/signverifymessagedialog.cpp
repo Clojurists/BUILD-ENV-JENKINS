@@ -121,4 +121,37 @@ void SignVerifyMessageDialog::on_signMessageButton_SM_clicked()
     {
         ui->addressIn_SM->setValid(false);
         ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
-        ui->statusLabel_SM->setText(tr("The entered address is invalid.") + QString(" ") + tr("P
+        ui->statusLabel_SM->setText(tr("The entered address is invalid.") + QString(" ") + tr("Please check the address and try again."));
+        return;
+    }
+    
+    CKeyID keyID;
+    if (!addr.GetKeyID(keyID))
+    {
+        ui->addressIn_SM->setValid(false);
+        ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_SM->setText(tr("The entered address does not refer to a key.") + QString(" ") + tr("Please check the address and try again."));
+        return;
+    }
+
+    WalletModel::UnlockContext ctx(model->requestUnlock());
+    if (!ctx.isValid())
+    {
+        ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_SM->setText(tr("Wallet unlock was cancelled."));
+        return;
+    }
+
+    CKey key;
+    if (!pwalletMain->GetKey(keyID, key))
+    {
+        ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel_SM->setText(tr("Private key for the entered address is not available."));
+        return;
+    }
+
+    CDataStream ss(SER_GETHASH, 0);
+    ss << strMessageMagic;
+    ss << ui->messageIn_SM->document()->toPlainText().toStdString();
+
+    std::vector<unsigned char>
