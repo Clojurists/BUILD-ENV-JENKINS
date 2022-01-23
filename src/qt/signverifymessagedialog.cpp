@@ -284,4 +284,5 @@ bool SignVerifyMessageDialog::eventFilter(QObject *object, QEvent *event)
             ui->statusLabel_VM->clear();
         }
     }
-    r
+    return QDialog::eventFilter(object, event);
+}
