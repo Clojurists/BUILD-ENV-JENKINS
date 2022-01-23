@@ -248,4 +248,40 @@ void SignVerifyMessageDialog::on_verifyMessageButton_VM_clicked()
         return;
     }
 
-    ui
+    ui->statusLabel_VM->setStyleSheet("QLabel { color: green; }");
+    ui->statusLabel_VM->setText(QString("<nobr>") + tr("Message verified.") + QString("</nobr>"));
+}
+
+
+void SignVerifyMessageDialog::on_clearButton_VM_clicked()
+{
+    ui->addressIn_VM->clear();
+    ui->signatureIn_VM->clear();
+    ui->messageIn_VM->clear();
+    ui->statusLabel_VM->clear();
+    ui->addressIn_VM->setFocus();
+}
+
+
+bool SignVerifyMessageDialog::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::FocusIn)
+    {
+        if (ui->tabWidget->currentIndex() == 0)
+        {
+            // Clear status message on focus change
+            ui->statusLabel_SM->clear();
+            // Select generated signature
+            if (object == ui->signatureOut_SM)
+            {
+                ui->signatureOut_SM->selectAll();
+                return true;
+            }
+        }
+        else if (ui->tabWidget->currentIndex() == 1)
+        {
+            // Clear status message on focus change
+            ui->statusLabel_VM->clear();
+        }
+    }
+    r
