@@ -70,4 +70,34 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 strHTML += tr(", broadcast through %n node(s)", "", nRequests);
             }
         }
-        strHTML += "
+        strHTML += "<br>";
+        strHTML += "<b>" + tr("Date") + ":</b> " + (nTime ? GUIUtil::dateTimeStr(nTime) : "") + "<br>";
+
+        //
+        // From
+        //
+        if (wtx.IsCoinBase())
+        {
+            strHTML += "<b>" + tr("Source") + ":</b> " + tr("Generated") + "<br>";
+        }
+        else if (wtx.IsCoinStake())
+        {
+            strHTML += "<b>" + tr("Source") + ":</b> " + tr("Stake Generated") + "<br>";
+        }
+        else if (wtx.mapValue.count("from") && (!wtx.mapValue["from"].empty()))
+        {
+            // Online transaction
+            strHTML += "<b>" + tr("From") + ":</b> " + GUIUtil::HtmlEscape(wtx.mapValue["from"]) + "<br>";
+        }
+        else
+        {
+            // Offline transaction
+            if (nNet > 0)
+            {
+                // Credit
+                BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+                {
+                    if (wallet->IsMine(txout))
+                    {
+                        CTxDestination address;
+                        if (ExtractDestination(tx
