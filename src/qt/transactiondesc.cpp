@@ -100,4 +100,22 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                     if (wallet->IsMine(txout))
                     {
                         CTxDestination address;
-                        if (ExtractDestination(tx
+                        if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address))
+                        {
+                            if (wallet->mapAddressBook.count(address))
+                            {
+                                strHTML += "<b>" + tr("From") + ":</b> " + tr("unknown") + "<br>";
+                                strHTML += "<b>" + tr("To") + ":</b> ";
+                                strHTML += GUIUtil::HtmlEscape(CBitcoinAddress(address).ToString());
+                                if (!wallet->mapAddressBook[address].empty())
+                                {
+                                    strHTML += " (" + tr("own address") + ", " + tr("label") + ": " + GUIUtil::HtmlEscape(wallet->mapAddressBook[address]) + ")";
+                                }
+                                else
+                                {
+                                    strHTML += " (" + tr("own address") + ")";
+                                }
+                                strHTML += "<br>";
+                            }
+                        }
+                       
