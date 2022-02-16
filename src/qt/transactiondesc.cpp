@@ -118,4 +118,40 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                                 strHTML += "<br>";
                             }
                         }
-                       
+                        break;
+                    }
+                }
+            }
+        }
+
+        //
+        // To
+        //
+        if (wtx.mapValue.count("to") && (!wtx.mapValue["to"].empty()))
+        {
+            // Online transaction
+            std::string strAddress = wtx.mapValue["to"];
+            strHTML += "<b>" + tr("To") + ":</b> ";
+            CTxDestination dest = CBitcoinAddress(strAddress).Get();
+            if (wallet->mapAddressBook.count(dest) && (!wallet->mapAddressBook[dest].empty()))
+            {
+                strHTML += GUIUtil::HtmlEscape(wallet->mapAddressBook[dest]) + " ";
+            }
+            strHTML += GUIUtil::HtmlEscape(strAddress) + "<br>";
+        }
+
+        //
+        // Amount
+        //
+        if ((wtx.IsCoinBase() || wtx.IsCoinStake()) && (nCredit == 0))
+        {
+            //
+            // Coinbase or Stake
+            //
+            int64 nUnmatured = 0;
+            BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+            {
+                nUnmatured += wallet->GetCredit(txout);
+            }
+            strHTML += "<b>" + tr("Credit") + ":</b> ";
+            if (wtx.IsInMainChain
