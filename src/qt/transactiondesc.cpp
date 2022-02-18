@@ -154,4 +154,40 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 nUnmatured += wallet->GetCredit(txout);
             }
             strHTML += "<b>" + tr("Credit") + ":</b> ";
-            if (wtx.IsInMainChain
+            if (wtx.IsInMainChain())
+            {
+                strHTML += BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, nUnmatured)+ " (" + tr("matures in %n more block(s)", "", wtx.GetBlocksToMaturity()) + ")";
+            }
+            else
+            {
+                strHTML += "(" + tr("not accepted") + ")";
+            }
+            strHTML += "<br>";
+        }
+        else if (nNet > 0)
+        {
+            //
+            // Credit
+            //
+            strHTML += "<b>" + tr("Credit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, nNet) + "<br>";
+        }
+        else
+        {
+            bool fAllFromMe = true;
+            BOOST_FOREACH (const CTxIn& txin, wtx.vin)
+            {
+                fAllFromMe = fAllFromMe && wallet->IsMine(txin);
+            }
+
+            bool fAllToMe = true;
+            BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+            {
+                fAllToMe = fAllToMe && wallet->IsMine(txout);
+            }
+
+            if (fAllFromMe)
+            {
+                //
+                // Debit
+                //
+                BOOST_FOREACH (const CTxOut& txout, wtx
