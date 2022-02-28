@@ -211,4 +211,29 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                             strHTML += "<br>";
                         }
                     }
-                    strHTML += "<b>" + tr("Debit") + ":</b> " + BitcoinUnits::formatWithUnit(Bitcoi
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, -txout.nValue) + "<br>";
+                }
+                if (fAllToMe)
+                {
+                    // Payment to self
+                    int64 nChange = wtx.GetChange();
+                    int64 nValue = nCredit - nChange;
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, -nValue) + "<br>";
+                    strHTML += "<b>" + tr("Credit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, nValue) + "<br>";
+                }
+                int64 nTxFee = nDebit - wtx.GetValueOut();
+                if (nTxFee > 0)
+                {
+                    strHTML += "<b>" + tr("Transaction fee") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, -nTxFee) + "<br>";
+                }
+            }
+            else
+            {
+                //
+                // Mixed debit transaction
+                //
+                BOOST_FOREACH (const CTxIn& txin, wtx.vin)
+                {
+                    if (wallet->IsMine(txin))
+                    {
+   
