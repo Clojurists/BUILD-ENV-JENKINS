@@ -190,4 +190,25 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 //
                 // Debit
                 //
-                BOOST_FOREACH (const CTxOut& txout, wtx
+                BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+                {
+                    if (wallet->IsMine(txout))
+                    {
+                        continue;
+                    }
+                    if ((!wtx.mapValue.count("to")) || wtx.mapValue["to"].empty())
+                    {
+                        // Offline transaction
+                        CTxDestination address;
+                        if (ExtractDestination(txout.scriptPubKey, address))
+                        {
+                            strHTML += "<b>" + tr("To") + ":</b> ";
+                            if (wallet->mapAddressBook.count(address) && !wallet->mapAddressBook[address].empty())
+                            {
+                                strHTML += GUIUtil::HtmlEscape(wallet->mapAddressBook[address]) + " ";
+                            }
+                            strHTML += GUIUtil::HtmlEscape(CBitcoinAddress(address).ToString());
+                            strHTML += "<br>";
+                        }
+                    }
+                    strHTML += "<b>" + tr("Debit") + ":</b> " + BitcoinUnits::formatWithUnit(Bitcoi
