@@ -236,4 +236,29 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                 {
                     if (wallet->IsMine(txin))
                     {
-   
+                        strHTML += "<b>" + tr("Debit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, -wallet->GetDebit(txin)) + "<br>";
+                    }
+                }
+                BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+                {
+                    if (wallet->IsMine(txout))
+                    {
+                        strHTML += "<b>" + tr("Credit") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, wallet->GetCredit(txout)) + "<br>";
+                    }
+                }
+            }
+        }
+
+        strHTML += "<b>" + tr("Net amount") + ":</b> " + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, nNet, true) + "<br>";
+			
+        //
+        // Message
+        //
+        if (wtx.mapValue.count("message") && (!wtx.mapValue["message"].empty()))
+        {
+             strHTML += "<br><b>" + tr("Message") + ":</b><br>" + GUIUtil::HtmlEscape(wtx.mapValue["message"], true) + "<br>";
+        }
+        
+        if (wtx.mapValue.count("comment") && (!wtx.mapValue["comment"].empty()))
+        {
+            
