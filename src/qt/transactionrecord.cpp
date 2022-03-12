@@ -77,4 +77,32 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
         }
         
         bool fAllToMe = true;
-        BOOST_FOREACH (const CTxOut& t
+        BOOST_FOREACH (const CTxOut& txout, wtx.vout)
+        {
+            fAllToMe = (fAllToMe && wallet->IsMine(txout));
+        }
+
+        if (fAllFromMe && fAllToMe)
+        {
+            // Payment to self
+            int64 nChange = wtx.GetChange();
+            parts.append(TransactionRecord(hash, nTime, TransactionRecord::SendToSelf, "",
+                            0 - (nDebit - nChange), nCredit - nChange));
+        }
+        else if (fAllFromMe)
+        {
+            int64 nTxFee = nDebit - wtx.GetValueOut();
+            for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++)
+            {
+                const CTxOut& txout = wtx.vout[nOut];
+                TransactionRecord sub(hash, nTime);
+                sub.idx = parts.size();
+
+                if (wallet->IsMine(txout))
+                {
+                    // Ignore parts sent to self, as this is usually the change
+                    // from a transaction sent back to our own address.
+                    continue;
+                }
+
+        
