@@ -45,3 +45,36 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                 else
                 {
                     // Received by IP connection (deprecated features), or a multisignature or other non-simple transaction
+                    sub.type = TransactionRecord::RecvFromOther;
+                    sub.address = mapValue["from"];
+                }
+                if (wtx.IsCoinBase())
+                {
+                    // Generated
+                    sub.type = TransactionRecord::Generated;
+                }
+                if (wtx.IsCoinStake())
+                {
+                    if (hashPrev == hash) 
+                    {
+                        // last coinstake output
+                        continue; 
+                    }
+                    sub.type = TransactionRecord::StakeMint;
+                    sub.credit = nNet > 0 ? nNet : wtx.GetValueOut() - nDebit;
+                    hashPrev = hash;
+                }
+                parts.append(sub);
+            }
+        }
+    }
+    else
+    {
+        bool fAllFromMe = true;
+        BOOST_FOREACH (const CTxIn& txin, wtx.vin)
+        {
+            fAllFromMe = fAllFromMe && wallet->IsMine(txin);
+        }
+        
+        bool fAllToMe = true;
+        BOOST_FOREACH (const CTxOut& t
