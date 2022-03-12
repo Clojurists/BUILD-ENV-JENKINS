@@ -324,4 +324,14 @@ QString TransactionDesc::toHTML(CWallet *wallet, CWalletTx &wtx)
                                 strHTML += QString::fromStdString(CBitcoinAddress(address).ToString());
                             }
                             strHTML = strHTML + " " + tr("Amount") + "=" + BitcoinUnits::formatWithUnit(BitcoinUnits::BTC, vout.nValue);
-                            strHTML = strHTML + " IsMine=" + (wallet->IsMine(vout) ? tr("true") : tr("false")) +
+                            strHTML = strHTML + " IsMine=" + (wallet->IsMine(vout) ? tr("true") : tr("false")) + "</li>";
+                        }
+                    }
+                }
+            }
+            strHTML += "</ul>";
+        }
+        strHTML += "</font></html>";
+    }
+    return strHTML;
+}
