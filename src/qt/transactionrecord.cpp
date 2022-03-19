@@ -134,4 +134,41 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
         {
             // Mixed debit transaction, can't break down payees
             parts.append(TransactionRecord(hash, nTime, TransactionRecord::Other, "", nNet, 0));
-     
+        }
+    }
+
+    return parts;
+}
+
+
+void TransactionRecord::updateStatus(const CWalletTx &wtx)
+{
+    // Determine transaction status
+    // Find the block the tx is in
+    CBlockIndex* pindex = NULL;
+    std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(wtx.hashBlock);
+    if (mi != mapBlockIndex.end())
+    {
+        pindex = (*mi).second;
+    }
+    
+    // Sort order, unrecorded transactions sort to the top
+    status.sortKey = strprintf("%010d-%01d-%010u-%03d",
+        (pindex ? pindex->nHeight : std::numeric_limits<int>::max()),
+        (wtx.IsCoinBase() ? 1 : 0),
+        wtx.nTimeReceived,
+        idx);
+    status.countsForBalance = wtx.IsConfirmed() && !(wtx.GetBlocksToMaturity() > 0);
+    status.depth = wtx.GetDepthInMainChain();
+    status.cur_num_blocks = nBestHeight;
+
+    if (!wtx.IsFinal())
+    {
+        if (wtx.nLockTime < LOCKTIME_THRESHOLD)
+        {
+            status.status = TransactionStatus::OpenUntilBlock;
+            status.open_for = wtx.nLockTime - nBestHeight;
+        }
+        else
+        {
+            status.status =
