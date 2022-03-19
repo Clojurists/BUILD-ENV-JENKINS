@@ -105,4 +105,33 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet *
                     continue;
                 }
 
-        
+                CTxDestination address;
+                if (ExtractDestination(txout.scriptPubKey, address))
+                {
+                    // Sent to Bitcoin Address
+                    sub.type = TransactionRecord::SendToAddress;
+                    sub.address = CBitcoinAddress(address).ToString();
+                }
+                else
+                {
+                    // Sent to IP, or other non-address transaction like OP_EVAL
+                    sub.type = TransactionRecord::SendToOther;
+                    sub.address = mapValue["to"];
+                }
+
+                int64 nValue = txout.nValue;
+                //  Add fee to first output
+                if (nTxFee > 0)
+                {
+                    nValue += nTxFee;
+                    nTxFee = 0;
+                }
+                sub.debit = -nValue;
+                parts.append(sub);
+            }
+        }
+        else
+        {
+            // Mixed debit transaction, can't break down payees
+            parts.append(TransactionRecord(hash, nTime, TransactionRecord::Other, "", nNet, 0));
+     
