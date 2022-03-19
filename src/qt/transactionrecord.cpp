@@ -204,4 +204,35 @@ void TransactionRecord::updateStatus(const CWalletTx &wtx)
     {
         if (status.depth < 0)
         {
-            status.
+            status.status = TransactionStatus::Conflicted;
+        }
+        else if (((GetAdjustedTime() - wtx.nTimeReceived) > (2 * 60)) && (wtx.GetRequestCount() == 0))
+        {
+            status.status = TransactionStatus::Offline;
+        }
+        else if (status.depth == 0)
+        {
+            status.status = TransactionStatus::Unconfirmed;
+        }
+        else if (status.depth < RecommendedNumConfirmations)
+        {
+            status.status = TransactionStatus::Confirming;
+        }
+        else
+        {
+            status.status = TransactionStatus::Confirmed;
+        }
+    }
+}
+
+
+bool TransactionRecord::statusUpdateNeeded()
+{
+    return (status.cur_num_blocks != nBestHeight);
+}
+
+
+std::string TransactionRecord::getTxID()
+{
+    return (hash.ToString() + strprintf("-%03d", idx));
+}
