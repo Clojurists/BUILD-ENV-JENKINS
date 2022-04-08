@@ -76,4 +76,37 @@ TransactionView::TransactionView(QWidget *parent) :
     typeWidget->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
     typeWidget->addItem(tr("Staked"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
     typeWidget->addItem(tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
-    typeWidget->addItem(tr("Other"), TransactionFilte
+    typeWidget->addItem(tr("Other"), TransactionFilterProxy::TYPE(TransactionRecord::Other));
+
+    hlayout->addWidget(typeWidget);
+
+    addressWidget = new QLineEdit(this);
+#if QT_VERSION >= 0x040700
+    addressWidget->setPlaceholderText(tr("Enter address or label to search"));
+#endif
+    hlayout->addWidget(addressWidget);
+
+    amountWidget = new QLineEdit(this);
+#if QT_VERSION >= 0x040700
+    amountWidget->setPlaceholderText(tr("Min amount"));
+#endif
+#ifdef Q_OS_MAC
+    amountWidget->setFixedWidth(97);
+#else
+    amountWidget->setFixedWidth(100);
+#endif
+    amountWidget->setValidator(new QDoubleValidator(0, 1e20, 8, this));
+    hlayout->addWidget(amountWidget);
+
+    QVBoxLayout *vlayout = new QVBoxLayout(this);
+    vlayout->setContentsMargins(0,0,0,0);
+    vlayout->setSpacing(0);
+
+    QTableView *view = new QTableView(this);
+    vlayout->addLayout(hlayout);
+    vlayout->addWidget(createDateRangeWidget());
+    vlayout->addWidget(view);
+    vlayout->setSpacing(0);
+    int width = view->verticalScrollBar()->sizeHint().width();
+    
+    // Cover scroll bar width with
