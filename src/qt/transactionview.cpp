@@ -109,4 +109,32 @@ TransactionView::TransactionView(QWidget *parent) :
     vlayout->setSpacing(0);
     int width = view->verticalScrollBar()->sizeHint().width();
     
-    // Cover scroll bar width with
+    // Cover scroll bar width with spacing
+#ifdef Q_OS_MAC
+    hlayout->addSpacing(width + 2);
+#else
+    hlayout->addSpacing(width);
+#endif
+
+    // Always show scroll bar
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    view->setTabKeyNavigation(false);
+    view->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    transactionView = view;
+
+    // Actions
+    QAction *copyAddressAction = new QAction(tr("Copy address"), this);
+    QAction *copyLabelAction = new QAction(tr("Copy label"), this);
+    QAction *copyAmountAction = new QAction(tr("Copy amount"), this);
+    QAction *copyTxIDAction = new QAction(tr("Copy transaction ID"), this);
+    QAction *editLabelAction = new QAction(tr("Edit label"), this);
+    QAction *showDetailsAction = new QAction(tr("Show transaction details"), this);
+
+    contextMenu = new QMenu();
+    contextMenu->addAction(copyAddressAction);
+    contextMenu->addAction(copyLabelAction);
+    contextMenu->addAction(copyAmountAction);
+    contextMenu->addAction(copyTxIDAction);
+    contextMenu->addAction(editLabelAction);
+    contextMenu->addAction(showD
