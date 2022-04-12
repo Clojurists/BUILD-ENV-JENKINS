@@ -155,4 +155,25 @@ TransactionView::TransactionView(QWidget *parent) :
 }
 
 
-void Tr
+void TransactionView::setModel(WalletModel *model)
+{
+    this->model = model;
+    if (model)
+    {
+        transactionProxyModel = new TransactionFilterProxy(this);
+        transactionProxyModel->setSourceModel(model->getTransactionTableModel());
+        transactionProxyModel->setDynamicSortFilter(true);
+        transactionProxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+        transactionProxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        transactionProxyModel->setSortRole(Qt::EditRole);
+
+        transactionView->setModel(transactionProxyModel);
+        transactionView->setAlternatingRowColors(true);
+        transactionView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        transactionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        transactionView->setSortingEnabled(true);
+        transactionView->sortByColumn(TransactionTableModel::Date, Qt::DescendingOrder);
+        transactionView->verticalHeader()->hide();
+
+        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Status, 23);
+        transactionView->horizontalHea
