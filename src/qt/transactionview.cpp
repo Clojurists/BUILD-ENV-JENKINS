@@ -176,4 +176,29 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->verticalHeader()->hide();
 
         transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Status, 23);
-        transactionView->horizontalHea
+        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Date, 120);
+        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Type, 120);
+        transactionView->horizontalHeader()->setResizeMode(TransactionTableModel::ToAddress, QHeaderView::Stretch);
+        transactionView->horizontalHeader()->resizeSection(TransactionTableModel::Amount, 100);
+    }
+}
+
+
+void TransactionView::chooseDate(int idx)
+{
+    if (transactionProxyModel)
+    {
+        QDate current = QDate::currentDate();
+        dateRangeWidget->setVisible(false);
+        switch (dateWidget->itemData(idx).toInt())
+        {
+          case All:
+               transactionProxyModel->setDateRange(TransactionFilterProxy::MIN_DATE, TransactionFilterProxy::MAX_DATE);
+               break;
+          case Today:
+               transactionProxyModel->setDateRange(QDateTime(current), TransactionFilterProxy::MAX_DATE);
+               break;
+          case ThisWeek: 
+          {
+               QDate startOfWeek = current.addDays(0 - (current.dayOfWeek() - 1));
+               transactionProxyMode
