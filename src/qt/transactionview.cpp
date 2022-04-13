@@ -201,4 +201,34 @@ void TransactionView::chooseDate(int idx)
           case ThisWeek: 
           {
                QDate startOfWeek = current.addDays(0 - (current.dayOfWeek() - 1));
-               transactionProxyMode
+               transactionProxyModel->setDateRange(QDateTime(startOfWeek), TransactionFilterProxy::MAX_DATE);
+          } 
+               break;
+          case ThisMonth:
+               transactionProxyModel->setDateRange(QDateTime(QDate(current.year(), current.month(), 1)), TransactionFilterProxy::MAX_DATE);
+               break;
+          case LastMonth:
+               transactionProxyModel->setDateRange(QDateTime(QDate(current.year(), current.month() - 1, 1)), QDateTime(QDate(current.year(), current.month(), 1)));
+               break;
+          case ThisYear:
+               transactionProxyModel->setDateRange(QDateTime(QDate(current.year(), 1, 1)), TransactionFilterProxy::MAX_DATE);
+               break;
+          case Range:
+               dateRangeWidget->setVisible(true);
+               dateRangeChanged();
+               break;
+        }
+    }
+}
+
+
+void TransactionView::chooseType(int idx)
+{
+    if (transactionProxyModel)
+    {
+        transactionProxyModel->setTypeFilter(typeWidget->itemData(idx).toInt());
+    }
+}
+
+
+void TransactionView::changedPrefix(const
