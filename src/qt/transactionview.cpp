@@ -270,4 +270,42 @@ void TransactionView::exportClicked()
         writer.setModel(transactionProxyModel);
         writer.addColumn(tr("Confirmed"), 0, TransactionTableModel::ConfirmedRole);
         writer.addColumn(tr("Date"), 0, TransactionTableModel::DateRole);
-        writer.addColumn(tr("Type"), TransactionTableModel::
+        writer.addColumn(tr("Type"), TransactionTableModel::Type, Qt::EditRole);
+        writer.addColumn(tr("Label"), 0, TransactionTableModel::LabelRole);
+        writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
+        writer.addColumn(tr("Amount"), 0, TransactionTableModel::FormattedAmountRole);
+        writer.addColumn(tr("ID"), 0, TransactionTableModel::TxIDRole);
+        if (!writer.write())
+        {
+            QMessageBox::critical(this, tr("Error exporting"), tr("Could not write to file %1.").arg(filename),
+                                  QMessageBox::Abort, QMessageBox::Abort);
+        }
+    }
+}
+
+
+void TransactionView::contextualMenu(const QPoint &point)
+{
+    QModelIndex index = transactionView->indexAt(point);
+    if (index.isValid())
+    {
+        contextMenu->exec(QCursor::pos());
+    }
+}
+
+
+void TransactionView::copyAddress()
+{
+    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::AddressRole);
+}
+
+
+void TransactionView::copyLabel()
+{
+    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::LabelRole);
+}
+
+
+void TransactionView::copyAmount()
+{
+    GUIUt
