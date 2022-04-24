@@ -231,4 +231,43 @@ void TransactionView::chooseType(int idx)
 }
 
 
-void TransactionView::changedPrefix(const
+void TransactionView::changedPrefix(const QString &prefix)
+{
+    if (transactionProxyModel)
+    {
+        transactionProxyModel->setAddressPrefix(prefix);
+    }
+}
+
+
+void TransactionView::changedAmount(const QString &amount)
+{
+    if (transactionProxyModel)
+    {
+        qint64 amount_parsed = 0;
+        if (BitcoinUnits::parse(model->getOptionsModel()->getDisplayUnit(), amount, &amount_parsed))
+        {
+            transactionProxyModel->setMinAmount(amount_parsed);
+        }
+        else
+        {
+            transactionProxyModel->setMinAmount(0);
+        }
+    }
+}
+
+
+void TransactionView::exportClicked()
+{
+    QString filename = GUIUtil::getSaveFileName(
+            this,
+            tr("Export Transaction Data"), QString(),
+            tr("Comma separated file (*.csv)"));
+
+    if (!filename.isNull())
+    {
+        CSVModelWriter writer(filename);
+        writer.setModel(transactionProxyModel);
+        writer.addColumn(tr("Confirmed"), 0, TransactionTableModel::ConfirmedRole);
+        writer.addColumn(tr("Date"), 0, TransactionTableModel::DateRole);
+        writer.addColumn(tr("Type"), TransactionTableModel::
