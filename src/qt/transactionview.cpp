@@ -355,4 +355,42 @@ void TransactionView::editLabel()
                         dlg.setModel(addressBook);
                         dlg.setAddress(address);
                         dlg.exec();
-          
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void TransactionView::showDetails()
+{
+    if (transactionView->selectionModel())
+    {
+        QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+        if (!selection.isEmpty())
+        {
+            TransactionDescDialog dlg(selection.at(0));
+            dlg.exec();
+        }
+    }
+}
+
+
+QWidget *TransactionView::createDateRangeWidget()
+{
+    dateRangeWidget = new QFrame();
+    dateRangeWidget->setFrameStyle(QFrame::Panel | QFrame::Raised);
+    dateRangeWidget->setContentsMargins(1,1,1,1);
+    QHBoxLayout *layout = new QHBoxLayout(dateRangeWidget);
+    layout->setContentsMargins(0,0,0,0);
+    layout->addSpacing(23);
+    layout->addWidget(new QLabel(tr("Range:")));
+
+    dateFrom = new QDateTimeEdit(this);
+    dateFrom->setDisplayFormat("dd/MM/yy");
+    dateFrom->setCalendarPopup(true);
+    dateFrom->setMinimumWidth(100);
+    dateFrom->setDate(QDate::currentDate().addDays(-7));
+    layout->addWidget(dateFrom);
+    layout->addWidget(new QLabel(
