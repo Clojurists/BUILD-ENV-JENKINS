@@ -308,4 +308,32 @@ void TransactionView::copyLabel()
 
 void TransactionView::copyAmount()
 {
-    GUIUt
+    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::FormattedAmountRole);
+}
+
+
+void TransactionView::copyTxID()
+{
+    GUIUtil::copyEntryData(transactionView, 0, TransactionTableModel::TxIDRole);
+}
+
+
+void TransactionView::editLabel()
+{
+    if (transactionView->selectionModel() && model)
+    {
+        QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+        if (!selection.isEmpty())
+        {
+            AddressTableModel *addressBook = model->getAddressTableModel();
+            if (addressBook) {
+                QString address = selection.at(0).data(TransactionTableModel::AddressRole).toString();
+                if (!address.isEmpty())
+                {
+                    // Is address in address book? Address book can miss address when a transaction is
+                    // sent from outside the UI.
+                    int idx = addressBook->lookupAddress(address);
+                    if (idx != -1)
+                    {
+                        // Edit sending / receiving address
+                  
