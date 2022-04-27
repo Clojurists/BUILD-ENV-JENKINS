@@ -336,4 +336,23 @@ void TransactionView::editLabel()
                     if (idx != -1)
                     {
                         // Edit sending / receiving address
-                  
+                        QModelIndex modelIdx = addressBook->index(idx, 0, QModelIndex());
+                        // Determine type of address, launch appropriate editor dialog type
+                        QString type = modelIdx.data(AddressTableModel::TypeRole).toString();
+            
+                        EditAddressDialog dlg(type == AddressTableModel::Receive
+                                                      ? EditAddressDialog::EditReceivingAddress
+                                                      : EditAddressDialog::EditSendingAddress,
+                                              this);
+                        dlg.setModel(addressBook);
+                        dlg.loadRow(idx);
+                        dlg.exec();
+                    }
+                    else
+                    {
+                        // Add sending address
+                        EditAddressDialog dlg(EditAddressDialog::NewSendingAddress, this);
+                        dlg.setModel(addressBook);
+                        dlg.setAddress(address);
+                        dlg.exec();
+          
