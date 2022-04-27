@@ -393,4 +393,48 @@ QWidget *TransactionView::createDateRangeWidget()
     dateFrom->setMinimumWidth(100);
     dateFrom->setDate(QDate::currentDate().addDays(-7));
     layout->addWidget(dateFrom);
-    layout->addWidget(new QLabel(
+    layout->addWidget(new QLabel(tr("to")));
+
+    dateTo = new QDateTimeEdit(this);
+    dateTo->setDisplayFormat("dd/MM/yy");
+    dateTo->setCalendarPopup(true);
+    dateTo->setMinimumWidth(100);
+    dateTo->setDate(QDate::currentDate());
+    layout->addWidget(dateTo);
+    layout->addStretch();
+
+    // Hide by default
+    dateRangeWidget->setVisible(false);
+
+    // Notify on change
+    connect(dateFrom, SIGNAL(dateChanged(QDate)), this, SLOT(dateRangeChanged()));
+    connect(dateTo, SIGNAL(dateChanged(QDate)), this, SLOT(dateRangeChanged()));
+
+    return dateRangeWidget;
+}
+
+
+void TransactionView::dateRangeChanged()
+{
+    if (transactionProxyModel)
+    {
+        transactionProxyModel->setDateRange(QDateTime(dateFrom->date()), QDateTime(dateTo->date()).addDays(1));
+    }
+}
+
+
+void TransactionView::focusTransaction(const QModelIndex &idx)
+{
+    if (transactionProxyModel)
+    {
+        QModelIndex targetIdx = transactionProxyModel->mapFromSource(idx);
+        transactionView->scrollTo(targetIdx);
+        transactionView->setCurrentIndex(targetIdx);
+        transactionView->setFocus();
+    }
+}
+
+
+void TransactionView::updateTransactionList(bool hideInvalid)
+{
+ 
