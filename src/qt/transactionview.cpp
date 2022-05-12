@@ -437,4 +437,8 @@ void TransactionView::focusTransaction(const QModelIndex &idx)
 
 void TransactionView::updateTransactionList(bool hideInvalid)
 {
- 
+    if (transactionProxyModel)
+    {
+       transactionProxyModel->setHideInvalid(hideInvalid);
+    }
+}
