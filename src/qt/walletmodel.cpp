@@ -79,4 +79,40 @@ int WalletModel::getNumTransactions() const
 
 void WalletModel::updateStatus()
 {
-    EncryptionStatus
+    EncryptionStatus newEncryptionStatus = getEncryptionStatus();
+    if (cachedEncryptionStatus != newEncryptionStatus) 
+    {
+        emit encryptionStatusChanged(newEncryptionStatus);
+    }
+}
+
+
+void WalletModel::pollBalanceChanged()
+{
+    if (nBestHeight != cachedNumBlocks)
+    {
+        // Balance and number of transactions might have changed
+        cachedNumBlocks = nBestHeight;
+        checkBalanceChanged();
+        // Block index has changed
+        emit nBestHeightChanged(nBestHeight);
+    }
+}
+
+
+void WalletModel::checkBalanceChanged()
+{
+    qint64 newBalance = getBalance();
+    qint64 newStake = getStake();
+    qint64 newUnconfirmedBalance = getUnconfirmedBalance();
+    qint64 newImmatureBalance = getImmatureBalance();
+    
+    if ((cachedBalance != newBalance) || 
+        (cachedStake != newStake) || 
+        (cachedUnconfirmedBalance != newUnconfirmedBalance) || 
+        (cachedImmatureBalance != newImmatureBalance))
+    {
+        cachedBalance = newBalance;
+        cachedStake = newStake;
+        cachedUnconfirmedBalance = newUnconfirmedBalance;
+        
