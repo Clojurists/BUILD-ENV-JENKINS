@@ -115,4 +115,45 @@ void WalletModel::checkBalanceChanged()
         cachedBalance = newBalance;
         cachedStake = newStake;
         cachedUnconfirmedBalance = newUnconfirmedBalance;
-        
+        cachedImmatureBalance = newImmatureBalance;
+        emit balanceChanged(newBalance, newStake, newUnconfirmedBalance, newImmatureBalance);
+    }
+}
+
+
+void WalletModel::updateTransaction(const QString &hash, int status)
+{
+    if (transactionTableModel)
+    {
+        transactionTableModel->updateTransaction(hash, status);
+    }
+    
+    // Balance and number of transactions might have changed
+    checkBalanceChanged();
+
+    int newNumTransactions = getNumTransactions();
+    if (cachedNumTransactions != newNumTransactions)
+    {
+        cachedNumTransactions = newNumTransactions;
+        emit numTransactionsChanged(newNumTransactions);
+    }
+}
+
+
+void WalletModel::updateAddressBook(const QString &address, const QString &label, bool isMine, int status)
+{
+    if (addressTableModel) 
+    {
+        addressTableModel->updateEntry(address, label, isMine, status);
+    }
+}
+
+
+bool WalletModel::validateAddress(const QString &address)
+{
+    CBitcoinAddress addressParsed(address.toStdString());
+    return addressParsed.IsValid();
+}
+
+
+WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinCont
