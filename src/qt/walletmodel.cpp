@@ -156,4 +156,55 @@ bool WalletModel::validateAddress(const QString &address)
 }
 
 
-WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinCont
+WalletModel::SendCoinsReturn WalletModel::sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinControl *coinControl)
+{
+    qint64 total = 0;
+    QSet<QString> setAddress;
+    QString hex;
+
+    if (recipients.empty())
+    {
+        return OK;
+    }
+
+    // Pre-check input data for validity
+    foreach (const SendCoinsRecipient &rcp, recipients)
+    {
+        if (!validateAddress(rcp.address))
+        {
+            return InvalidAddress;
+        }
+        setAddress.insert(rcp.address);
+        if (rcp.amount <= 0)
+        {
+            return InvalidAmount;
+        }
+        total += rcp.amount;
+    }
+
+    if (recipients.size() > setAddress.size())
+    {
+        return DuplicateAddress;
+    }
+
+	int64 nBalance = 0;
+    std::vector<COutput> vCoins;
+    wallet->AvailableCoins(vCoins, true, coinControl);
+
+    BOOST_FOREACH (const COutput& out, vCoins)
+    {
+        nBalance += out.tx->vout[out.i].nValue;
+    }
+
+    if (total > nBalance)
+    {
+        return AmountExceedsBalance;
+    }
+
+    if((total + nTransactionFee) > nBalance)
+    {
+        return SendCoinsReturn(AmountWithFeeExceedsBalance, nTransactionFee);
+    }
+
+    {
+        LOC
