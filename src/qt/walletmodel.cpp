@@ -277,4 +277,63 @@ AddressTableModel *WalletModel::getAddressTableModel()
 }
 
 
-TransactionTableModel *WalletMo
+TransactionTableModel *WalletModel::getTransactionTableModel()
+{
+    return transactionTableModel;
+}
+
+
+WalletModel::EncryptionStatus WalletModel::getEncryptionStatus() const
+{
+    if (!wallet->IsCrypted())
+    {
+        return Unencrypted;
+    }
+    else if (wallet->IsLocked())
+    {
+        return Locked;
+    }
+    else
+    {
+        return Unlocked;
+    }
+}
+
+
+bool WalletModel::setWalletEncrypted(bool encrypted, const SecureString &passphrase)
+{
+    if (encrypted)
+    {
+        // Encrypt
+        return wallet->EncryptWallet(passphrase);
+    }
+    else
+    {
+        // Decrypt -- TODO; not supported yet
+        return false;
+    }
+}
+
+
+bool WalletModel::setWalletLocked(bool locked, const SecureString &passPhrase)
+{
+    if (locked)
+    {
+        return wallet->Lock();
+    }
+    else
+    {
+        return wallet->Unlock(passPhrase);
+    }
+}
+
+
+bool WalletModel::changePassphrase(const SecureString &oldPass, const SecureString &newPass)
+{
+    bool retval;
+    {
+        LOCK(wallet->cs_wallet);
+        
+        // Make sure wallet is locked before attempting pass change
+        wallet->Lock();
+        ret
