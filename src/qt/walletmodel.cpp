@@ -361,4 +361,30 @@ static void NotifyAddressBookChanged(WalletModel *walletmodel, CWallet *wallet, 
     OutputDebugStringF("NotifyAddressBookChanged %s %s isMine=%i status=%i\n", CBitcoinAddress(address).ToString().c_str(), label.c_str(), isMine, status);
     QMetaObject::invokeMethod(walletmodel, "updateAddressBook", Qt::QueuedConnection,
                               Q_ARG(QString, QString::fromStdString(CBitcoinAddress(address).ToString())),
-                              Q_A
+                              Q_ARG(QString, QString::fromStdString(label)),
+                              Q_ARG(bool, isMine),
+                              Q_ARG(int, status));
+}
+
+
+static void NotifyTransactionChanged(WalletModel *walletmodel, CWallet *wallet, const uint256 &hash, ChangeType status)
+{
+    OutputDebugStringF("NotifyTransactionChanged %s status=%i\n", hash.GetHex().c_str(), status);
+    QMetaObject::invokeMethod(walletmodel, "updateTransaction", Qt::QueuedConnection,
+                              Q_ARG(QString, QString::fromStdString(hash.GetHex())),
+                              Q_ARG(int, status));
+}
+
+
+void WalletModel::subscribeToCoreSignals()
+{
+    wallet->NotifyStatusChanged.connect(boost::bind(&NotifyKeyStoreStatusChanged, this, _1));
+    wallet->NotifyAddressBookChanged.connect(boost::bind(NotifyAddressBookChanged, this, _1, _2, _3, _4, _5));
+    wallet->NotifyTransactionChanged.connect(boost::bind(NotifyTransactionChanged, this, _1, _2, _3));
+}
+
+
+void WalletModel::unsubscribeFromCoreSignals()
+{
+    wallet->NotifyStatusChanged.disconnect(boost::bind(&NotifyKeyStoreStatusChanged, this, _1));
+    wal
