@@ -336,4 +336,29 @@ bool WalletModel::changePassphrase(const SecureString &oldPass, const SecureStri
         
         // Make sure wallet is locked before attempting pass change
         wallet->Lock();
-        ret
+        retval = wallet->ChangeWalletPassphrase(oldPass, newPass);
+    }
+    return retval;
+}
+
+
+bool WalletModel::backupWallet(const QString &filename)
+{
+    return BackupWallet(*wallet, filename.toLocal8Bit().data());
+}
+
+
+// Handlers for core signals
+static void NotifyKeyStoreStatusChanged(WalletModel *walletmodel, CCryptoKeyStore *wallet)
+{
+    OutputDebugStringF("NotifyKeyStoreStatusChanged\n");
+    QMetaObject::invokeMethod(walletmodel, "updateStatus", Qt::QueuedConnection);
+}
+
+
+static void NotifyAddressBookChanged(WalletModel *walletmodel, CWallet *wallet, const CTxDestination &address, const std::string &label, bool isMine, ChangeType status)
+{
+    OutputDebugStringF("NotifyAddressBookChanged %s %s isMine=%i status=%i\n", CBitcoinAddress(address).ToString().c_str(), label.c_str(), isMine, status);
+    QMetaObject::invokeMethod(walletmodel, "updateAddressBook", Qt::QueuedConnection,
+                              Q_ARG(QString, QString::fromStdString(CBitcoinAddress(address).ToString())),
+                              Q_A
