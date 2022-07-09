@@ -387,4 +387,37 @@ void WalletModel::subscribeToCoreSignals()
 void WalletModel::unsubscribeFromCoreSignals()
 {
     wallet->NotifyStatusChanged.disconnect(boost::bind(&NotifyKeyStoreStatusChanged, this, _1));
-    wal
+    wallet->NotifyAddressBookChanged.disconnect(boost::bind(NotifyAddressBookChanged, this, _1, _2, _3, _4, _5));
+    wallet->NotifyTransactionChanged.disconnect(boost::bind(NotifyTransactionChanged, this, _1, _2, _3));
+}
+
+
+// WalletModel::UnlockContext implementation
+WalletModel::UnlockContext WalletModel::requestUnlock()
+{
+    bool was_locked = getEncryptionStatus() == Locked;
+    
+    if ((!was_locked) && fWalletUnlockMintOnly)
+    {
+        setWalletLocked(true);
+        was_locked = getEncryptionStatus() == Locked;
+    }
+    if (was_locked)
+    {
+        // Request UI to unlock wallet
+        emit requireUnlock();
+    }
+    else if (fWalletUnlockMintOnly)
+    {
+        setWalletLocked(true);
+        emit requireUnlock();
+    }
+    // If wallet is still locked, unlock was failed or cancelled, mark context as invalid
+    bool valid = (getEncryptionStatus() != Locked);
+
+    return UnlockContext(this, valid, ((was_locked) && (!fWalletUnlockMintOnly)));
+}
+
+
+WalletModel::UnlockContext::UnlockContext(WalletModel *wallet, bool valid, bool relock):
+        wallet(wal
