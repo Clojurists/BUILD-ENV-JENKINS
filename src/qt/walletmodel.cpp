@@ -420,4 +420,51 @@ WalletModel::UnlockContext WalletModel::requestUnlock()
 
 
 WalletModel::UnlockContext::UnlockContext(WalletModel *wallet, bool valid, bool relock):
-        wallet(wal
+        wallet(wallet),
+        valid(valid),
+        relock(relock)
+{
+}
+
+
+WalletModel::UnlockContext::~UnlockContext()
+{
+    if (valid && relock)
+    {
+        wallet->setWalletLocked(true);
+    }
+}
+
+
+void WalletModel::UnlockContext::CopyFrom(const UnlockContext& rhs)
+{
+    // Transfer context; old object no longer relocks wallet
+    *this = rhs;
+    rhs.relock = false;
+}
+
+
+bool WalletModel::getPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const
+{
+    return wallet->GetPubKey(address, vchPubKeyOut);   
+}
+ 
+ 
+// returns a list of COutputs from COutPoints
+void WalletModel::getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs)
+{
+    BOOST_FOREACH (const COutPoint& outpoint, vOutpoints)
+    {
+        if (wallet->mapWallet.count(outpoint.hash)) 
+        {
+            int nDepth = wallet->mapWallet[outpoint.hash].GetDepthInMainChain();
+            if (nDepth >= 0) 
+            {
+                COutput out(&wallet->mapWallet[outpoint.hash], outpoint.n, nDepth);
+                vOutputs.push_back(out);
+            }
+        }
+    }
+}
+ 
+// AvailableCoins 
