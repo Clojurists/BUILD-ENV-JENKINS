@@ -43,4 +43,40 @@ public:
     enum StatusCode 
     {
         OK,
-        Inv
+        InvalidAmount,
+        InvalidAddress,
+        AmountExceedsBalance,
+        AmountWithFeeExceedsBalance,
+        DuplicateAddress,
+        TransactionCreationFailed,
+        TransactionCommitFailed,
+        Aborted
+    };
+
+    // Status of wallet has been encypted and locked/unlocked
+    enum EncryptionStatus
+    {
+        Unencrypted,
+        Locked,
+        Unlocked
+    };
+
+    OptionsModel *getOptionsModel();
+    AddressTableModel *getAddressTableModel();
+    TransactionTableModel *getTransactionTableModel();
+
+    qint64 getBalance() const;
+    qint64 getStake() const;
+    qint64 getUnconfirmedBalance() const;
+    qint64 getImmatureBalance() const;
+    int getNumTransactions() const;
+    EncryptionStatus getEncryptionStatus() const;
+
+    // Check address for validity
+    bool validateAddress(const QString &address);
+
+    // Return status record for SendCoins, contains error id + information
+    struct SendCoinsReturn
+    {
+		SendCoinsReturn(StatusCode status=Aborted, qint64 fee = 0, QString hex=QString()):
+            status(status)
