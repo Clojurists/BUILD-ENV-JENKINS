@@ -79,4 +79,31 @@ public:
     struct SendCoinsReturn
     {
 		SendCoinsReturn(StatusCode status=Aborted, qint64 fee = 0, QString hex=QString()):
-            status(status)
+            status(status), fee(fee), hex(hex) {}
+        StatusCode status;
+        qint64 fee;  // is used in case status is "AmountWithFeeExceedsBalance"
+        QString hex; // is filled with the transaction hash if status is "OK"
+    };
+
+    // Send coins to a list of recipients
+    SendCoinsReturn sendCoins(const QList<SendCoinsRecipient> &recipients, const CCoinControl *coinControl = NULL);
+
+    // Wallet encryption
+    bool setWalletEncrypted(bool encrypted, const SecureString &passphrase);
+    // Passphrase only needed when unlocking
+    bool setWalletLocked(bool locked, const SecureString &passPhrase = SecureString());
+    // Change the passphrase
+    bool changePassphrase(const SecureString &oldPass, const SecureString &newPass);
+    // Wallet backup
+    bool backupWallet(const QString &filename);
+
+    // RAI object for unlocking wallet, returned by requestUnlock()
+    class UnlockContext
+    {
+        
+    public:
+        UnlockContext(WalletModel *wallet, bool valid, bool relock);
+        ~UnlockContext();
+
+        bool isValid() const 
+  
