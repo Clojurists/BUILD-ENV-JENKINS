@@ -53,4 +53,30 @@ Value getpeerinfo(const Array& params, bool fHelp)
 
         obj.push_back(Pair("addr", stats.addrName));
         obj.push_back(Pair("services", strprintf("%08"PRI64x, stats.nServices)));
-        obj.push_back(Pair("lastsend", (boo
+        obj.push_back(Pair("lastsend", (boost::int64_t)stats.nLastSend));
+        obj.push_back(Pair("lastrecv", (boost::int64_t)stats.nLastRecv));
+        obj.push_back(Pair("conntime", (boost::int64_t)stats.nTimeConnected));
+        obj.push_back(Pair("version", stats.nVersion));
+        obj.push_back(Pair("subver", stats.strSubVer));
+        obj.push_back(Pair("inbound", stats.fInbound));
+        obj.push_back(Pair("releasetime", (boost::int64_t)stats.nReleaseTime));
+        obj.push_back(Pair("startingheight", stats.nStartingHeight));
+        obj.push_back(Pair("banscore", stats.nMisbehavior));
+
+        ret.push_back(obj);
+    }
+
+    return ret;
+}
+
+extern CCriticalSection cs_mapAlerts;
+extern map<uint256, CAlert> mapAlerts;
+ 
+// ppcoin: send alert.  
+// There is a known deadlock situation with ThreadMessageHandler
+// ThreadMessageHandler: holds cs_vSend and acquiring cs_main in SendMessages()
+// ThreadRPCServer: holds cs_main and acquiring cs_vSend in alert.RelayTo()/PushMessage()/BeginMessage()
+Value sendalert(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() < 6)
+        th
