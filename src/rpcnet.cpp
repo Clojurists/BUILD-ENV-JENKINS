@@ -104,4 +104,31 @@ Value sendalert(const Array& params, bool fHelp)
     alert.nRelayUntil = GetAdjustedTime() + 365*24*60*60;
     alert.nExpiration = GetAdjustedTime() + 365*24*60*60;
 
-    CDataStream sMsg
+    CDataStream sMsg(SER_NETWORK, PROTOCOL_VERSION);
+    sMsg << (CUnsignedAlert)alert;
+    alert.vchMsg = vector<unsigned char>(sMsg.begin(), sMsg.end());
+
+    vector<unsigned char> vchPrivKey = ParseHex(params[1].get_str());
+    key.SetPrivKey(CPrivKey(vchPrivKey.begin(), vchPrivKey.end())); // if key is not correct openssl may crash
+    if (!key.Sign(Hash(alert.vchMsg.begin(), alert.vchMsg.end()), alert.vchSig))
+        throw runtime_error(
+            "Unable to sign alert, check private key?\n");  
+    if(!alert.ProcessAlert()) 
+        throw runtime_error(
+            "Failed to process alert.\n");
+    // Relay alert
+    {
+        LOCK(cs_vNodes);
+        BOOST_FOREACH(CNode* pnode, vNodes)
+            alert.RelayTo(pnode);
+    }
+
+    Object result;
+    result.push_back(Pair("strStatusBar", alert.strStatusBar));
+    result.push_back(Pair("nVersion", alert.nVersion));
+    result.push_back(Pair("nMinVer", alert.nMinVer));
+    result.push_back(Pair("nMaxVer", alert.nMaxVer));
+    result.push_back(Pair("nPriority", alert.nPriority));
+    result.push_back(Pair("nID", alert.nID));
+    if (alert.nCancel > 0)
+        result.push_ba
