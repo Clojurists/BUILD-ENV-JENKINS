@@ -131,4 +131,6 @@ Value sendalert(const Array& params, bool fHelp)
     result.push_back(Pair("nPriority", alert.nPriority));
     result.push_back(Pair("nID", alert.nID));
     if (alert.nCancel > 0)
-        result.push_ba
+        result.push_back(Pair("nCancel", alert.nCancel));
+    return result;
+}
