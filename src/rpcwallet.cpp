@@ -125,4 +125,33 @@ Value getnewpubkey(const Array& params, bool fHelp)
 }
 
 
-Valu
+Value getnewaddress(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw runtime_error(
+            "getnewaddress [account]\n"
+            "Returns a new JackpotCoin address for receiving payments.  "
+            "If [account] is specified (recommended), it is added to the address book "
+            "so payments received with the address will be credited to [account].");
+
+    // Parse the account first so we don't generate a key if there's an error
+    string strAccount;
+    if (params.size() > 0)
+        strAccount = AccountFromValue(params[0]);
+
+    if (!pwalletMain->IsLocked())
+        pwalletMain->TopUpKeyPool();
+
+    // Generate a new key that is added to wallet
+    CPubKey newKey;
+    if (!pwalletMain->GetKeyFromPool(newKey, false))
+        throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
+    CKeyID keyID = newKey.GetID();
+
+    pwalletMain->SetAddressBookName(keyID, strAccount);
+
+    return CBitcoinAddress(keyID).ToString();
+}
+
+
+CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew=fal
