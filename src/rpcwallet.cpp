@@ -154,4 +154,35 @@ Value getnewaddress(const Array& params, bool fHelp)
 }
 
 
-CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew=fal
+CBitcoinAddress GetAccountAddress(string strAccount, bool bForceNew=false)
+{
+    CWalletDB walletdb(pwalletMain->strWalletFile);
+
+    CAccount account;
+    walletdb.ReadAccount(strAccount, account);
+
+    bool bKeyUsed = false;
+
+    // Check if the current key has been used
+    if (account.vchPubKey.IsValid())
+    {
+        CScript scriptPubKey;
+        scriptPubKey.SetDestination(account.vchPubKey.GetID());
+        for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin();
+             it != pwalletMain->mapWallet.end() && account.vchPubKey.IsValid();
+             ++it)
+        {
+            const CWalletTx& wtx = (*it).second;
+            BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+                if (txout.scriptPubKey == scriptPubKey)
+                    bKeyUsed = true;
+        }
+    }
+
+    // Generate a new key
+    if (!account.vchPubKey.IsValid() || bForceNew || bKeyUsed)
+    {
+        if (!pwalletMain->GetKeyFromPool(account.vchPubKey, false))
+            throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
+
+        pwalletMain->SetAddressBookName(account.vchPub
