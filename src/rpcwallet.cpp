@@ -253,4 +253,37 @@ Value getaccount(const Array& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid JackpotCoin address");
 
     string strAccount;
-    map<CTxDestination, string>::iterator mi = pwalletMain->
+    map<CTxDestination, string>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
+    if (mi != pwalletMain->mapAddressBook.end() && !(*mi).second.empty())
+        strAccount = (*mi).second;
+    return strAccount;
+}
+
+
+Value getaddressesbyaccount(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "getaddressesbyaccount <account>\n"
+            "Returns the list of addresses for the given account.");
+
+    string strAccount = AccountFromValue(params[0]);
+
+    // Find all addresses that have the given account
+    Array ret;
+    BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, string)& item, pwalletMain->mapAddressBook)
+    {
+        const CBitcoinAddress& address = item.first;
+        const string& strName = item.second;
+        if (strName == strAccount)
+            ret.push_back(address.ToString());
+    }
+    return ret;
+}
+
+Value sendtoaddress(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() < 2 || params.size() > 4)
+        throw runtime_error(
+		"sendtoaddress <JackpotCoinaddress> <amount> [comment] [comment-to]\n"
+            "
