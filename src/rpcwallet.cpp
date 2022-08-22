@@ -337,4 +337,38 @@ Value listaddressgroupings(const Array& params, bool fHelp)
             addressInfo.push_back(ValueFromAmount(balances[address]));
             {
                 LOCK(pwalletMain->cs_wallet);
-                if (pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get()) != pwalletMain->mapAddressBook.end(
+                if (pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get()) != pwalletMain->mapAddressBook.end())
+                    addressInfo.push_back(pwalletMain->mapAddressBook.find(CBitcoinAddress(address).Get())->second);
+            }
+            jsonGrouping.push_back(addressInfo);
+        }
+        jsonGroupings.push_back(jsonGrouping);
+    }
+    return jsonGroupings;
+}
+
+Value signmessage(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 2)
+        throw runtime_error(
+            "signmessage <jackpotcoinaddress> <message>\n"
+            "Sign a message with the private key of an address");
+
+    EnsureWalletIsUnlocked();
+
+    string strAddress = params[0].get_str();
+    string strMessage = params[1].get_str();
+
+    CBitcoinAddress addr(strAddress);
+    if (!addr.IsValid())
+        throw JSONRPCError(RPC_TYPE_ERROR, "Invalid address");
+
+    CKeyID keyID;
+    if (!addr.GetKeyID(keyID))
+        throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to key");
+
+    CKey key;
+    if (!pwalletMain->GetKey(keyID, key))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Private key not available");
+
+    CDataStream ss(SER_GETHASH, 0)
