@@ -437,4 +437,38 @@ Value getreceivedbyaddress(const Array& params, bool fHelp)
 
     // Minimum confirmations
     int nMinDepth = 1;
-    if (par
+    if (params.size() > 1)
+        nMinDepth = params[1].get_int();
+
+    // Tally
+    int64 nAmount = 0;
+    for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
+    {
+        const CWalletTx& wtx = (*it).second;
+        if (wtx.IsCoinBase() || wtx.IsCoinStake() || !wtx.IsFinal())
+            continue;
+
+        BOOST_FOREACH(const CTxOut& txout, wtx.vout)
+            if (txout.scriptPubKey == scriptPubKey)
+                if (wtx.GetDepthInMainChain() >= nMinDepth)
+                    nAmount += txout.nValue;
+    }
+
+    return  ValueFromAmount(nAmount);
+}
+
+
+void GetAccountAddresses(string strAccount, set<CTxDestination>& setAddress)
+{
+    BOOST_FOREACH(const PAIRTYPE(CTxDestination, string)& item, pwalletMain->mapAddressBook)
+    {
+        const CTxDestination& address = item.first;
+        const string& strName = item.second;
+        if (strName == strAccount)
+            setAddress.insert(address);
+    }
+}
+
+Value getreceivedbyaccount(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() < 1 || params.size(
