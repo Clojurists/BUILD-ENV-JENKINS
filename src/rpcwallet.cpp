@@ -535,4 +535,34 @@ int64 GetAccountBalance(CWalletDB& walletdb, const string& strAccount, int nMinD
 int64 GetAccountBalance(const string& strAccount, int nMinDepth)
 {
     CWalletDB walletdb(pwalletMain->strWalletFile);
-    return Ge
+    return GetAccountBalance(walletdb, strAccount, nMinDepth);
+}
+
+
+Value getbalance(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 2)
+        throw runtime_error(
+            "getbalance [account] [minconf=1]\n"
+            "If [account] is not specified, returns the server's total available balance.\n"
+            "If [account] is specified, returns the balance in the account.");
+
+    if (params.size() == 0)
+        return  ValueFromAmount(pwalletMain->GetBalance());
+
+    int nMinDepth = 1;
+    if (params.size() > 1)
+        nMinDepth = params[1].get_int();
+
+    if (params[0].get_str() == "*") {
+        // Calculate total balance a different way from GetBalance()
+        // (GetBalance() sums up all unspent TxOuts)
+        // getbalance and getbalance '*' should always return the same number.
+        int64 nBalance = 0;
+        for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
+        {
+            const CWalletTx& wtx = (*it).second;
+            if (!wtx.IsFinal())
+                continue;
+
+            int64 allGeneratedImmature, allGeneratedMature
