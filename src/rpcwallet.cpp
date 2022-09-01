@@ -595,4 +595,36 @@ Value getbalance(const Array& params, bool fHelp)
 
 Value movecmd(const Array& params, bool fHelp)
 {
-    if (fHelp || params.size(
+    if (fHelp || params.size() < 3 || params.size() > 5)
+        throw runtime_error(
+            "move <fromaccount> <toaccount> <amount> [minconf=1] [comment]\n"
+            "Move from one account in your wallet to another.");
+
+    string strFrom = AccountFromValue(params[0]);
+    string strTo = AccountFromValue(params[1]);
+    int64 nAmount = AmountFromValue(params[2]);
+
+    if (nAmount < MIN_TXOUT_AMOUNT)
+        throw JSONRPCError(-101, "Send amount too small");
+
+    if (params.size() > 3)
+        // unused parameter, used to be nMinDepth, keep type-checking it though
+        (void)params[3].get_int();
+    string strComment;
+    if (params.size() > 4)
+        strComment = params[4].get_str();
+
+    CWalletDB walletdb(pwalletMain->strWalletFile);
+    if (!walletdb.TxnBegin())
+        throw JSONRPCError(RPC_DATABASE_ERROR, "database error");
+
+    int64 nNow = GetAdjustedTime();
+
+    // Debit
+    CAccountingEntry debit;
+    debit.nOrderPos = pwalletMain->IncOrderPosNext(&walletdb);
+    debit.strAccount = strFrom;
+    debit.nCreditDebit = -nAmount;
+    debit.nTime = nNow;
+    debit.strOtherAccount = strTo;
+    debi
