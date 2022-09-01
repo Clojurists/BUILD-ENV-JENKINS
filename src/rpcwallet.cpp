@@ -565,4 +565,34 @@ Value getbalance(const Array& params, bool fHelp)
             if (!wtx.IsFinal())
                 continue;
 
-            int64 allGeneratedImmature, allGeneratedMature
+            int64 allGeneratedImmature, allGeneratedMature, allFee;
+            allGeneratedImmature = allGeneratedMature = allFee = 0;
+
+            string strSentAccount;
+            list<pair<CTxDestination, int64> > listReceived;
+            list<pair<CTxDestination, int64> > listSent;
+            wtx.GetAmounts(allGeneratedImmature, allGeneratedMature, listReceived, listSent, allFee, strSentAccount);
+            if (wtx.GetDepthInMainChain() >= nMinDepth)
+            {
+                BOOST_FOREACH(const PAIRTYPE(CTxDestination,int64)& r, listReceived)
+                    nBalance += r.second;
+            }
+            BOOST_FOREACH(const PAIRTYPE(CTxDestination,int64)& r, listSent)
+            nBalance -= r.second;
+            nBalance -= allFee;
+            nBalance += allGeneratedMature;
+        }
+        return  ValueFromAmount(nBalance);
+    }
+
+    string strAccount = AccountFromValue(params[0]);
+
+    int64 nBalance = GetAccountBalance(strAccount, nMinDepth);
+
+    return ValueFromAmount(nBalance);
+}
+
+
+Value movecmd(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size(
