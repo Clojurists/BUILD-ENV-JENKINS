@@ -627,4 +627,38 @@ Value movecmd(const Array& params, bool fHelp)
     debit.nCreditDebit = -nAmount;
     debit.nTime = nNow;
     debit.strOtherAccount = strTo;
-    debi
+    debit.strComment = strComment;
+    walletdb.WriteAccountingEntry(debit);
+
+    // Credit
+    CAccountingEntry credit;
+    credit.nOrderPos = pwalletMain->IncOrderPosNext(&walletdb);
+    credit.strAccount = strTo;
+    credit.nCreditDebit = nAmount;
+    credit.nTime = nNow;
+    credit.strOtherAccount = strFrom;
+    credit.strComment = strComment;
+    walletdb.WriteAccountingEntry(credit);
+
+    if (!walletdb.TxnCommit())
+        throw JSONRPCError(RPC_DATABASE_ERROR, "database error");
+
+    return true;
+}
+
+
+Value sendfrom(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() < 3 || params.size() > 6)
+        throw runtime_error(
+		"sendfrom <fromaccount> <tojackpotcoinaddress> <amount> [minconf=1] [comment] [comment-to]\n"
+            "<amount> is a real and is rounded to the nearest 0.000001"
+            + HelpRequiringPassphrase());
+
+    string strAccount = AccountFromValue(params[0]);
+    CBitcoinAddress address(params[1].get_str());
+    if (!address.IsValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid JackpotCoin address");
+    int64 nAmount = AmountFromValue(params[2]);
+
+    if (nAmo
