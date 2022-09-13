@@ -938,4 +938,28 @@ Value listreceivedbyaddress(const Array& params, bool fHelp)
             "listreceivedbyaddress [minconf=1] [includeempty=false]\n"
             "[minconf] is the minimum number of confirmations before payments are included.\n"
             "[includeempty] whether to include addresses that haven't received any payments.\n"
-            "Returns an array of objec
+            "Returns an array of objects containing:\n"
+            "  \"address\" : receiving address\n"
+            "  \"account\" : the account of the receiving address\n"
+            "  \"amount\" : total amount received by the address\n"
+            "  \"confirmations\" : number of confirmations of the most recent transaction included");
+
+    return ListReceived(params, false);
+}
+
+Value listreceivedbyaccount(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 2)
+        throw runtime_error(
+            "listreceivedbyaccount [minconf=1] [includeempty=false]\n"
+            "[minconf] is the minimum number of confirmations before payments are included.\n"
+            "[includeempty] whether to include accounts that haven't received any payments.\n"
+            "Returns an array of objects containing:\n"
+            "  \"account\" : the account of the receiving addresses\n"
+            "  \"amount\" : total amount received by addresses with this account\n"
+            "  \"confirmations\" : number of confirmations of the most recent transaction included");
+
+    return ListReceived(params, true);
+}
+
+static
