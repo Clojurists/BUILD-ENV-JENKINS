@@ -1020,4 +1020,27 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
     // Received
     if (listReceived.size() > 0 && wtx.GetDepthInMainChain() >= nMinDepth)
     {
-        BOOST_FOREACH(co
+        BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
+        {
+            string account;
+            if (pwalletMain->mapAddressBook.count(r.first))
+                account = pwalletMain->mapAddressBook[r.first];
+            if (fAllAccounts || (account == strAccount))
+            {
+                Object entry;
+                entry.push_back(Pair("account", account));
+                entry.push_back(Pair("address", CBitcoinAddress(r.first).ToString()));
+                if (wtx.IsCoinBase())
+                {
+                    if (wtx.GetDepthInMainChain() < 1)
+                        entry.push_back(Pair("category", "orphan"));
+                    else if (wtx.GetBlocksToMaturity() > 0)
+                        entry.push_back(Pair("category", "immature"));
+                    else
+                        entry.push_back(Pair("category", "generate"));
+                }
+                else
+                    entry.push_back(Pair("category", "receive"));
+                entry.push_back(Pair("amount", ValueFromAmount(r.second)));
+                if (fLong)
+             
