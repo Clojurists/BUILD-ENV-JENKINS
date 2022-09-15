@@ -1043,4 +1043,33 @@ void ListTransactions(const CWalletTx& wtx, const string& strAccount, int nMinDe
                     entry.push_back(Pair("category", "receive"));
                 entry.push_back(Pair("amount", ValueFromAmount(r.second)));
                 if (fLong)
-             
+                    WalletTxToJSON(wtx, entry);
+                ret.push_back(entry);
+            }
+        }
+    }
+}
+
+void AcentryToJSON(const CAccountingEntry& acentry, const string& strAccount, Array& ret)
+{
+    bool fAllAccounts = (strAccount == string("*"));
+
+    if (fAllAccounts || acentry.strAccount == strAccount)
+    {
+        Object entry;
+        entry.push_back(Pair("account", acentry.strAccount));
+        entry.push_back(Pair("category", "move"));
+        entry.push_back(Pair("time", (boost::int64_t)acentry.nTime));
+        entry.push_back(Pair("amount", ValueFromAmount(acentry.nCreditDebit)));
+        entry.push_back(Pair("otheraccount", acentry.strOtherAccount));
+        entry.push_back(Pair("comment", acentry.strComment));
+        ret.push_back(entry);
+    }
+}
+
+Value listtransactions(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 3)
+        throw runtime_error(
+            "listtransactions [account] [count=10] [from=0]\n"
+            "Returns up to [count] most recent transactions skipping the first [from]
