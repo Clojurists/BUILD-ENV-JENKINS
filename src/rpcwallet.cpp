@@ -1138,4 +1138,24 @@ Value listaccounts(const Array& params, bool fHelp)
 
     map<string, int64> mapAccountBalances;
     BOOST_FOREACH(const PAIRTYPE(CTxDestination, string)& entry, pwalletMain->mapAddressBook) {
-        if (IsMine(*pwallet
+        if (IsMine(*pwalletMain, entry.first)) // This address belongs to me
+            mapAccountBalances[entry.second] = 0;
+    }
+
+    for (map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it)
+    {
+        const CWalletTx& wtx = (*it).second;
+        int64 nGeneratedImmature, nGeneratedMature, nFee;
+        string strSentAccount;
+        list<pair<CTxDestination, int64> > listReceived;
+        list<pair<CTxDestination, int64> > listSent;
+        wtx.GetAmounts(nGeneratedImmature, nGeneratedMature, listReceived, listSent, nFee, strSentAccount);
+        mapAccountBalances[strSentAccount] -= nFee;
+        BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& s, listSent)
+            mapAccountBalances[strSentAccount] -= s.second;
+        if (wtx.GetDepthInMainChain() >= nMinDepth)
+        {
+            mapAccountBalances[""] += nGeneratedMature;
+            BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
+                if (pwalletMain->mapAddressBook.count(r.first))
+                    mapAccountBalances[pwalletMain->mapAdd
