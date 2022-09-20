@@ -1158,4 +1158,40 @@ Value listaccounts(const Array& params, bool fHelp)
             mapAccountBalances[""] += nGeneratedMature;
             BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64)& r, listReceived)
                 if (pwalletMain->mapAddressBook.count(r.first))
-                    mapAccountBalances[pwalletMain->mapAdd
+                    mapAccountBalances[pwalletMain->mapAddressBook[r.first]] += r.second;
+                else
+                    mapAccountBalances[""] += r.second;
+        }
+    }
+
+    list<CAccountingEntry> acentries;
+    CWalletDB(pwalletMain->strWalletFile).ListAccountCreditDebit("*", acentries);
+    BOOST_FOREACH(const CAccountingEntry& entry, acentries)
+        mapAccountBalances[entry.strAccount] += entry.nCreditDebit;
+
+    Object ret;
+    BOOST_FOREACH(const PAIRTYPE(string, int64)& accountBalance, mapAccountBalances) {
+        ret.push_back(Pair(accountBalance.first, ValueFromAmount(accountBalance.second)));
+    }
+    return ret;
+}
+
+Value listsinceblock(const Array& params, bool fHelp)
+{
+    if (fHelp)
+        throw runtime_error(
+            "listsinceblock [blockhash] [target-confirmations]\n"
+            "Get all transactions in blocks since block [blockhash], or all transactions if omitted");
+
+    CBlockIndex *pindex = NULL;
+    int target_confirms = 1;
+
+    if (params.size() > 0)
+    {
+        uint256 blockId = 0;
+
+        blockId.SetHex(params[0].get_str());
+        pindex = CBlockLocator(blockId).GetBlockIndex();
+    }
+
+    if (params.size() > 1)
