@@ -1301,4 +1301,47 @@ Value gettransaction(const Array& params, bool fHelp)
             }
         }
         else
-            throw JSONRPCError(RPC_INVALID_A
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
+    }
+
+    return entry;
+}
+
+
+Value backupwallet(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "backupwallet <destination>\n"
+            "Safely copies wallet.dat to destination, which can be a directory or a path with filename.");
+
+    string strDest = params[0].get_str();
+    if (!BackupWallet(*pwalletMain, strDest))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error: Wallet backup failed!");
+
+    return Value::null;
+}
+
+
+Value keypoolrefill(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 0)
+        throw runtime_error(
+            "keypoolrefill\n"
+            "Fills the keypool."
+            + HelpRequiringPassphrase());
+
+    EnsureWalletIsUnlocked();
+
+    pwalletMain->TopUpKeyPool();
+
+    if (pwalletMain->GetKeyPoolSize() < GetArg("-keypool", 100))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error refreshing keypool.");
+
+    return Value::null;
+}
+
+
+void ThreadTopUpKeyPool(void* parg)
+{
+    // Make this threa
