@@ -1386,4 +1386,28 @@ void ThreadCleanWalletPassphrase(void* parg)
     else
     {
         if (nWalletUnlockTime < nMyWakeTime)
-     
+            nWalletUnlockTime = nMyWakeTime;
+    }
+
+    LEAVE_CRITICAL_SECTION(cs_nWalletUnlockTime);
+
+    delete (int64*)parg;
+}
+
+Value walletpassphrase(const Array& params, bool fHelp)
+{
+    if (pwalletMain->IsCrypted() && (fHelp || params.size() < 2 || params.size() > 3))
+        throw runtime_error(
+            "walletpassphrase <passphrase> <timeout> [mintonly]\n"
+            "Stores the wallet decryption key in memory for <timeout> seconds.\n"
+            "mintonly is optional true/false allowing only block minting.");
+    if (fHelp)
+        return true;
+    if (!pwalletMain->IsCrypted())
+        throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an unencrypted wallet, but walletpassphrase was called.");
+
+    if (!pwalletMain->IsLocked())
+        throw JSONRPCError(RPC_WALLET_ALREADY_UNLOCKED, "Error: Wallet is already unlocked, use walletlock first if need to change unlock settings.");
+    // Note that the walletpassphrase is stored in params[0] which is not mlock()ed
+    SecureString strWalletPass;
+    strWalletPass.reser
