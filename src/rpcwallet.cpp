@@ -1463,3 +1463,30 @@ Value walletpassphrasechange(const Array& params, bool fHelp)
     if (strOldWalletPass.length() < 1 || strNewWalletPass.length() < 1)
         throw runtime_error(
             "walletpassphrasechange <oldpassphrase> <newpassphrase>\n"
+            "Changes the wallet passphrase from <oldpassphrase> to <newpassphrase>.");
+
+    if (!pwalletMain->ChangeWalletPassphrase(strOldWalletPass, strNewWalletPass))
+        throw JSONRPCError(RPC_WALLET_PASSPHRASE_INCORRECT, "Error: The wallet passphrase entered was incorrect.");
+
+    return Value::null;
+}
+
+
+Value walletlock(const Array& params, bool fHelp)
+{
+    if (pwalletMain->IsCrypted() && (fHelp || params.size() != 0))
+        throw runtime_error(
+            "walletlock\n"
+            "Removes the wallet encryption key from memory, locking the wallet.\n"
+            "After calling this method, you will need to call walletpassphrase again\n"
+            "before being able to call any methods which require the wallet to be unlocked.");
+    if (fHelp)
+        return true;
+    if (!pwalletMain->IsCrypted())
+        throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an unencrypted wallet, but walletlock was called.");
+
+    {
+        LOCK(cs_nWalletUnlockTime);
+        pwalletMain->Lock();
+        nWalletUnlockTime = 0;
+ 
