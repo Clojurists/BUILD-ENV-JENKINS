@@ -1489,4 +1489,35 @@ Value walletlock(const Array& params, bool fHelp)
         LOCK(cs_nWalletUnlockTime);
         pwalletMain->Lock();
         nWalletUnlockTime = 0;
- 
+    }
+
+    return Value::null;
+}
+
+
+Value encryptwallet(const Array& params, bool fHelp)
+{
+    if (!pwalletMain->IsCrypted() && (fHelp || params.size() != 1))
+        throw runtime_error(
+            "encryptwallet <passphrase>\n"
+            "Encrypts the wallet with <passphrase>.");
+    if (fHelp)
+        return true;
+    if (pwalletMain->IsCrypted())
+        throw JSONRPCError(RPC_WALLET_WRONG_ENC_STATE, "Error: running with an encrypted wallet, but encryptwallet was called.");
+
+    // TODO: get rid of this .c_str() by implementing SecureString::operator=(std::string)
+    // Alternately, find a way to make params[0] mlock()'d to begin with.
+    SecureString strWalletPass;
+    strWalletPass.reserve(100);
+    strWalletPass = params[0].get_str().c_str();
+
+    if (strWalletPass.length() < 1)
+        throw runtime_error(
+            "encryptwallet <passphrase>\n"
+            "Encrypts the wallet with <passphrase>.");
+
+    if (!pwalletMain->EncryptWallet(strWalletPass))
+        throw JSONRPCError(RPC_WALLET_ENCRYPTION_FAILED, "Error: Failed to encrypt the wallet.");
+
+  
