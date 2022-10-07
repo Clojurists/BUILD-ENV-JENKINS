@@ -1547,4 +1547,35 @@ public:
         obj.push_back(Pair("isscript", true));
         CScript subscript;
         pwalletMain->GetCScript(scriptID, subscript);
-        std::vector<CTxDestinat
+        std::vector<CTxDestination> addresses;
+        txnouttype whichType;
+        int nRequired;
+        ExtractDestinations(subscript, whichType, addresses, nRequired);
+        obj.push_back(Pair("script", GetTxnOutputType(whichType)));
+        Array a;
+        BOOST_FOREACH(const CTxDestination& addr, addresses)
+            a.push_back(CBitcoinAddress(addr).ToString());
+        obj.push_back(Pair("addresses", a));
+        if (whichType == TX_MULTISIG)
+            obj.push_back(Pair("sigsrequired", nRequired));
+        return obj;
+    }
+};
+
+Value validateaddress(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw runtime_error(
+            "validateaddress <JackpotCoinaddress>\n"
+            "Return information about <JackpotCoinaddress>.");
+
+    CBitcoinAddress address(params[0].get_str());
+    bool isValid = address.IsValid();
+
+    Object ret;
+    ret.push_back(Pair("isvalid", isValid));
+    if (isValid)
+    {
+        CTxDestination dest = address.Get();
+        string currentAddress = address.ToString();
+        ret.push_back(P
