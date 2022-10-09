@@ -1578,4 +1578,36 @@ Value validateaddress(const Array& params, bool fHelp)
     {
         CTxDestination dest = address.Get();
         string currentAddress = address.ToString();
-        ret.push_back(P
+        ret.push_back(Pair("address", currentAddress));
+        bool fMine = IsMine(*pwalletMain, dest);
+        ret.push_back(Pair("ismine", fMine));
+        if (fMine) {
+            Object detail = boost::apply_visitor(DescribeAddressVisitor(), dest);
+            ret.insert(ret.end(), detail.begin(), detail.end());
+        }
+        if (pwalletMain->mapAddressBook.count(dest))
+            ret.push_back(Pair("account", pwalletMain->mapAddressBook[dest]));
+    }
+    return ret;
+}
+
+Value validatepubkey(const Array& params, bool fHelp)
+{
+    if (fHelp || !params.size() || params.size() > 2)
+        throw runtime_error(
+            "validatepubkey <JackpotCoinpubkey>\n"
+            "Return information about <JackpotCoinpubkey>.");
+
+    std::vector<unsigned char> vchPubKey = ParseHex(params[0].get_str());
+    CPubKey pubKey(vchPubKey);
+
+    bool isValid = pubKey.IsValid();
+    bool isCompressed = pubKey.IsCompressed();
+    CKeyID keyID = pubKey.GetID();
+
+    CBitcoinAddress address;
+    address.Set(keyID);
+
+    Object ret;
+    ret.push_back(Pair("isvalid", isValid));
+    if
