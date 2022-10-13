@@ -1610,4 +1610,30 @@ Value validatepubkey(const Array& params, bool fHelp)
 
     Object ret;
     ret.push_back(Pair("isvalid", isValid));
-    if
+    if (isValid)
+    {
+        CTxDestination dest = address.Get();
+        string currentAddress = address.ToString();
+        ret.push_back(Pair("address", currentAddress));
+        bool fMine = IsMine(*pwalletMain, dest);
+        ret.push_back(Pair("ismine", fMine));
+        ret.push_back(Pair("iscompressed", isCompressed));
+        if (fMine) {
+            Object detail = boost::apply_visitor(DescribeAddressVisitor(), dest);
+            ret.insert(ret.end(), detail.begin(), detail.end());
+        }
+        if (pwalletMain->mapAddressBook.count(dest))
+            ret.push_back(Pair("account", pwalletMain->mapAddressBook[dest]));
+    }
+    return ret;
+}
+
+// ppcoin: reserve balance from being staked for network protection
+Value reservebalance(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() > 2)
+        throw runtime_error(
+            "reservebalance [<reserve> [amount]]\n"
+            "<reserve> is true or false to turn balance reserve on or off.\n"
+            "<amount> is a real and rounded to cent.\n"
+            "Set reserve amount not participating in network p
