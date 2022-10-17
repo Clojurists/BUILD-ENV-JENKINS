@@ -1746,4 +1746,9 @@ Value makekeypair(const Array& params, bool fHelp)
     CKey key;
     key.MakeNewKey(false);
 
-    CPrivKey vchPrivKey = key.GetPrivKe
+    CPrivKey vchPrivKey = key.GetPrivKey();
+    Object result;
+    result.push_back(Pair("PrivateKey", HexStr<CPrivKey::iterator>(vchPrivKey.begin(), vchPrivKey.end())));
+    result.push_back(Pair("PublicKey", HexStr(key.GetPubKey().Raw())));
+    return result;
+}
