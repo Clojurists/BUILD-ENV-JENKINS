@@ -102,4 +102,69 @@ extern "C"{
 #define M5_8_3    1
 
 #define M5_9_0    4
-#
+#define M5_9_1    0
+#define M5_9_2    1
+#define M5_9_3    2
+
+#define M5_10_0   0
+#define M5_10_1   1
+#define M5_10_2   2
+#define M5_10_3   3
+
+#define M5_11_0   1
+#define M5_11_1   2
+#define M5_11_2   3
+#define M5_11_3   4
+
+#define M5_12_0   2
+#define M5_12_1   3
+#define M5_12_2   4
+#define M5_12_3   0
+
+#define M5_13_0   3
+#define M5_13_1   4
+#define M5_13_2   0
+#define M5_13_3   1
+
+#define M5_14_0   4
+#define M5_14_1   0
+#define M5_14_2   1
+#define M5_14_3   2
+
+#define M5_15_0   0
+#define M5_15_1   1
+#define M5_15_2   2
+#define M5_15_3   3
+
+#define M5_16_0   1
+#define M5_16_1   2
+#define M5_16_2   3
+#define M5_16_3   4
+
+#define M5_17_0   2
+#define M5_17_1   3
+#define M5_17_2   4
+#define M5_17_3   0
+
+#define M5_18_0   3
+#define M5_18_1   4
+#define M5_18_2   0
+#define M5_18_3   1
+#endif
+
+/*
+ * M9_ ## s ## _ ## i  evaluates to s+i mod 9 (0 <= s <= 18, 0 <= i <= 7).
+ */
+
+#define M9_0_0    0
+#define M9_0_1    1
+#define M9_0_2    2
+#define M9_0_3    3
+#define M9_0_4    4
+#define M9_0_5    5
+#define M9_0_6    6
+#define M9_0_7    7
+
+#define M9_1_0    1
+#define M9_1_1    2
+#define M9_
