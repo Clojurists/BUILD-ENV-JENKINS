@@ -167,4 +167,65 @@ extern "C"{
 
 #define M9_1_0    1
 #define M9_1_1    2
-#define M9_
+#define M9_1_2    3
+#define M9_1_3    4
+#define M9_1_4    5
+#define M9_1_5    6
+#define M9_1_6    7
+#define M9_1_7    8
+
+#define M9_2_0    2
+#define M9_2_1    3
+#define M9_2_2    4
+#define M9_2_3    5
+#define M9_2_4    6
+#define M9_2_5    7
+#define M9_2_6    8
+#define M9_2_7    0
+
+#define M9_3_0    3
+#define M9_3_1    4
+#define M9_3_2    5
+#define M9_3_3    6
+#define M9_3_4    7
+#define M9_3_5    8
+#define M9_3_6    0
+#define M9_3_7    1
+
+#define M9_4_0    4
+#define M9_4_1    5
+#define M9_4_2    6
+#define M9_4_3    7
+#define M9_4_4    8
+#define M9_4_5    0
+#define M9_4_6    1
+#define M9_4_7    2
+
+#define M9_5_0    5
+#define M9_5_1    6
+#define M9_5_2    7
+#define M9_5_3    8
+#define M9_5_4    0
+#define M9_5_5    1
+#define M9_5_6    2
+#define M9_5_7    3
+
+#define M9_6_0    6
+#define M9_6_1    7
+#define M9_6_2    8
+#define M9_6_3    0
+#define M9_6_4    1
+#define M9_6_5    2
+#define M9_6_6    3
+#define M9_6_7    4
+
+#define M9_7_0    7
+#define M9_7_1    8
+#define M9_7_2    0
+#define M9_7_3    1
+#define M9_7_4    2
+#define M9_7_5    3
+#define M9_7_6    4
+#define M9_7_7    5
+
+#define
