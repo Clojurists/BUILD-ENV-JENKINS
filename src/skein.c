@@ -288,4 +288,62 @@ extern "C"{
 #define M9_14_3   8
 #define M9_14_4   0
 #define M9_14_5   1
-#def
+#define M9_14_6   2
+#define M9_14_7   3
+
+#define M9_15_0   6
+#define M9_15_1   7
+#define M9_15_2   8
+#define M9_15_3   0
+#define M9_15_4   1
+#define M9_15_5   2
+#define M9_15_6   3
+#define M9_15_7   4
+
+#define M9_16_0   7
+#define M9_16_1   8
+#define M9_16_2   0
+#define M9_16_3   1
+#define M9_16_4   2
+#define M9_16_5   3
+#define M9_16_6   4
+#define M9_16_7   5
+
+#define M9_17_0   8
+#define M9_17_1   0
+#define M9_17_2   1
+#define M9_17_3   2
+#define M9_17_4   3
+#define M9_17_5   4
+#define M9_17_6   5
+#define M9_17_7   6
+
+#define M9_18_0   0
+#define M9_18_1   1
+#define M9_18_2   2
+#define M9_18_3   3
+#define M9_18_4   4
+#define M9_18_5   5
+#define M9_18_6   6
+#define M9_18_7   7
+
+/*
+ * M3_ ## s ## _ ## i  evaluates to s+i mod 3 (0 <= s <= 18, 0 <= i <= 1).
+ */
+
+#define M3_0_0    0
+#define M3_0_1    1
+#define M3_1_0    1
+#define M3_1_1    2
+#define M3_2_0    2
+#define M3_2_1    0
+#define M3_3_0    0
+#define M3_3_1    1
+#define M3_4_0    1
+#define M3_4_1    2
+#define M3_5_0    2
+#define M3_5_1    0
+#define M3_6_0    0
+#define M3_6_1    1
+#define M3_7_0    1
+#define M3
