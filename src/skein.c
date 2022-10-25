@@ -346,4 +346,48 @@ extern "C"{
 #define M3_6_0    0
 #define M3_6_1    1
 #define M3_7_0    1
-#define M3
+#define M3_7_1    2
+#define M3_8_0    2
+#define M3_8_1    0
+#define M3_9_0    0
+#define M3_9_1    1
+#define M3_10_0   1
+#define M3_10_1   2
+#define M3_11_0   2
+#define M3_11_1   0
+#define M3_12_0   0
+#define M3_12_1   1
+#define M3_13_0   1
+#define M3_13_1   2
+#define M3_14_0   2
+#define M3_14_1   0
+#define M3_15_0   0
+#define M3_15_1   1
+#define M3_16_0   1
+#define M3_16_1   2
+#define M3_17_0   2
+#define M3_17_1   0
+#define M3_18_0   0
+#define M3_18_1   1
+
+#define XCAT(x, y)     XCAT_(x, y)
+#define XCAT_(x, y)    x ## y
+
+#if 0
+/* obsolete */
+#define SKSI(k, s, i)   XCAT(k, XCAT(XCAT(XCAT(M5_, s), _), i))
+#define SKST(t, s, v)   XCAT(t, XCAT(XCAT(XCAT(M3_, s), _), v))
+#endif
+
+#define SKBI(k, s, i)   XCAT(k, XCAT(XCAT(XCAT(M9_, s), _), i))
+#define SKBT(t, s, v)   XCAT(t, XCAT(XCAT(XCAT(M3_, s), _), v))
+
+#if 0
+/* obsolete */
+#define TFSMALL_KINIT(k0, k1, k2, k3, k4, t0, t1, t2)   do { \
+		k4 = (k0 ^ k1) ^ (k2 ^ k3) ^ SPH_C64(0x1BD11BDAA9FC1A22); \
+		t2 = t0 ^ t1; \
+	} while (0)
+#endif
+
+#define TFBIG_KINIT(k0, k1, k2, k3, k4, k5, k6, k7, k8, t0, t1, t2)   do { \
