@@ -391,3 +391,40 @@ extern "C"{
 #endif
 
 #define TFBIG_KINIT(k0, k1, k2, k3, k4, k5, k6, k7, k8, t0, t1, t2)   do { \
+		k8 = ((k0 ^ k1) ^ (k2 ^ k3)) ^ ((k4 ^ k5) ^ (k6 ^ k7)) \
+			^ SPH_C64(0x1BD11BDAA9FC1A22); \
+		t2 = t0 ^ t1; \
+	} while (0)
+
+#if 0
+/* obsolete */
+#define TFSMALL_ADDKEY(w0, w1, w2, w3, k, t, s)   do { \
+		w0 = SPH_T64(w0 + SKSI(k, s, 0)); \
+		w1 = SPH_T64(w1 + SKSI(k, s, 1) + SKST(t, s, 0)); \
+		w2 = SPH_T64(w2 + SKSI(k, s, 2) + SKST(t, s, 1)); \
+		w3 = SPH_T64(w3 + SKSI(k, s, 3) + (sph_u64)s); \
+	} while (0)
+#endif
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+#define TFBIG_ADDKEY(s, tt0, tt1)   do { \
+		p0 = SPH_T64(p0 + h[s + 0]); \
+		p1 = SPH_T64(p1 + h[s + 1]); \
+		p2 = SPH_T64(p2 + h[s + 2]); \
+		p3 = SPH_T64(p3 + h[s + 3]); \
+		p4 = SPH_T64(p4 + h[s + 4]); \
+		p5 = SPH_T64(p5 + h[s + 5] + tt0); \
+		p6 = SPH_T64(p6 + h[s + 6] + tt1); \
+		p7 = SPH_T64(p7 + h[s + 7] + (sph_u64)s); \
+	} while (0)
+
+#else
+
+#define TFBIG_ADDKEY(w0, w1, w2, w3, w4, w5, w6, w7, k, t, s)   do { \
+		w0 = SPH_T64(w0 + SKBI(k, s, 0)); \
+		w1 = SPH_T64(w1 + SKBI(k, s, 1)); \
+		w2 = SPH_T64(w2 + SKBI(k, s, 2)); \
+		w3 = SPH_T64(w3 + SKBI(k, s, 3)); \
+		w4 = SPH_T64(w4 + SKBI(k, s, 4)); \
+		w5 = SPH_T6
