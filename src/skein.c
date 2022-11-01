@@ -533,4 +533,46 @@ extern "C"{
 		sph_u64 p3 = m3; \
 		t0 = SPH_T64(bcount << 5) + (sph_u64)(extra); \
 		t1 = (bcount >> 59) + ((sph_u64)(etype) << 55); \
-		TFSMALL_KINIT
+		TFSMALL_KINIT(h0, h1, h2, h3, h4, t0, t1, t2); \
+		TFSMALL_4e(0); \
+		TFSMALL_4o(1); \
+		TFSMALL_4e(2); \
+		TFSMALL_4o(3); \
+		TFSMALL_4e(4); \
+		TFSMALL_4o(5); \
+		TFSMALL_4e(6); \
+		TFSMALL_4o(7); \
+		TFSMALL_4e(8); \
+		TFSMALL_4o(9); \
+		TFSMALL_4e(10); \
+		TFSMALL_4o(11); \
+		TFSMALL_4e(12); \
+		TFSMALL_4o(13); \
+		TFSMALL_4e(14); \
+		TFSMALL_4o(15); \
+		TFSMALL_4e(16); \
+		TFSMALL_4o(17); \
+		TFSMALL_ADDKEY(p0, p1, p2, p3, h, t, 18); \
+		h0 = m0 ^ p0; \
+		h1 = m1 ^ p1; \
+		h2 = m2 ^ p2; \
+		h3 = m3 ^ p3; \
+	} while (0)
+#endif
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+#define UBI_BIG(etype, extra)  do { \
+		sph_u64 t0, t1, t2; \
+		unsigned u; \
+		sph_u64 m0 = sph_dec64le_aligned(buf +  0); \
+		sph_u64 m1 = sph_dec64le_aligned(buf +  8); \
+		sph_u64 m2 = sph_dec64le_aligned(buf + 16); \
+		sph_u64 m3 = sph_dec64le_aligned(buf + 24); \
+		sph_u64 m4 = sph_dec64le_aligned(buf + 32); \
+		sph_u64 m5 = sph_dec64le_aligned(buf + 40); \
+		sph_u64 m6 = sph_dec64le_aligned(buf + 48); \
+		sph_u64 m7 = sph_dec64le_aligned(buf + 56); \
+		sph_u64 p0 = m0; \
+		sph_u64 p1 = m1; \
+		sph_u64 p2
