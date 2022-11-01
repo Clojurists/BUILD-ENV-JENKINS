@@ -470,4 +470,37 @@ extern "C"{
 		TFSMALL_MIX4(p0, p3, p2, p1, 52, 57); \
 		TFSMALL_MIX4(p0, p1, p2, p3, 23, 40); \
 		TFSMALL_MIX4(p0, p3, p2, p1,  5, 37); \
-	} wh
+	} while (0)
+
+#define TFSMALL_4o(s)   do { \
+		TFSMALL_ADDKEY(p0, p1, p2, p3, h, t, s); \
+		TFSMALL_MIX4(p0, p1, p2, p3, 25, 33); \
+		TFSMALL_MIX4(p0, p3, p2, p1, 46, 12); \
+		TFSMALL_MIX4(p0, p1, p2, p3, 58, 22); \
+		TFSMALL_MIX4(p0, p3, p2, p1, 32, 32); \
+	} while (0)
+#endif
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+#define TFBIG_4e(s)   do { \
+		TFBIG_ADDKEY(s, t0, t1); \
+		TFBIG_MIX8(p0, p1, p2, p3, p4, p5, p6, p7, 46, 36, 19, 37); \
+		TFBIG_MIX8(p2, p1, p4, p7, p6, p5, p0, p3, 33, 27, 14, 42); \
+		TFBIG_MIX8(p4, p1, p6, p3, p0, p5, p2, p7, 17, 49, 36, 39); \
+		TFBIG_MIX8(p6, p1, p0, p7, p2, p5, p4, p3, 44,  9, 54, 56); \
+	} while (0)
+
+#define TFBIG_4o(s)   do { \
+		TFBIG_ADDKEY(s, t1, t2); \
+		TFBIG_MIX8(p0, p1, p2, p3, p4, p5, p6, p7, 39, 30, 34, 24); \
+		TFBIG_MIX8(p2, p1, p4, p7, p6, p5, p0, p3, 13, 50, 10, 17); \
+		TFBIG_MIX8(p4, p1, p6, p3, p0, p5, p2, p7, 25, 29, 39, 43); \
+		TFBIG_MIX8(p6, p1, p0, p7, p2, p5, p4, p3,  8, 35, 56, 22); \
+	} while (0)
+
+#else
+
+#define TFBIG_4e(s)   do { \
+		TFBIG_ADDKEY(p0, p1, p2, p3, p4, p5, p6, p7, h, t, s); \
+		TFBIG_MIX8(p0, p1, p2, p3, p4, p5, p6,
