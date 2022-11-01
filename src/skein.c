@@ -427,4 +427,47 @@ extern "C"{
 		w2 = SPH_T64(w2 + SKBI(k, s, 2)); \
 		w3 = SPH_T64(w3 + SKBI(k, s, 3)); \
 		w4 = SPH_T64(w4 + SKBI(k, s, 4)); \
-		w5 = SPH_T6
+		w5 = SPH_T64(w5 + SKBI(k, s, 5) + SKBT(t, s, 0)); \
+		w6 = SPH_T64(w6 + SKBI(k, s, 6) + SKBT(t, s, 1)); \
+		w7 = SPH_T64(w7 + SKBI(k, s, 7) + (sph_u64)s); \
+	} while (0)
+
+#endif
+
+#if 0
+/* obsolete */
+#define TFSMALL_MIX(x0, x1, rc)   do { \
+		x0 = SPH_T64(x0 + x1); \
+		x1 = SPH_ROTL64(x1, rc) ^ x0; \
+	} while (0)
+#endif
+
+#define TFBIG_MIX(x0, x1, rc)   do { \
+		x0 = SPH_T64(x0 + x1); \
+		x1 = SPH_ROTL64(x1, rc) ^ x0; \
+	} while (0)
+
+#if 0
+/* obsolete */
+#define TFSMALL_MIX4(w0, w1, w2, w3, rc0, rc1)  do { \
+		TFSMALL_MIX(w0, w1, rc0); \
+		TFSMALL_MIX(w2, w3, rc1); \
+	} while (0)
+#endif
+
+#define TFBIG_MIX8(w0, w1, w2, w3, w4, w5, w6, w7, rc0, rc1, rc2, rc3)  do { \
+		TFBIG_MIX(w0, w1, rc0); \
+		TFBIG_MIX(w2, w3, rc1); \
+		TFBIG_MIX(w4, w5, rc2); \
+		TFBIG_MIX(w6, w7, rc3); \
+	} while (0)
+
+#if 0
+/* obsolete */
+#define TFSMALL_4e(s)   do { \
+		TFSMALL_ADDKEY(p0, p1, p2, p3, h, t, s); \
+		TFSMALL_MIX4(p0, p1, p2, p3, 14, 16); \
+		TFSMALL_MIX4(p0, p3, p2, p1, 52, 57); \
+		TFSMALL_MIX4(p0, p1, p2, p3, 23, 40); \
+		TFSMALL_MIX4(p0, p3, p2, p1,  5, 37); \
+	} wh
