@@ -668,4 +668,62 @@ extern "C"{
 #if 0
 /* obsolete */
 #define DECL_STATE_SMALL \
-	sph_u64 h0, 
+	sph_u64 h0, h1, h2, h3; \
+	sph_u64 bcount;
+
+#define READ_STATE_SMALL(sc)   do { \
+		h0 = (sc)->h0; \
+		h1 = (sc)->h1; \
+		h2 = (sc)->h2; \
+		h3 = (sc)->h3; \
+		bcount = sc->bcount; \
+	} while (0)
+
+#define WRITE_STATE_SMALL(sc)   do { \
+		(sc)->h0 = h0; \
+		(sc)->h1 = h1; \
+		(sc)->h2 = h2; \
+		(sc)->h3 = h3; \
+		sc->bcount = bcount; \
+	} while (0)
+#endif
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+#define DECL_STATE_BIG \
+	sph_u64 h[27]; \
+	sph_u64 bcount;
+
+#define READ_STATE_BIG(sc)   do { \
+		h[0] = (sc)->h0; \
+		h[1] = (sc)->h1; \
+		h[2] = (sc)->h2; \
+		h[3] = (sc)->h3; \
+		h[4] = (sc)->h4; \
+		h[5] = (sc)->h5; \
+		h[6] = (sc)->h6; \
+		h[7] = (sc)->h7; \
+		bcount = sc->bcount; \
+	} while (0)
+
+#define WRITE_STATE_BIG(sc)   do { \
+		(sc)->h0 = h[0]; \
+		(sc)->h1 = h[1]; \
+		(sc)->h2 = h[2]; \
+		(sc)->h3 = h[3]; \
+		(sc)->h4 = h[4]; \
+		(sc)->h5 = h[5]; \
+		(sc)->h6 = h[6]; \
+		(sc)->h7 = h[7]; \
+		sc->bcount = bcount; \
+	} while (0)
+
+#else
+
+#define DECL_STATE_BIG \
+	sph_u64 h0, h1, h2, h3, h4, h5, h6, h7; \
+	sph_u64 bcount;
+
+#define READ_STATE_BIG(sc)   do { \
+		h0 = (sc)->h0; \
+	
