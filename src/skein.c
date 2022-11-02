@@ -575,4 +575,47 @@ extern "C"{
 		sph_u64 m7 = sph_dec64le_aligned(buf + 56); \
 		sph_u64 p0 = m0; \
 		sph_u64 p1 = m1; \
-		sph_u64 p2
+		sph_u64 p2 = m2; \
+		sph_u64 p3 = m3; \
+		sph_u64 p4 = m4; \
+		sph_u64 p5 = m5; \
+		sph_u64 p6 = m6; \
+		sph_u64 p7 = m7; \
+		t0 = SPH_T64(bcount << 6) + (sph_u64)(extra); \
+		t1 = (bcount >> 58) + ((sph_u64)(etype) << 55); \
+		TFBIG_KINIT(h[0], h[1], h[2], h[3], h[4], h[5], \
+			h[6], h[7], h[8], t0, t1, t2); \
+		for (u = 0; u <= 15; u += 3) { \
+			h[u +  9] = h[u + 0]; \
+			h[u + 10] = h[u + 1]; \
+			h[u + 11] = h[u + 2]; \
+		} \
+		for (u = 0; u < 9; u ++) { \
+			sph_u64 s = u << 1; \
+			sph_u64 tmp; \
+			TFBIG_4e(s); \
+			TFBIG_4o(s + 1); \
+			tmp = t2; \
+			t2 = t1; \
+			t1 = t0; \
+			t0 = tmp; \
+		} \
+		TFBIG_ADDKEY(18, t0, t1); \
+		h[0] = m0 ^ p0; \
+		h[1] = m1 ^ p1; \
+		h[2] = m2 ^ p2; \
+		h[3] = m3 ^ p3; \
+		h[4] = m4 ^ p4; \
+		h[5] = m5 ^ p5; \
+		h[6] = m6 ^ p6; \
+		h[7] = m7 ^ p7; \
+	} while (0)
+
+#else
+
+#define UBI_BIG(etype, extra)  do { \
+		sph_u64 h8, t0, t1, t2; \
+		sph_u64 m0 = sph_dec64le_aligned(buf +  0); \
+		sph_u64 m1 = sph_dec64le_aligned(buf +  8); \
+		sph_u64 m2 = sph_dec64le_aligned(buf + 16); \
+		sph_u64 m3 = sph_dec64le_align
