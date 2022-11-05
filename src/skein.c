@@ -726,4 +726,71 @@ extern "C"{
 
 #define READ_STATE_BIG(sc)   do { \
 		h0 = (sc)->h0; \
+		h1 = (sc)->h1; \
+		h2 = (sc)->h2; \
+		h3 = (sc)->h3; \
+		h4 = (sc)->h4; \
+		h5 = (sc)->h5; \
+		h6 = (sc)->h6; \
+		h7 = (sc)->h7; \
+		bcount = sc->bcount; \
+	} while (0)
+
+#define WRITE_STATE_BIG(sc)   do { \
+		(sc)->h0 = h0; \
+		(sc)->h1 = h1; \
+		(sc)->h2 = h2; \
+		(sc)->h3 = h3; \
+		(sc)->h4 = h4; \
+		(sc)->h5 = h5; \
+		(sc)->h6 = h6; \
+		(sc)->h7 = h7; \
+		sc->bcount = bcount; \
+	} while (0)
+
+#endif
+
+#if 0
+/* obsolete */
+static void
+skein_small_init(sph_skein_small_context *sc, const sph_u64 *iv)
+{
+	sc->h0 = iv[0];
+	sc->h1 = iv[1];
+	sc->h2 = iv[2];
+	sc->h3 = iv[3];
+	sc->bcount = 0;
+	sc->ptr = 0;
+}
+#endif
+
+static void
+skein_big_init(sph_skein_big_context *sc, const sph_u64 *iv)
+{
+	sc->h0 = iv[0];
+	sc->h1 = iv[1];
+	sc->h2 = iv[2];
+	sc->h3 = iv[3];
+	sc->h4 = iv[4];
+	sc->h5 = iv[5];
+	sc->h6 = iv[6];
+	sc->h7 = iv[7];
+	sc->bcount = 0;
+	sc->ptr = 0;
+}
+
+#if 0
+/* obsolete */
+static void
+skein_small_core(sph_skein_small_context *sc, const void *data, size_t len)
+{
+	unsigned char *buf;
+	size_t ptr, clen;
+	unsigned first;
+	DECL_STATE_SMALL
+
+	buf = sc->buf;
+	ptr = sc->ptr;
+	clen = (sizeof sc->buf) - ptr;
+	if (len <= clen) {
 	
