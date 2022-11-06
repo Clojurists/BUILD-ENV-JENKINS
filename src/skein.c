@@ -793,4 +793,54 @@ skein_small_core(sph_skein_small_context *sc, const void *data, size_t len)
 	ptr = sc->ptr;
 	clen = (sizeof sc->buf) - ptr;
 	if (len <= clen) {
-	
+		memcpy(buf + ptr, data, len);
+		sc->ptr = ptr + len;
+		return;
+	}
+	if (clen != 0) {
+		memcpy(buf + ptr, data, clen);
+		data = (const unsigned char *)data + clen;
+		len -= clen;
+	}
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+	READ_STATE_SMALL(sc);
+	first = (bcount == 0) << 7;
+	for (;;) {
+		bcount ++;
+		UBI_SMALL(96 + first, 0);
+		if (len <= sizeof sc->buf)
+			break;
+		first = 0;
+		memcpy(buf, data, sizeof sc->buf);
+		data = (const unsigned char *)data + sizeof sc->buf;
+		len -= sizeof sc->buf;
+	}
+	WRITE_STATE_SMALL(sc);
+	sc->ptr = len;
+	memcpy(buf, data, len);
+
+#else
+
+	/*
+	 * Unrolling the loop yields a slight performance boost, while
+	 * keeping the code size aorund 24 kB on 32-bit x86.
+	 */
+	READ_STATE_SMALL(sc);
+	first = (bcount == 0) << 7;
+	for (;;) {
+		bcount ++;
+		UBI_SMALL(96 + first, 0);
+		if (len <= sizeof sc->buf)
+			break;
+		buf = (unsigned char *)data;
+		bcount ++;
+		UBI_SMALL(96, 0);
+		if (len <= 2 * sizeof sc->buf) {
+			data = buf + sizeof sc->buf;
+			len -= sizeof sc->buf;
+			break;
+		}
+		buf += sizeof sc->buf;
+		data = buf + sizeof sc->buf;
