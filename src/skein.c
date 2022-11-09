@@ -844,3 +844,47 @@ skein_small_core(sph_skein_small_context *sc, const void *data, size_t len)
 		}
 		buf += sizeof sc->buf;
 		data = buf + sizeof sc->buf;
+		first = 0;
+		len -= 2 * sizeof sc->buf;
+	}
+	WRITE_STATE_SMALL(sc);
+	sc->ptr = len;
+	memcpy(sc->buf, data, len);
+
+#endif
+}
+#endif
+
+static void
+skein_big_core(sph_skein_big_context *sc, const void *data, size_t len)
+{
+	/*
+	 * The Skein "final bit" in the tweak is troublesome here,
+	 * because if the input has a length which is a multiple of the
+	 * block size (512 bits) then that bit must be set for the
+	 * final block, which is full of message bits (padding in
+	 * Skein can be reduced to no extra bit at all). However, this
+	 * function cannot know whether it processes the last chunks of
+	 * the message or not. Hence we may keep a full block of buffered
+	 * data (64 bytes).
+	 */
+	unsigned char *buf;
+	size_t ptr;
+	unsigned first;
+	DECL_STATE_BIG
+
+	buf = sc->buf;
+	ptr = sc->ptr;
+	if (len <= (sizeof sc->buf) - ptr) {
+		memcpy(buf + ptr, data, len);
+		ptr += len;
+		sc->ptr = ptr;
+		return;
+	}
+
+	READ_STATE_BIG(sc);
+	first = (bcount == 0) << 7;
+	do {
+		size_t clen;
+
+		if (ptr == sizeof sc->buf) {
