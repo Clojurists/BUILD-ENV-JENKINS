@@ -888,3 +888,59 @@ skein_big_core(sph_skein_big_context *sc, const void *data, size_t len)
 		size_t clen;
 
 		if (ptr == sizeof sc->buf) {
+			bcount ++;
+			UBI_BIG(96 + first, 0);
+			first = 0;
+			ptr = 0;
+		}
+		clen = (sizeof sc->buf) - ptr;
+		if (clen > len)
+			clen = len;
+		memcpy(buf + ptr, data, clen);
+		ptr += clen;
+		data = (const unsigned char *)data + clen;
+		len -= clen;
+	} while (len > 0);
+	WRITE_STATE_BIG(sc);
+	sc->ptr = ptr;
+}
+
+#if 0
+/* obsolete */
+static void
+skein_small_close(sph_skein_small_context *sc, unsigned ub, unsigned n,
+	void *dst, size_t out_len)
+{
+	unsigned char *buf;
+	size_t ptr;
+	unsigned et;
+	int i;
+	DECL_STATE_SMALL
+
+	if (n != 0) {
+		unsigned z;
+		unsigned char x;
+
+		z = 0x80 >> n;
+		x = ((ub & -z) | z) & 0xFF;
+		skein_small_core(sc, &x, 1);
+	}
+
+	buf = sc->buf;
+	ptr = sc->ptr;
+	READ_STATE_SMALL(sc);
+	memset(buf + ptr, 0, (sizeof sc->buf) - ptr);
+	et = 352 + ((bcount == 0) << 7) + (n != 0);
+	for (i = 0; i < 2; i ++) {
+		UBI_SMALL(et, ptr);
+		if (i == 0) {
+			memset(buf, 0, sizeof sc->buf);
+			bcount = 0;
+			et = 510;
+			ptr = 8;
+		}
+	}
+
+	sph_enc64le_aligned(buf +  0, h0);
+	sph_enc64le_aligned(buf +  8, h1);
+	sph_enc64le_aligned(buf + 16, 
