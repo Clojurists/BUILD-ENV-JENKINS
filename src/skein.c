@@ -943,4 +943,51 @@ skein_small_close(sph_skein_small_context *sc, unsigned ub, unsigned n,
 
 	sph_enc64le_aligned(buf +  0, h0);
 	sph_enc64le_aligned(buf +  8, h1);
-	sph_enc64le_aligned(buf + 16, 
+	sph_enc64le_aligned(buf + 16, h2);
+	sph_enc64le_aligned(buf + 24, h3);
+	memcpy(dst, buf, out_len);
+}
+#endif
+
+static void
+skein_big_close(sph_skein_big_context *sc, unsigned ub, unsigned n,
+	void *dst, size_t out_len)
+{
+	unsigned char *buf;
+	size_t ptr;
+	unsigned et;
+	int i;
+#if SPH_SMALL_FOOTPRINT_SKEIN
+	size_t u;
+#endif
+	DECL_STATE_BIG
+
+	/*
+	 * Add bit padding if necessary.
+	 */
+	if (n != 0) {
+		unsigned z;
+		unsigned char x;
+
+		z = 0x80 >> n;
+		x = ((ub & -z) | z) & 0xFF;
+		skein_big_core(sc, &x, 1);
+	}
+
+	buf = sc->buf;
+	ptr = sc->ptr;
+
+	/*
+	 * At that point, if ptr == 0, then the message was empty;
+	 * otherwise, there is between 1 and 64 bytes (inclusive) which
+	 * are yet to be processed. Either way, we complete the buffer
+	 * to a full block with zeros (the Skein specification mandates
+	 * that an empty message is padded so that there is at least
+	 * one block to process).
+	 *
+	 * Once this block has been processed, we do it again, with
+	 * a block full of zeros, for the output (that block contains
+	 * the encoding of "0", over 8 bytes, then padded with zeros).
+	 */
+	READ_STATE_BIG(sc);
+	memset(buf + ptr, 0, (sizeof sc->b
