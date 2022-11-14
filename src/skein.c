@@ -990,4 +990,51 @@ skein_big_close(sph_skein_big_context *sc, unsigned ub, unsigned n,
 	 * the encoding of "0", over 8 bytes, then padded with zeros).
 	 */
 	READ_STATE_BIG(sc);
-	memset(buf + ptr, 0, (sizeof sc->b
+	memset(buf + ptr, 0, (sizeof sc->buf) - ptr);
+	et = 352 + ((bcount == 0) << 7) + (n != 0);
+	for (i = 0; i < 2; i ++) {
+		UBI_BIG(et, ptr);
+		if (i == 0) {
+			memset(buf, 0, sizeof sc->buf);
+			bcount = 0;
+			et = 510;
+			ptr = 8;
+		}
+	}
+
+#if SPH_SMALL_FOOTPRINT_SKEIN
+
+	/*
+	 * We use a temporary buffer because we must support the case
+	 * where output size is not a multiple of 64 (namely, a 224-bit
+	 * output).
+	 */
+	for (u = 0; u < out_len; u += 8)
+		sph_enc64le_aligned(buf + u, h[u >> 3]);
+	memcpy(dst, buf, out_len);
+
+#else
+
+	sph_enc64le_aligned(buf +  0, h0);
+	sph_enc64le_aligned(buf +  8, h1);
+	sph_enc64le_aligned(buf + 16, h2);
+	sph_enc64le_aligned(buf + 24, h3);
+	sph_enc64le_aligned(buf + 32, h4);
+	sph_enc64le_aligned(buf + 40, h5);
+	sph_enc64le_aligned(buf + 48, h6);
+	sph_enc64le_aligned(buf + 56, h7);
+	memcpy(dst, buf, out_len);
+
+#endif
+}
+
+#if 0
+/* obsolete */
+static const sph_u64 IV224[] = {
+	SPH_C64(0xC6098A8C9AE5EA0B), SPH_C64(0x876D568608C5191C),
+	SPH_C64(0x99CB88D7D7F53884), SPH_C64(0x384BDDB1AEDDB5DE)
+};
+
+static const sph_u64 IV256[] = {
+	SPH_C64(0xFC9DA860D048B449), SPH_C64(0x2FCA66479FA7D833),
+	SPH_C64(0xB3
