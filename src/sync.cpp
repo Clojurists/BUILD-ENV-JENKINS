@@ -54,4 +54,34 @@ static std::map<std::pair<void*, void*>, LockStack> lockorders;
 static boost::thread_specific_ptr<LockStack> lockstack;
 
 
-static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch, const LockSta
+static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch, const LockStack& s1, const LockStack& s2)
+{
+    printf("POTENTIAL DEADLOCK DETECTED\n");
+    printf("Previous lock order was:\n");
+    BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, s2)
+    {
+        if (i.first == mismatch.first) printf(" (1)");
+        if (i.first == mismatch.second) printf(" (2)");
+        printf(" %s\n", i.second.ToString().c_str());
+    }
+    printf("Current lock order is:\n");
+    BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, s1)
+    {
+        if (i.first == mismatch.first) printf(" (1)");
+        if (i.first == mismatch.second) printf(" (2)");
+        printf(" %s\n", i.second.ToString().c_str());
+    }
+}
+
+static void push_lock(void* c, const CLockLocation& locklocation, bool fTry)
+{
+    if (lockstack.get() == NULL)
+        lockstack.reset(new LockStack);
+
+    if (fDebug) printf("Locking: %s\n", locklocation.ToString().c_str());
+    dd_mutex.lock();
+
+    (*lockstack).push_back(std::make_pair(c, locklocation));
+
+    if (!fTry) {
+        BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, (*lockstack)) {
