@@ -18,4 +18,40 @@ void PrintLockContention(const char* pszName, const char* pszFile, int nLine)
 #ifdef DEBUG_LOCKORDER
 //
 // Early deadlock detection.
-// P
+// Problem being solved:
+//    Thread 1 locks  A, then B, then C
+//    Thread 2 locks  D, then C, then A
+//     --> may result in deadlock between the two threads, depending on when they run.
+// Solution implemented here:
+// Keep track of pairs of locks: (A before B), (A before C), etc.
+// Complain if any thread tries to lock in a different order.
+//
+
+struct CLockLocation
+{
+    CLockLocation(const char* pszName, const char* pszFile, int nLine)
+    {
+        mutexName = pszName;
+        sourceFile = pszFile;
+        sourceLine = nLine;
+    }
+
+    std::string ToString() const
+    {
+        return mutexName+"  "+sourceFile+":"+itostr(sourceLine);
+    }
+
+private:
+    std::string mutexName;
+    std::string sourceFile;
+    int sourceLine;
+};
+
+typedef std::vector< std::pair<void*, CLockLocation> > LockStack;
+
+static boost::mutex dd_mutex;
+static std::map<std::pair<void*, void*>, LockStack> lockorders;
+static boost::thread_specific_ptr<LockStack> lockstack;
+
+
+static void potential_deadlock_detected(const std::pair<void*, void*>& mismatch, const LockSta
