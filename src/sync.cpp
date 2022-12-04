@@ -85,3 +85,44 @@ static void push_lock(void* c, const CLockLocation& locklocation, bool fTry)
 
     if (!fTry) {
         BOOST_FOREACH(const PAIRTYPE(void*, CLockLocation)& i, (*lockstack)) {
+            if (i.first == c) break;
+
+            std::pair<void*, void*> p1 = std::make_pair(i.first, c);
+            if (lockorders.count(p1))
+                continue;
+            lockorders[p1] = (*lockstack);
+
+            std::pair<void*, void*> p2 = std::make_pair(c, i.first);
+            if (lockorders.count(p2))
+            {
+                potential_deadlock_detected(p1, lockorders[p2], lockorders[p1]);
+                break;
+            }
+        }
+    }
+    dd_mutex.unlock();
+}
+
+static void pop_lock()
+{
+    if (fDebug)
+    {
+        const CLockLocation& locklocation = (*lockstack).rbegin()->second;
+        printf("Unlocked: %s\n", locklocation.ToString().c_str());
+    }
+    dd_mutex.lock();
+    (*lockstack).pop_back();
+    dd_mutex.unlock();
+}
+
+void EnterCritical(const char* pszName, const char* pszFile, int nLine, void* cs, bool fTry)
+{
+    push_lock(cs, CLockLocation(pszName, pszFile, nLine), fTry);
+}
+
+void LeaveCritical()
+{
+    pop_lock();
+}
+
+#endif /* DEBUG_LOCKORDER */
