@@ -9,4 +9,38 @@
 ["0x4e03000000ffff","0x01 NOP", "PUSHDATA4 with not enough bytes"],
 
 ["1", "IF 0x50 ENDIF 1", "0x50 is reserved"],
-["0x52", "0x5f ADD 0x60 EQUAL", "0x51 through 0x60 push 1 through 16 on
+["0x52", "0x5f ADD 0x60 EQUAL", "0x51 through 0x60 push 1 through 16 onto stack"],
+["0","NOP"],
+["1", "IF VER ELSE 1 ENDIF", "VER non-functional"],
+["0", "IF VERIF ELSE 1 ENDIF", "VERIF illegal everywhere"],
+["0", "IF VERNOTIF ELSE 1 ENDIF", "VERNOT illegal everywhere"],
+
+["1 IF", "1 ENDIF", "IF/ENDIF can't span scriptSig/scriptPubKey"],
+["1 IF 0 ENDIF", "1 ENDIF"],
+["1 ELSE 0 ENDIF", "1"],
+["0 NOTIF", "123"],
+
+["0", "DUP IF ENDIF"],
+["0", "IF 1 ENDIF"],
+["0", "DUP IF ELSE ENDIF"],
+["0", "IF 1 ELSE ENDIF"],
+["0", "NOTIF ELSE 1 ENDIF"],
+
+["0 1", "IF IF 1 ELSE 0 ENDIF ENDIF"],
+["0 0", "IF IF 1 ELSE 0 ENDIF ENDIF"],
+["1 0", "IF IF 1 ELSE 0 ENDIF ELSE IF 0 ELSE 1 ENDIF ENDIF"],
+["0 1", "IF IF 1 ELSE 0 ENDIF ELSE IF 0 ELSE 1 ENDIF ENDIF"],
+
+["0 0", "NOTIF IF 1 ELSE 0 ENDIF ENDIF"],
+["0 1", "NOTIF IF 1 ELSE 0 ENDIF ENDIF"],
+["1 1", "NOTIF IF 1 ELSE 0 ENDIF ELSE IF 0 ELSE 1 ENDIF ENDIF"],
+["0 0", "NOTIF IF 1 ELSE 0 ENDIF ELSE IF 0 ELSE 1 ENDIF ENDIF"],
+
+["1", "RETURN"],
+["1", "DUP IF RETURN ENDIF"],
+
+["0", "VERIFY 1"],
+["1", "VERIFY"],
+["1", "VERIFY 0"],
+
+["1 TOALTSTACK", "FROMALTSTACK 1", "alt stack not shared between sig/pubkey"],
