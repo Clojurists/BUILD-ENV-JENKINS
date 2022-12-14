@@ -109,4 +109,33 @@
 
 ["0 1","EQUAL"],
 ["1 1 ADD", "0 EQUAL"],
-["11 1 ADD 12
+["11 1 ADD 12 SUB", "11 EQUAL"],
+
+["2147483648 0 ADD", "NOP", "arithmetic operands must be in range [-2^31...2^31] "],
+["-2147483648 0 ADD", "NOP", "arithmetic operands must be in range [-2^31...2^31] "],
+["2147483647 DUP ADD", "4294967294 NUMEQUAL", "NUMEQUAL must be in numeric range"],
+["'abcdef' NOT", "0 EQUAL", "NOT is an arithmetic operand"],
+
+["2 DUP MUL", "4 EQUAL", "disabled"],
+["2 DUP DIV", "1 EQUAL", "disabled"],
+["2 2MUL", "4 EQUAL", "disabled"],
+["2 2DIV", "1 EQUAL", "disabled"],
+["7 3 MOD", "1 EQUAL", "disabled"],
+["2 2 LSHIFT", "8 EQUAL", "disabled"],
+["2 1 RSHIFT", "1 EQUAL", "disabled"],
+
+["1","NOP1 NOP2 NOP3 NOP4 NOP5 NOP6 NOP7 NOP8 NOP9 NOP10 2 EQUAL"],
+["'NOP_1_to_10' NOP1 NOP2 NOP3 NOP4 NOP5 NOP6 NOP7 NOP8 NOP9 NOP10","'NOP_1_to_11' EQUAL"],
+
+["0x50","1", "opcode 0x50 is reserved"],
+["1", "IF 0xba ELSE 1 ENDIF", "opcodes above NOP10 invalid"],
+["1", "IF 0xc0 ELSE 1 ENDIF"],
+["1", "IF 0xd1 ELSE 1 ENDIF"],
+["1", "IF 0xee ELSE 1 ENDIF"],
+["1", "IF 0xfd ELSE 1 ENDIF"],
+["1", "IF 0xff ELSE 1 ENDIF"],
+
+["NOP", "RIPEMD160"],
+["NOP", "SHA1"],
+["NOP", "SHA256"],
+["NOP",
