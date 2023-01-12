@@ -25,4 +25,38 @@ ResetArgs(const std::string& strArg)
 
 BOOST_AUTO_TEST_CASE(boolarg)
 {
-    ResetArgs
+    ResetArgs("-foo");
+    BOOST_CHECK(GetBoolArg("-foo"));
+    BOOST_CHECK(GetBoolArg("-foo", false));
+    BOOST_CHECK(GetBoolArg("-foo", true));
+
+    BOOST_CHECK(!GetBoolArg("-fo"));
+    BOOST_CHECK(!GetBoolArg("-fo", false));
+    BOOST_CHECK(GetBoolArg("-fo", true));
+
+    BOOST_CHECK(!GetBoolArg("-fooo"));
+    BOOST_CHECK(!GetBoolArg("-fooo", false));
+    BOOST_CHECK(GetBoolArg("-fooo", true));
+
+    ResetArgs("-foo=0");
+    BOOST_CHECK(!GetBoolArg("-foo"));
+    BOOST_CHECK(!GetBoolArg("-foo", false));
+    BOOST_CHECK(!GetBoolArg("-foo", true));
+
+    ResetArgs("-foo=1");
+    BOOST_CHECK(GetBoolArg("-foo"));
+    BOOST_CHECK(GetBoolArg("-foo", false));
+    BOOST_CHECK(GetBoolArg("-foo", true));
+
+    // New 0.6 feature: auto-map -nosomething to !-something:
+    ResetArgs("-nofoo");
+    BOOST_CHECK(!GetBoolArg("-foo"));
+    BOOST_CHECK(!GetBoolArg("-foo", false));
+    BOOST_CHECK(!GetBoolArg("-foo", true));
+
+    ResetArgs("-nofoo=1");
+    BOOST_CHECK(!GetBoolArg("-foo"));
+    BOOST_CHECK(!GetBoolArg("-foo", false));
+    BOOST_CHECK(!GetBoolArg("-foo", true));
+
+    ResetArgs("-fo
