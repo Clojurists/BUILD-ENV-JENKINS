@@ -67,3 +67,34 @@ BOOST_AUTO_TEST_CASE(key_test1)
     BOOST_CHECK(fCompressed == false);
     CSecret secret2  = bsecret2.GetSecret (fCompressed);
     BOOST_CHECK(fCompressed == false);
+    CSecret secret1C = bsecret1C.GetSecret(fCompressed);
+    BOOST_CHECK(fCompressed == true);
+    CSecret secret2C = bsecret2C.GetSecret(fCompressed);
+    BOOST_CHECK(fCompressed == true);
+
+    BOOST_CHECK(secret1 == secret1C);
+    BOOST_CHECK(secret2 == secret2C);
+
+    CKey key1, key2, key1C, key2C;
+    key1.SetSecret(secret1, false);
+    key2.SetSecret(secret2, false);
+    key1C.SetSecret(secret1, true);
+    key2C.SetSecret(secret2, true);
+
+    BOOST_CHECK(addr1.Get()  == CTxDestination(key1.GetPubKey().GetID()));
+    BOOST_CHECK(addr2.Get()  == CTxDestination(key2.GetPubKey().GetID()));
+    BOOST_CHECK(addr1C.Get() == CTxDestination(key1C.GetPubKey().GetID()));
+    BOOST_CHECK(addr2C.Get() == CTxDestination(key2C.GetPubKey().GetID()));
+
+    for (int n=0; n<16; n++)
+    {
+        string strMsg = strprintf("Very secret message %i: 11", n);
+        uint256 hashMsg = Hash(strMsg.begin(), strMsg.end());
+
+        // normal signatures
+
+        vector<unsigned char> sign1, sign2, sign1C, sign2C;
+
+        BOOST_CHECK(key1.Sign (hashMsg, sign1));
+        BOOST_CHECK(key2.Sign (hashMsg, sign2));
+        BOOS
