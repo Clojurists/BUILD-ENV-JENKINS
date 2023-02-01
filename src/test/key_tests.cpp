@@ -97,4 +97,31 @@ BOOST_AUTO_TEST_CASE(key_test1)
 
         BOOST_CHECK(key1.Sign (hashMsg, sign1));
         BOOST_CHECK(key2.Sign (hashMsg, sign2));
-        BOOS
+        BOOST_CHECK(key1C.Sign(hashMsg, sign1C));
+        BOOST_CHECK(key2C.Sign(hashMsg, sign2C));
+
+        BOOST_CHECK( key1.Verify(hashMsg, sign1));
+        BOOST_CHECK(!key1.Verify(hashMsg, sign2));
+        BOOST_CHECK( key1.Verify(hashMsg, sign1C));
+        BOOST_CHECK(!key1.Verify(hashMsg, sign2C));
+
+        BOOST_CHECK(!key2.Verify(hashMsg, sign1));
+        BOOST_CHECK( key2.Verify(hashMsg, sign2));
+        BOOST_CHECK(!key2.Verify(hashMsg, sign1C));
+        BOOST_CHECK( key2.Verify(hashMsg, sign2C));
+
+        BOOST_CHECK( key1C.Verify(hashMsg, sign1));
+        BOOST_CHECK(!key1C.Verify(hashMsg, sign2));
+        BOOST_CHECK( key1C.Verify(hashMsg, sign1C));
+        BOOST_CHECK(!key1C.Verify(hashMsg, sign2C));
+
+        BOOST_CHECK(!key2C.Verify(hashMsg, sign1));
+        BOOST_CHECK( key2C.Verify(hashMsg, sign2));
+        BOOST_CHECK(!key2C.Verify(hashMsg, sign1C));
+        BOOST_CHECK( key2C.Verify(hashMsg, sign2C));
+
+        // compact signatures (with key recovery)
+
+        vector<unsigned char> csign1, csign2, csign1C, csign2C;
+
+        BOOST_CHECK(key1.SignCompact (hash
