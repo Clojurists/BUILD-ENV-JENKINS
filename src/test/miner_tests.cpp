@@ -48,4 +48,33 @@ struct {
 // NOTE: These tests rely on CreateNewBlock doing its own self-validation!
 BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
 {
-  
+    CReserveKey reservekey(pwalletMain);
+    CBlock *pblock;
+    CTransaction tx;
+    CScript script;
+    uint256 hash;
+
+    // Simple block creation, nothing special yet:
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+
+    // We can't make transactions until we have inputs
+    // Therefore, load 100 blocks :)
+    std::vector<CTransaction*>txFirst;
+    for (unsigned int i = 0; i < sizeof(blockinfo)/sizeof(*blockinfo); ++i)
+    {
+        pblock->nVersion = 1;
+        pblock->nTime = pindexBest->GetMedianTimePast()+1;
+        pblock->vtx[0].vin[0].scriptSig = CScript();
+        pblock->vtx[0].vin[0].scriptSig.push_back(blockinfo[i].extranonce);
+        pblock->vtx[0].vin[0].scriptSig.push_back(pindexBest->nHeight);
+        pblock->vtx[0].vout[0].scriptPubKey = CScript();
+        if (txFirst.size() < 2)
+            txFirst.push_back(new CTransaction(pblock->vtx[0]));
+        pblock->hashMerkleRoot = pblock->BuildMerkleTree();
+        pblock->nNonce = blockinfo[i].nonce;
+        assert(ProcessBlock(NULL, pblock));
+        pblock->hashPrevBlock = pblock->GetHash();
+    }
+    delete pblock;
+
+    // Just to make s
