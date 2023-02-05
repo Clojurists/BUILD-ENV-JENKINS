@@ -77,4 +77,34 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     }
     delete pblock;
 
-    // Just to make s
+    // Just to make sure we can still make simple blocks
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+
+    // block sigops > limit: 1000 CHECKMULTISIG + 1
+    tx.vin.resize(1);
+    // NOTE: OP_NOP is used to force 20 SigOps for the CHECKMULTISIG
+    tx.vin[0].scriptSig = CScript() << OP_0 << OP_0 << OP_0 << OP_NOP << OP_CHECKMULTISIG << OP_1;
+    tx.vin[0].prevout.hash = txFirst[0]->GetHash();
+    tx.vin[0].prevout.n = 0;
+    tx.vout.resize(1);
+    tx.vout[0].nValue = 5000000000LL;
+    for (unsigned int i = 0; i < 1001; ++i)
+    {
+        tx.vout[0].nValue -= 1000000;
+        hash = tx.GetHash();
+        mempool.addUnchecked(hash, tx);
+        tx.vin[0].prevout.hash = hash;
+    }
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // block size > limit
+    tx.vin[0].scriptSig = CScript();
+    // 18 * (520char + DROP) + OP_1 = 9433 bytes
+    std::vector<unsigned char> vchData(520);
+    for (unsigned int i = 0; i < 18; ++i)
+        tx.vin[0].scriptSig << vchData << OP_DROP;
+    tx.vin[0].scriptSig << OP_1;
+    tx.vin[0].prevout.hash = txFirst[0]->GetHash();
+    tx.vou
