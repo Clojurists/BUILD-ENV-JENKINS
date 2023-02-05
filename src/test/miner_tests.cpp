@@ -107,4 +107,37 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
         tx.vin[0].scriptSig << vchData << OP_DROP;
     tx.vin[0].scriptSig << OP_1;
     tx.vin[0].prevout.hash = txFirst[0]->GetHash();
-    tx.vou
+    tx.vout[0].nValue = 5000000000LL;
+    for (unsigned int i = 0; i < 128; ++i)
+    {
+        tx.vout[0].nValue -= 10000000;
+        hash = tx.GetHash();
+        mempool.addUnchecked(hash, tx);
+        tx.vin[0].prevout.hash = hash;
+    }
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // orphan in mempool
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // child with higher priority than parent
+    tx.vin[0].scriptSig = CScript() << OP_1;
+    tx.vin[0].prevout.hash = txFirst[1]->GetHash();
+    tx.vout[0].nValue = 4900000000LL;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    tx.vin[0].prevout.hash = hash;
+    tx.vin.resize(2);
+    tx.vin[1].scriptSig = CScript() << OP_1;
+    tx.vin[1].prevout.hash = txFirst[0]->GetHash();
+    tx.vin[1].prevout.n = 0;
+    tx.vout[0].nValue = 5900000000LL;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    BOOST_CHECK(pblock = CreateNewBlock(re
