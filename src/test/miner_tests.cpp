@@ -140,4 +140,38 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     tx.vout[0].nValue = 5900000000LL;
     hash = tx.GetHash();
     mempool.addUnchecked(hash, tx);
-    BOOST_CHECK(pblock = CreateNewBlock(re
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // coinbase in mempool
+    tx.vin.resize(1);
+    tx.vin[0].prevout.SetNull();
+    tx.vin[0].scriptSig = CScript() << OP_0 << OP_1;
+    tx.vout[0].nValue = 0;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // invalid (pre-p2sh) txn in mempool
+    tx.vin[0].prevout.hash = txFirst[0]->GetHash();
+    tx.vin[0].prevout.n = 0;
+    tx.vin[0].scriptSig = CScript() << OP_1;
+    tx.vout[0].nValue = 4900000000LL;
+    script = CScript() << OP_0;
+    tx.vout[0].scriptPubKey.SetDestination(script.GetID());
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    tx.vin[0].prevout.hash = hash;
+    tx.vin[0].scriptSig = CScript() << (std::vector<unsigned char>)script;
+    tx.vout[0].nValue -= 1000000;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash,tx);
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // double spend txn pair in mempool
+    
