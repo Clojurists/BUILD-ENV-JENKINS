@@ -174,4 +174,34 @@ BOOST_AUTO_TEST_CASE(CreateNewBlock_validity)
     mempool.clear();
 
     // double spend txn pair in mempool
-    
+    tx.vin[0].prevout.hash = txFirst[0]->GetHash();
+    tx.vin[0].scriptSig = CScript() << OP_1;
+    tx.vout[0].nValue = 4900000000LL;
+    tx.vout[0].scriptPubKey = CScript() << OP_1;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    tx.vout[0].scriptPubKey = CScript() << OP_2;
+    hash = tx.GetHash();
+    mempool.addUnchecked(hash, tx);
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    mempool.clear();
+
+    // subsidy changing
+    int nHeight = pindexBest->nHeight;
+    pindexBest->nHeight = 209999;
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    pindexBest->nHeight = 210000;
+    BOOST_CHECK(pblock = CreateNewBlock(reservekey));
+    delete pblock;
+    pindexBest->nHeight = nHeight;
+}
+
+BOOST_AUTO_TEST_CASE(sha256transform_equality)
+{
+    unsigned int pSHA256InitState[8] = {0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19};
+
+
+    // unsigned char pstate[32];
+    unsigned char p
