@@ -175,4 +175,35 @@ BOOST_AUTO_TEST_CASE(multisig_Solver1)
     //
     CBasicKeyStore keystore, emptykeystore, partialkeystore;
     CKey key[3];
-    CTxDestination ke
+    CTxDestination keyaddr[3];
+    for (int i = 0; i < 3; i++)
+    {
+        key[i].MakeNewKey(true);
+        keystore.AddKey(key[i]);
+        keyaddr[i] = key[i].GetPubKey().GetID();
+    }
+    partialkeystore.AddKey(key[0]);
+
+    {
+        vector<valtype> solutions;
+        txnouttype whichType;
+        CScript s;
+        s << key[0].GetPubKey() << OP_CHECKSIG;
+        BOOST_CHECK(Solver(s, whichType, solutions));
+        BOOST_CHECK(solutions.size() == 1);
+        CTxDestination addr;
+        BOOST_CHECK(ExtractDestination(s, addr));
+        BOOST_CHECK(addr == keyaddr[0]);
+        BOOST_CHECK(IsMine(keystore, s));
+        BOOST_CHECK(!IsMine(emptykeystore, s));
+    }
+    {
+        vector<valtype> solutions;
+        txnouttype whichType;
+        CScript s;
+        s << OP_DUP << OP_HASH160 << key[0].GetPubKey().GetID() << OP_EQUALVERIFY << OP_CHECKSIG;
+        BOOST_CHECK(Solver(s, whichType, solutions));
+        BOOST_CHECK(solutions.size() == 1);
+        CTxDestination addr;
+        BOOST_CHECK(ExtractDestination(s, addr));
+        BOOST_CHECK(addr == keyaddr[0]
