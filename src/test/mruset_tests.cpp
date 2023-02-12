@@ -71,4 +71,20 @@ int static permute(int n)
     return ret;
 }
 
-// Test that an mruset acts like a moving window, if no duplicate elements 
+// Test that an mruset acts like a moving window, if no duplicate elements are added
+BOOST_AUTO_TEST_CASE(mruset_window)
+{
+    mruset<int> mru(MAX_SIZE);
+    for (int n=0; n<10*MAX_SIZE; n++)
+    {
+        mru.insert(permute(n));
+
+        set<int> tester;
+        for (int m=max(0,n-MAX_SIZE+1); m<=n; m++)
+            tester.insert(permute(m));
+
+        BOOST_CHECK(mru == tester);
+    }
+}
+
+BOOST_AUTO_TEST_SUITE_END()
