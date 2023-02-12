@@ -151,3 +151,28 @@ BOOST_AUTO_TEST_CASE(multisig_IsStandard)
 
     CScript malformed[6];
     malformed[0] << OP_3 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+    malformed[1] << OP_2 << key[0].GetPubKey() << key[1].GetPubKey() << OP_3 << OP_CHECKMULTISIG;
+    malformed[2] << OP_0 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+    malformed[3] << OP_1 << key[0].GetPubKey() << key[1].GetPubKey() << OP_0 << OP_CHECKMULTISIG;
+    malformed[4] << OP_1 << key[0].GetPubKey() << key[1].GetPubKey() << OP_CHECKMULTISIG;
+    malformed[5] << OP_1 << key[0].GetPubKey() << key[1].GetPubKey();
+
+    for (int i = 0; i < 6; i++)
+        BOOST_CHECK(!::IsStandard(malformed[i]));
+}
+
+BOOST_AUTO_TEST_CASE(multisig_Solver1)
+{
+    // Tests Solver() that returns lists of keys that are
+    // required to satisfy a ScriptPubKey
+    //
+    // Also tests IsMine() and ExtractAddress()
+    //
+    // Note: ExtractAddress for the multisignature transactions
+    // always returns false for this release, even if you have
+    // one key that would satisfy an (a|b) or 2-of-3 keys needed
+    // to spend an escrow transaction.
+    //
+    CBasicKeyStore keystore, emptykeystore, partialkeystore;
+    CKey key[3];
+    CTxDestination ke
