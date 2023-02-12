@@ -121,4 +121,33 @@ BOOST_AUTO_TEST_CASE(multisig_verify)
             keys += key[i],key[j];
             s = sign_multisig(escrow, keys, txTo[2], 0);
             if (i < j && i < 3 && j < 3)
-                BOOST_CHECK_MESSAGE(VerifyScript(s, escrow, txTo[2], 0, true, 0), s
+                BOOST_CHECK_MESSAGE(VerifyScript(s, escrow, txTo[2], 0, true, 0), strprintf("escrow 1: %d %d", i, j));
+            else
+                BOOST_CHECK_MESSAGE(!VerifyScript(s, escrow, txTo[2], 0, true, 0), strprintf("escrow 2: %d %d", i, j));
+        }
+}
+
+BOOST_AUTO_TEST_CASE(multisig_IsStandard)
+{
+    CKey key[4];
+    for (int i = 0; i < 4; i++)
+        key[i].MakeNewKey(true);
+
+    CScript a_and_b;
+    a_and_b << OP_2 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+    BOOST_CHECK(::IsStandard(a_and_b));
+
+    CScript a_or_b;
+    a_or_b  << OP_1 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+    BOOST_CHECK(::IsStandard(a_or_b));
+
+    CScript escrow;
+    escrow << OP_2 << key[0].GetPubKey() << key[1].GetPubKey() << key[2].GetPubKey() << OP_3 << OP_CHECKMULTISIG;
+    BOOST_CHECK(::IsStandard(escrow));
+
+    CScript one_of_four;
+    one_of_four << OP_1 << key[0].GetPubKey() << key[1].GetPubKey() << key[2].GetPubKey() << key[3].GetPubKey() << OP_4 << OP_CHECKMULTISIG;
+    BOOST_CHECK(!::IsStandard(one_of_four));
+
+    CScript malformed[6];
+    malformed[0] << OP_3 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
