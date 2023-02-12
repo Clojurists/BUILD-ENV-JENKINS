@@ -59,4 +59,37 @@ BOOST_AUTO_TEST_CASE(multisig_verify)
 
     CTransaction txFrom;  // Funding transaction
     txFrom.vout.resize(3);
-    txFr
+    txFrom.vout[0].scriptPubKey = a_and_b;
+    txFrom.vout[1].scriptPubKey = a_or_b;
+    txFrom.vout[2].scriptPubKey = escrow;
+
+    CTransaction txTo[3]; // Spending transaction
+    for (int i = 0; i < 3; i++)
+    {
+        txTo[i].vin.resize(1);
+        txTo[i].vout.resize(1);
+        txTo[i].vin[0].prevout.n = i;
+        txTo[i].vin[0].prevout.hash = txFrom.GetHash();
+        txTo[i].vout[0].nValue = 1;
+    }
+
+    vector<CKey> keys;
+    CScript s;
+
+    // Test a AND b:
+    keys.clear();
+    keys += key[0],key[1]; // magic operator+= from boost.assign
+    s = sign_multisig(a_and_b, keys, txTo[0], 0);
+    BOOST_CHECK(VerifyScript(s, a_and_b, txTo[0], 0, true, 0));
+
+    for (int i = 0; i < 4; i++)
+    {
+        keys.clear();
+        keys += key[i];
+        s = sign_multisig(a_and_b, keys, txTo[0], 0);
+        BOOST_CHECK_MESSAGE(!VerifyScript(s, a_and_b, txTo[0], 0, true, 0), strprintf("a&b 1: %d", i));
+
+        keys.clear();
+        keys += key[1],key[i];
+        s = sign_multisig(a_and_b, keys, txTo[0], 0);
+        BOOST_CHECK_MESSAG
