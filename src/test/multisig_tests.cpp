@@ -233,4 +233,39 @@ BOOST_AUTO_TEST_CASE(multisig_Solver1)
         vector<CTxDestination> addrs;
         int nRequired;
         BOOST_CHECK(ExtractDestinations(s, whichType, addrs, nRequired));
-        BOOST_CHECK(addrs[0] == keyaddr[
+        BOOST_CHECK(addrs[0] == keyaddr[0]);
+        BOOST_CHECK(addrs[1] == keyaddr[1]);
+        BOOST_CHECK(nRequired == 1);
+        BOOST_CHECK(IsMine(keystore, s));
+        BOOST_CHECK(!IsMine(emptykeystore, s));
+        BOOST_CHECK(!IsMine(partialkeystore, s));
+    }
+    {
+        vector<valtype> solutions;
+        txnouttype whichType;
+        CScript s;
+        s << OP_2 << key[0].GetPubKey() << key[1].GetPubKey() << key[2].GetPubKey() << OP_3 << OP_CHECKMULTISIG;
+        BOOST_CHECK(Solver(s, whichType, solutions));
+        BOOST_CHECK(solutions.size() == 5);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(multisig_Sign)
+{
+    // Test SignSignature() (and therefore the version of Solver() that signs transactions)
+    CBasicKeyStore keystore;
+    CKey key[4];
+    for (int i = 0; i < 4; i++)
+    {
+        key[i].MakeNewKey(true);
+        keystore.AddKey(key[i]);
+    }
+
+    CScript a_and_b;
+    a_and_b << OP_2 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+
+    CScript a_or_b;
+    a_or_b  << OP_1 << key[0].GetPubKey() << key[1].GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+
+    CScript escrow;
+    escrow << OP_2 << key[
