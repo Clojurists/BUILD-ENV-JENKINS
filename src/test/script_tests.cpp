@@ -131,4 +131,32 @@ BOOST_AUTO_TEST_CASE(script_valid)
     BOOST_FOREACH(Value& tv, tests)
     {
         Array test = tv.get_array();
-        str
+        string strTest = write_string(tv, false);
+        if (test.size() < 2) // Allow size > 2; extra stuff ignored (useful for comments)
+        {
+            BOOST_ERROR("Bad test: " << strTest);
+            continue;
+        }
+        string scriptSigString = test[0].get_str();
+        CScript scriptSig = ParseScript(scriptSigString);
+        string scriptPubKeyString = test[1].get_str();
+        CScript scriptPubKey = ParseScript(scriptPubKeyString);
+
+        CTransaction tx;
+        BOOST_CHECK_MESSAGE(VerifyScript(scriptSig, scriptPubKey, tx, 0, true, SIGHASH_NONE), strTest);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(script_invalid)
+{
+    // Scripts that should evaluate as invalid
+    Array tests = read_json("script_invalid.json");
+
+    BOOST_FOREACH(Value& tv, tests)
+    {
+        Array test = tv.get_array();
+        string strTest = write_string(tv, false);
+        if (test.size() < 2) // Allow size > 2; extra stuff ignored (useful for comments)
+        {
+            BOOST_ERROR("Bad test: " << strTest);
+            continu
