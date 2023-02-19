@@ -207,4 +207,44 @@ sign_multisig(CScript scriptPubKey, std::vector<CKey> keys, CTransaction transac
     // one extra item on the stack, before the signatures.
     // Putting OP_0 on the stack is the workaround;
     // fixing the bug would mean splitting the blockchain (old
-    // clients would not accept new CHEC
+    // clients would not accept new CHECKMULTISIG transactions,
+    // and vice-versa)
+    //
+    result << OP_0;
+    BOOST_FOREACH(CKey key, keys)
+    {
+        vector<unsigned char> vchSig;
+        BOOST_CHECK(key.Sign(hash, vchSig));
+        vchSig.push_back((unsigned char)SIGHASH_ALL);
+        result << vchSig;
+    }
+    return result;
+}
+CScript
+sign_multisig(CScript scriptPubKey, CKey key, CTransaction transaction)
+{
+    std::vector<CKey> keys;
+    keys.push_back(key);
+    return sign_multisig(scriptPubKey, keys, transaction);
+}
+
+BOOST_AUTO_TEST_CASE(script_CHECKMULTISIG12)
+{
+    CKey key1, key2, key3;
+    key1.MakeNewKey(true);
+    key2.MakeNewKey(false);
+    key3.MakeNewKey(true);
+
+    CScript scriptPubKey12;
+    scriptPubKey12 << OP_1 << key1.GetPubKey() << key2.GetPubKey() << OP_2 << OP_CHECKMULTISIG;
+
+    CTransaction txFrom12;
+    txFrom12.vout.resize(1);
+    txFrom12.vout[0].scriptPubKey = scriptPubKey12;
+
+    CTransaction txTo12;
+    txTo12.vin.resize(1);
+    txTo12.vout.resize(1);
+    txTo12.vin[0].prevout.n = 0;
+    txTo12.vin[0].prevout.hash = txFrom12.GetHash();
+    txTo12.v
