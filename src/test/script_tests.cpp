@@ -278,3 +278,30 @@ BOOST_AUTO_TEST_CASE(script_CHECKMULTISIG23)
 
     CTransaction txTo23;
     txTo23.vin.resize(1);
+    txTo23.vout.resize(1);
+    txTo23.vin[0].prevout.n = 0;
+    txTo23.vin[0].prevout.hash = txFrom23.GetHash();
+    txTo23.vout[0].nValue = 1;
+
+    std::vector<CKey> keys;
+    keys.push_back(key1); keys.push_back(key2);
+    CScript goodsig1 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(VerifyScript(goodsig1, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key1); keys.push_back(key3);
+    CScript goodsig2 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(VerifyScript(goodsig2, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key2); keys.push_back(key3);
+    CScript goodsig3 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(VerifyScript(goodsig3, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key2); keys.push_back(key2); // Can't re-use sig
+    CScript badsig1 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(badsig1, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key2); keys.push_back(key1); // sigs mu
