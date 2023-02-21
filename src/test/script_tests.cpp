@@ -304,4 +304,25 @@ BOOST_AUTO_TEST_CASE(script_CHECKMULTISIG23)
     BOOST_CHECK(!VerifyScript(badsig1, scriptPubKey23, txTo23, 0, true, 0));
 
     keys.clear();
-    keys.push_back(key2); keys.push_back(key1); // sigs mu
+    keys.push_back(key2); keys.push_back(key1); // sigs must be in correct order
+    CScript badsig2 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(badsig2, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key3); keys.push_back(key2); // sigs must be in correct order
+    CScript badsig3 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(badsig3, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key4); keys.push_back(key2); // sigs must match pubkeys
+    CScript badsig4 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(badsig4, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear();
+    keys.push_back(key1); keys.push_back(key4); // sigs must match pubkeys
+    CScript badsig5 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(badsig5, scriptPubKey23, txTo23, 0, true, 0));
+
+    keys.clear(); // Must have signatures
+    CScript badsig6 = sign_multisig(scriptPubKey23, keys, txTo23);
+    BOOST_CHECK(!VerifyScript(bad
