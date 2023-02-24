@@ -361,4 +361,24 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     SignSignature(keystore, txFrom, txTo, 0); // changes scriptSig
     combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSig, empty);
     BOOST_CHECK(combined == scriptSig);
-   
+    combined = CombineSignatures(scriptPubKey, txTo, 0, empty, scriptSig);
+    BOOST_CHECK(combined == scriptSig);
+    CScript scriptSigCopy = scriptSig;
+    // Signing again will give a different, valid signature:
+    SignSignature(keystore, txFrom, txTo, 0);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSigCopy, scriptSig);
+    BOOST_CHECK(combined == scriptSigCopy || combined == scriptSig);
+
+    // P2SH, single-signature case:
+    CScript pkSingle; pkSingle << keys[0].GetPubKey() << OP_CHECKSIG;
+    keystore.AddCScript(pkSingle);
+    scriptPubKey.SetDestination(pkSingle.GetID());
+    SignSignature(keystore, txFrom, txTo, 0);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSig, empty);
+    BOOST_CHECK(combined == scriptSig);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, empty, scriptSig);
+    BOOST_CHECK(combined == scriptSig);
+    scriptSigCopy = scriptSig;
+    SignSignature(keystore, txFrom, txTo, 0);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSigCopy, scriptSig);
+    BOOST_CHECK(co
