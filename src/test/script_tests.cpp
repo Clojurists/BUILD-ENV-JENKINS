@@ -381,4 +381,24 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     scriptSigCopy = scriptSig;
     SignSignature(keystore, txFrom, txTo, 0);
     combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSigCopy, scriptSig);
-    BOOST_CHECK(co
+    BOOST_CHECK(combined == scriptSigCopy || combined == scriptSig);
+    // dummy scriptSigCopy with placeholder, should always choose non-placeholder:
+    scriptSigCopy = CScript() << OP_0 << static_cast<vector<unsigned char> >(pkSingle);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSigCopy, scriptSig);
+    BOOST_CHECK(combined == scriptSig);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSig, scriptSigCopy);
+    BOOST_CHECK(combined == scriptSig);
+
+    // Hardest case:  Multisig 2-of-3
+    scriptPubKey.SetMultisig(2, keys);
+    keystore.AddCScript(scriptPubKey);
+    SignSignature(keystore, txFrom, txTo, 0);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSig, empty);
+    BOOST_CHECK(combined == scriptSig);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, empty, scriptSig);
+    BOOST_CHECK(combined == scriptSig);
+
+    // A couple of partially-signed versions:
+    vector<unsigned char> sig1;
+    uint256 hash1 = SignatureHash(scriptPubKey, txTo, 0, SIGHASH_ALL);
+    BOOST_CHECK(keys[0].Sign(h
