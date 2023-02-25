@@ -401,4 +401,25 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     // A couple of partially-signed versions:
     vector<unsigned char> sig1;
     uint256 hash1 = SignatureHash(scriptPubKey, txTo, 0, SIGHASH_ALL);
-    BOOST_CHECK(keys[0].Sign(h
+    BOOST_CHECK(keys[0].Sign(hash1, sig1));
+    sig1.push_back(SIGHASH_ALL);
+    vector<unsigned char> sig2;
+    uint256 hash2 = SignatureHash(scriptPubKey, txTo, 0, SIGHASH_NONE);
+    BOOST_CHECK(keys[1].Sign(hash2, sig2));
+    sig2.push_back(SIGHASH_NONE);
+    vector<unsigned char> sig3;
+    uint256 hash3 = SignatureHash(scriptPubKey, txTo, 0, SIGHASH_SINGLE);
+    BOOST_CHECK(keys[2].Sign(hash3, sig3));
+    sig3.push_back(SIGHASH_SINGLE);
+
+    // Not fussy about order (or even existence) of placeholders or signatures:
+    CScript partial1a = CScript() << OP_0 << sig1 << OP_0;
+    CScript partial1b = CScript() << OP_0 << OP_0 << sig1;
+    CScript partial2a = CScript() << OP_0 << sig2;
+    CScript partial2b = CScript() << sig2 << OP_0;
+    CScript partial3a = CScript() << sig3;
+    CScript partial3b = CScript() << OP_0 << OP_0 << sig3;
+    CScript partial3c = CScript() << OP_0 << sig3 << OP_0;
+    CScript complete12 = CScript() << OP_0 << sig1 << sig2;
+    CScript complete13 = CScript() << OP_0 << sig1 << sig3;
+    CScript complete23 = CScript() << OP_0 <<
