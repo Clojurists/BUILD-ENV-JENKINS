@@ -422,4 +422,24 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     CScript partial3c = CScript() << OP_0 << sig3 << OP_0;
     CScript complete12 = CScript() << OP_0 << sig1 << sig2;
     CScript complete13 = CScript() << OP_0 << sig1 << sig3;
-    CScript complete23 = CScript() << OP_0 <<
+    CScript complete23 = CScript() << OP_0 << sig2 << sig3;
+
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial1a, partial1b);
+    BOOST_CHECK(combined == partial1a);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial1a, partial2a);
+    BOOST_CHECK(combined == complete12);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial2a, partial1a);
+    BOOST_CHECK(combined == complete12);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial1b, partial2b);
+    BOOST_CHECK(combined == complete12);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial3b, partial1b);
+    BOOST_CHECK(combined == complete13);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial2a, partial3a);
+    BOOST_CHECK(combined == complete23);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial3b, partial2b);
+    BOOST_CHECK(combined == complete23);
+    combined = CombineSignatures(scriptPubKey, txTo, 0, partial3b, partial3a);
+    BOOST_CHECK(combined == partial3c);
+}
+
+BOOST_AUTO_TEST_SUITE_END()
