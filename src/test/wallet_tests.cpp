@@ -40,4 +40,36 @@ static void add_coin(int64 nValue, int nAge = 6*24, bool fIsFromMe = false, int 
     vCoins.push_back(output);
 }
 
-static void em
+static void empty_wallet(void)
+{
+    BOOST_FOREACH(COutput output, vCoins)
+        delete output.tx;
+    vCoins.clear();
+}
+
+static bool equal_sets(CoinSet a, CoinSet b)
+{
+    pair<CoinSet::iterator, CoinSet::iterator> ret = mismatch(a.begin(), a.end(), b.begin());
+    return ret.first == a.end() && ret.second == b.end();
+}
+
+BOOST_AUTO_TEST_CASE(coin_selection_tests)
+{
+    static CoinSet setCoinsRet, setCoinsRet2;
+    static int64 nValueRet;
+
+    // test multiple times to allow for differences in the shuffle order
+    for (int i = 0; i < RUN_TESTS; i++)
+    {
+        empty_wallet();
+
+        // with an empty wallet we can't even pay one cent
+        BOOST_CHECK(!wallet.SelectCoinsMinConf( 1 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
+
+        add_coin(1*CENT, 4);        // add a new 1 cent coin
+
+        // with a new 1 cent coin, we still can't find a mature 1 cent
+        BOOST_CHECK(!wallet.SelectCoinsMinConf( 1 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
+
+        // but we can find a new 1 cent
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 
