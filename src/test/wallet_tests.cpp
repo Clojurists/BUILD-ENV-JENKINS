@@ -72,4 +72,25 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         BOOST_CHECK(!wallet.SelectCoinsMinConf( 1 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
 
         // but we can find a new 1 cent
-        BOOST_CHECK( wallet.SelectCoinsMinConf( 
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * CENT);
+
+        add_coin(2*CENT);           // add a mature 2 cent coin
+
+        // we can't make 3 cents of mature coins
+        BOOST_CHECK(!wallet.SelectCoinsMinConf( 3 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
+
+        // we can make 3 cents of new  coins
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 3 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 3 * CENT);
+
+        add_coin(5*CENT);           // add a mature 5 cent coin,
+        add_coin(10*CENT, 3, true); // a new 10 cent coin sent from one of our own addresses
+        add_coin(20*CENT);          // and a mature 20 cent coin
+
+        // now we have new: 1+10=11 (of which 10 was self-sent), and mature: 2+5+20=27.  total = 38
+
+        // we can't make 38 cents only if we disallow new coins:
+        BOOST_CHECK(!wallet.SelectCoinsMinConf(38 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
+        // we can't even make 37 cents if we don't allow new coins even if they're from us
+        BOOST_CH
