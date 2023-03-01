@@ -93,4 +93,18 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         // we can't make 38 cents only if we disallow new coins:
         BOOST_CHECK(!wallet.SelectCoinsMinConf(38 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
         // we can't even make 37 cents if we don't allow new coins even if they're from us
-        BOOST_CH
+        BOOST_CHECK(!wallet.SelectCoinsMinConf(38 * CENT, 6, 6, vCoins, setCoinsRet, nValueRet));
+        // but we can make 37 cents if we accept new coins from ourself
+        BOOST_CHECK( wallet.SelectCoinsMinConf(37 * CENT, 1, 6, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 37 * CENT);
+        // and we can make 38 cents if we accept all new coins
+        BOOST_CHECK( wallet.SelectCoinsMinConf(38 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 38 * CENT);
+
+        // try making 34 cents from 1,2,5,10,20 - we can't do it exactly
+        BOOST_CHECK( wallet.SelectCoinsMinConf(34 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_GT(nValueRet, 34 * CENT);         // but should get more than 34 cents
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 3);     // the best should be 20+10+5.  it's incredibly unlikely the 1 or 2 got included (but possible)
+
+        // when we try making 7 cents, the smaller coins (1,2,5) are enough.  We should see just 2+5
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 7 * CENT, 1, 1, vCoins,
