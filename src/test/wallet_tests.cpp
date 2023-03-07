@@ -107,4 +107,25 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         BOOST_CHECK_EQUAL(setCoinsRet.size(), 3);     // the best should be 20+10+5.  it's incredibly unlikely the 1 or 2 got included (but possible)
 
         // when we try making 7 cents, the smaller coins (1,2,5) are enough.  We should see just 2+5
-        BOOST_CHECK( wallet.SelectCoinsMinConf( 7 * CENT, 1, 1, vCoins,
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 7 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 7 * CENT);
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 2);
+
+        // when we try making 8 cents, the smaller coins (1,2,5) are exactly enough.
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 8 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK(nValueRet == 8 * CENT);
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 3);
+
+        // when we try making 9 cents, no subset of smaller coins is enough, and we get the next bigger coin (10)
+        BOOST_CHECK( wallet.SelectCoinsMinConf( 9 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 10 * CENT);
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1);
+
+        // now clear out the wallet and start again to test choosing between subsets of smaller coins and the next biggest coin
+        empty_wallet();
+
+        add_coin( 6*CENT);
+        add_coin( 7*CENT);
+        add_coin( 8*CENT);
+        add_coin(20*CENT);
+        add_coin(30*CENT); // now we have 6+7+8+20+30 = 71 cents tota
