@@ -128,4 +128,24 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         add_coin( 7*CENT);
         add_coin( 8*CENT);
         add_coin(20*CENT);
-        add_coin(30*CENT); // now we have 6+7+8+20+30 = 71 cents tota
+        add_coin(30*CENT); // now we have 6+7+8+20+30 = 71 cents total
+
+        // check that we have 71 and not 72
+        BOOST_CHECK( wallet.SelectCoinsMinConf(71 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK(!wallet.SelectCoinsMinConf(72 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+
+        // now try making 16 cents.  the best smaller coins can do is 6+7+8 = 21; not as good at the next biggest coin, 20
+        BOOST_CHECK( wallet.SelectCoinsMinConf(16 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 20 * CENT); // we should get 20 in one coin
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1);
+
+        add_coin( 5*CENT); // now we have 5+6+7+8+20+30 = 75 cents total
+
+        // now if we try making 16 cents again, the smaller coins can make 5+6+7 = 18 cents, better than the next biggest coin, 20
+        BOOST_CHECK( wallet.SelectCoinsMinConf(16 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 18 * CENT); // we should get 18 in 3 coins
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 3);
+
+        add_coin( 18*CENT); // now we have 5+6+7+8+18+20+30
+
+        // and now i
