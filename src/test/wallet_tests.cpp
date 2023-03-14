@@ -165,4 +165,27 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         add_coin( 4*COIN); // now we have 5+6+7+8+18+20+30+100+200+300+400 = 1094 cents
         BOOST_CHECK( wallet.SelectCoinsMinConf(95 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
         BOOST_CHECK_EQUAL(nValueRet, 1 * COIN);  // we should get 1 BTC in 1 coin
-        BOOST_C
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1);
+
+        BOOST_CHECK( wallet.SelectCoinsMinConf(195 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 2 * COIN);  // we should get 2 BTC in 1 coin
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1);
+
+        // empty the wallet and start again, now with fractions of a cent, to test sub-cent change avoidance
+        empty_wallet();
+        add_coin(0.1*CENT);
+        add_coin(0.2*CENT);
+        add_coin(0.3*CENT);
+        add_coin(0.4*CENT);
+        add_coin(0.5*CENT);
+
+        // try making 1 cent from 0.1 + 0.2 + 0.3 + 0.4 + 0.5 = 1.5 cents
+        // we'll get sub-cent change whatever happens, so can expect 1.0 exactly
+        BOOST_CHECK( wallet.SelectCoinsMinConf(1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * CENT);
+
+        // but if we add a bigger coin, making it possible to avoid sub-cent change, things change:
+        add_coin(1111*CENT);
+
+        // try making 1 cent from 0.1 + 0.2 + 0.3 + 0.4 + 0.5 + 1111 = 1112.5 cents
+        BOOST_CH
