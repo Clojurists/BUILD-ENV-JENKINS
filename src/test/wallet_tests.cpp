@@ -148,4 +148,21 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
 
         add_coin( 18*CENT); // now we have 5+6+7+8+18+20+30
 
-        // and now i
+        // and now if we try making 16 cents again, the smaller coins can make 5+6+7 = 18 cents, the same as the next biggest coin, 18
+        BOOST_CHECK( wallet.SelectCoinsMinConf(16 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 18 * CENT);  // we should get 18 in 1 coin
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1); // because in the event of a tie, the biggest coin wins
+
+        // now try making 11 cents.  we should get 5+6
+        BOOST_CHECK( wallet.SelectCoinsMinConf(11 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 11 * CENT);
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 2);
+
+        // check that the smallest bigger coin is used
+        add_coin( 1*COIN);
+        add_coin( 2*COIN);
+        add_coin( 3*COIN);
+        add_coin( 4*COIN); // now we have 5+6+7+8+18+20+30+100+200+300+400 = 1094 cents
+        BOOST_CHECK( wallet.SelectCoinsMinConf(95 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * COIN);  // we should get 1 BTC in 1 coin
+        BOOST_C
