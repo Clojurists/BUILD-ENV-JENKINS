@@ -188,4 +188,23 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         add_coin(1111*CENT);
 
         // try making 1 cent from 0.1 + 0.2 + 0.3 + 0.4 + 0.5 + 1111 = 1112.5 cents
-        BOOST_CH
+        BOOST_CHECK( wallet.SelectCoinsMinConf(1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * CENT); // we should get the exact amount
+
+        // if we add more sub-cent coins:
+        add_coin(0.6*CENT);
+        add_coin(0.7*CENT);
+
+        // and try again to make 1.0 cents, we can still make 1.0 cents
+        BOOST_CHECK( wallet.SelectCoinsMinConf(1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * CENT); // we should get the exact amount
+
+        // run the 'mtgox' test (see http://blockexplorer.com/tx/29a3efd3ef04f9153d47a990bd7b048a4b2d213daaa5fb8ed670fb85f13bdbcf)
+        // they tried to consolidate 10 50k coins into one 500k coin, and ended up with 50k in change
+        empty_wallet();
+        for (int i = 0; i < 20; i++)
+            add_coin(50000 * COIN);
+
+        BOOST_CHECK( wallet.SelectCoinsMinConf(500000 * COIN, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 500000 * COIN); // we should get the exact amount
+        BOOST_CHECK_EQUAL(set
