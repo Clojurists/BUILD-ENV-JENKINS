@@ -255,4 +255,21 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
                 add_coin(COIN);
 
             // picking 50 from 100 coins doesn't depend on the shuffle,
-         
+            // but does depend on randomness in the stochastic approximation code
+            BOOST_CHECK(wallet.SelectCoinsMinConf(50 * COIN, 1, 6, vCoins, setCoinsRet , nValueRet));
+            BOOST_CHECK(wallet.SelectCoinsMinConf(50 * COIN, 1, 6, vCoins, setCoinsRet2, nValueRet));
+            BOOST_CHECK(!equal_sets(setCoinsRet, setCoinsRet2));
+
+            int fails = 0;
+            for (int i = 0; i < RANDOM_REPEATS; i++)
+            {
+                // selecting 1 from 100 identical coins depends on the shuffle; this test will fail 1% of the time
+                // run the test RANDOM_REPEATS times and only complain if all of them fail
+                BOOST_CHECK(wallet.SelectCoinsMinConf(COIN, 1, 6, vCoins, setCoinsRet , nValueRet));
+                BOOST_CHECK(wallet.SelectCoinsMinConf(COIN, 1, 6, vCoins, setCoinsRet2, nValueRet));
+                if (equal_sets(setCoinsRet, setCoinsRet2))
+                    fails++;
+            }
+            BOOST_CHECK_NE(fails, RANDOM_REPEATS);
+
+            // add 75 cents in small change.  not e
