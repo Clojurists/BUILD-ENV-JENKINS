@@ -207,4 +207,27 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
 
         BOOST_CHECK( wallet.SelectCoinsMinConf(500000 * COIN, 1, 1, vCoins, setCoinsRet, nValueRet));
         BOOST_CHECK_EQUAL(nValueRet, 500000 * COIN); // we should get the exact amount
-        BOOST_CHECK_EQUAL(set
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 10); // in ten coins
+
+        // if there's not enough in the smaller coins to make at least 1 cent change (0.5+0.6+0.7 < 1.0+1.0),
+        // we need to try finding an exact subset anyway
+
+        // sometimes it will fail, and so we use the next biggest coin:
+        empty_wallet();
+        add_coin(0.5 * CENT);
+        add_coin(0.6 * CENT);
+        add_coin(0.7 * CENT);
+        add_coin(1111 * CENT);
+        BOOST_CHECK( wallet.SelectCoinsMinConf(1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1111 * CENT); // we get the bigger coin
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 1);
+
+        // but sometimes it's possible, and we use an exact subset (0.4 + 0.6 = 1.0)
+        empty_wallet();
+        add_coin(0.4 * CENT);
+        add_coin(0.6 * CENT);
+        add_coin(0.8 * CENT);
+        add_coin(1111 * CENT);
+        BOOST_CHECK( wallet.SelectCoinsMinConf(1 * CENT, 1, 1, vCoins, setCoinsRet, nValueRet));
+        BOOST_CHECK_EQUAL(nValueRet, 1 * CENT);   // we should get the exact amount
+        BOOST_CHECK_EQUAL(setCoinsRet.size(), 2); // in two coins 0
