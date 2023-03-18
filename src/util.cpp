@@ -1147,3 +1147,249 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
 
 boost::filesystem::path GetPidFile()
 {
+    boost::filesystem::path pathPidFile(GetArg("-pid", "JackpotCoind.pid"));
+    if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
+    return pathPidFile;
+}
+
+#ifndef WIN32
+void CreatePidFile(const boost::filesystem::path &path, pid_t pid)
+{
+    FILE* file = fopen(path.string().c_str(), "w");
+    if (file)
+    {
+        fprintf(file, "%d\n", pid);
+        fclose(file);
+    }
+}
+#endif
+
+bool RenameOver(boost::filesystem::path src, boost::filesystem::path dest)
+{
+#ifdef WIN32
+    return MoveFileExA(src.string().c_str(), dest.string().c_str(),
+                      MOVEFILE_REPLACE_EXISTING);
+#else
+    int rc = std::rename(src.string().c_str(), dest.string().c_str());
+    return (rc == 0);
+#endif /* WIN32 */
+}
+
+void FileCommit(FILE *fileout)
+{
+    fflush(fileout);                // harmless if redundantly called
+#ifdef WIN32
+    _commit(_fileno(fileout));
+#else
+    fsync(fileno(fileout));
+#endif
+}
+
+int GetFilesize(FILE* file)
+{
+    int nSavePos = ftell(file);
+    int nFilesize = -1;
+    if (fseek(file, 0, SEEK_END) == 0)
+        nFilesize = ftell(file);
+    fseek(file, nSavePos, SEEK_SET);
+    return nFilesize;
+}
+
+void ShrinkDebugFile()
+{
+    // Scroll debug.log if it's getting too big
+    boost::filesystem::path pathLog = GetDataDir() / "debug.log";
+    FILE* file = fopen(pathLog.string().c_str(), "r");
+    if (file && GetFilesize(file) > 10 * 1000000)
+    {
+        // Restart the file with some of the end
+        char pch[200000];
+        fseek(file, -sizeof(pch), SEEK_END);
+        int nBytes = fread(pch, 1, sizeof(pch), file);
+        fclose(file);
+
+        file = fopen(pathLog.string().c_str(), "w");
+        if (file)
+        {
+            fwrite(pch, 1, nBytes, file);
+            fclose(file);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+//
+// "Never go to sea with two chronometers; take one or three."
+// Our three time sources are:
+//  - System clock
+//  - Median of other nodes clocks
+//  - The user (asking the user to fix the system clock if the first two disagree)
+//
+static int64 nMockTime = 0;  // For unit testing
+
+int64 GetTime()
+{
+    if (nMockTime) return nMockTime;
+
+    return time(NULL);
+}
+
+void SetMockTime(int64 nMockTimeIn)
+{
+    nMockTime = nMockTimeIn;
+}
+
+static int64 nTimeOffset = 0;
+
+int64 GetAdjustedTime()
+{
+    return GetTime() + nTimeOffset;
+}
+
+void AddTimeData(const CNetAddr& ip, int64 nTime)
+{
+    int64 nOffsetSample = nTime - GetTime();
+
+    // Ignore duplicates
+    static set<CNetAddr> setKnown;
+    if (!setKnown.insert(ip).second)
+        return;
+
+    // Add data
+    vTimeOffsets.input(nOffsetSample);
+    printf("Added time data, samples %d, offset %+"PRI64d" (%+"PRI64d" minutes)\n", vTimeOffsets.size(), nOffsetSample, nOffsetSample/60);
+    if (vTimeOffsets.size() >= 5 && vTimeOffsets.size() % 2 == 1)
+    {
+        int64 nMedian = vTimeOffsets.median();
+        std::vector<int64> vSorted = vTimeOffsets.sorted();
+        // Only let other nodes change our time by so much
+        if (abs64(nMedian) < 70 * 60)
+        {
+            nTimeOffset = nMedian;
+        }
+        else
+        {
+            nTimeOffset = 0;
+
+            static bool fDone;
+            if (!fDone)
+            {
+                // If nobody has a time different than ours but within 5 minutes of ours, give a warning
+                bool fMatch = false;
+                BOOST_FOREACH(int64 nOffset, vSorted)
+                    if (nOffset != 0 && abs64(nOffset) < 5 * 60)
+                        fMatch = true;
+
+                if (!fMatch)
+                {
+                    fDone = true;
+                    string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong JackpotCoin will not work properly.");
+                    strMiscWarning = strMessage;
+                    printf("*** %s\n", strMessage.c_str());
+                    uiInterface.ThreadSafeMessageBox(strMessage+" ", string("JackpotCoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION);
+                }
+            }
+        }
+        if (fDebug) {
+            BOOST_FOREACH(int64 n, vSorted)
+                printf("%+"PRI64d"  ", n);
+            printf("|  ");
+        }
+        printf("nTimeOffset = %+"PRI64d"  (%+"PRI64d" minutes)\n", nTimeOffset, nTimeOffset/60);
+    }
+}
+
+
+
+
+
+
+
+
+string FormatVersion(int nVersion)
+{
+    if (nVersion%100 == 0)
+        return strprintf("%d.%d.%d", nVersion/1000000, (nVersion/10000)%100, (nVersion/100)%100);
+    else
+        return strprintf("%d.%d.%d.%d", nVersion/1000000, (nVersion/10000)%100, (nVersion/100)%100, nVersion%100);
+}
+
+string FormatFullVersion()
+{
+    return CLIENT_BUILD;
+}
+
+// Format the subversion field according to BIP 14 spec (https://en.bitcoin.it/wiki/BIP_0014)
+std::string FormatSubVersion(const std::string& name, int nClientVersion, const std::vector<std::string>& comments)
+{
+    std::ostringstream ss;
+    ss << "/";
+    ss << name << ":" << FormatVersion(nClientVersion);
+    if (!comments.empty())
+        ss << "(" << boost::algorithm::join(comments, "; ") << ")";
+    ss << "/";
+    return ss.str();
+}
+
+#ifdef WIN32
+boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate)
+{
+    namespace fs = boost::filesystem;
+
+    char pszPath[MAX_PATH] = "";
+
+    if(SHGetSpecialFolderPathA(NULL, pszPath, nFolder, fCreate))
+    {
+        return fs::path(pszPath);
+    }
+
+    printf("SHGetSpecialFolderPathA() failed, could not obtain requested path.\n");
+    return fs::path("");
+}
+#endif
+
+void runCommand(std::string strCommand)
+{
+    int nErr = ::system(strCommand.c_str());
+    if (nErr)
+        printf("runCommand error: system(%s) returned %d\n", strCommand.c_str(), nErr);
+}
+
+void RenameThread(const char* name)
+{
+#if defined(PR_SET_NAME)
+    // Only the first 15 characters are used (16 - NUL terminator)
+    ::prctl(PR_SET_NAME, name, 0, 0, 0);
+#elif 0 && (defined(__FreeBSD__) || defined(__OpenBSD__))
+    // TODO: This is currently disabled because it needs to be verified to work
+    //       on FreeBSD or OpenBSD first. When verified the '0 &&' part can be
+    //       removed.
+    pthread_set_name_np(pthread_self(), name);
+
+// This is XCode 10.6-and-later; bring back if we drop 10.5 support:
+// #elif defined(MAC_OSX)
+//    pthread_setname_np(name);
+
+#else
+    // Prevent warnings for unused parameters...
+    (void)name;
+#endif
+}
+
+bool NewThread(void(*pfn)(void*), void* parg)
+{
+    try
+    {
+        boost::thread(pfn, parg); // thread detaches when out of scope
+    } catch(boost::thread_resource_error &e) {
+        printf("Error creating thread: %s\n", e.what());
+        return false;
+    }
+    return true;
+}
