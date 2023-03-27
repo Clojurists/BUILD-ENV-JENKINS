@@ -27,4 +27,36 @@ enum DBErrors
 class CWalletDB : public CDB
 {
 public:
-    CWalletDB(std::string 
+    CWalletDB(std::string strFilename, const char* pszMode="r+") : CDB(strFilename.c_str(), pszMode)
+    {
+    }
+private:
+    CWalletDB(const CWalletDB&);
+    void operator=(const CWalletDB&);
+public:
+    bool WriteName(const std::string& strAddress, const std::string& strName);
+
+    bool EraseName(const std::string& strAddress);
+
+    bool WriteTx(uint256 hash, const CWalletTx& wtx)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("tx"), hash), wtx);
+    }
+
+    bool EraseTx(uint256 hash)
+    {
+        nWalletDBUpdated++;
+        return Erase(std::make_pair(std::string("tx"), hash));
+    }
+
+    bool WriteKey(const CPubKey& vchPubKey, const CPrivKey& vchPrivKey)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("key"), vchPubKey.Raw()), vchPrivKey, false);
+    }
+
+    bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, bool fEraseUnencryptedKey = true)
+    {
+        nWalletDBUpdated++;
+        if (!Write(std::make_pair(std::s
