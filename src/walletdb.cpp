@@ -319,3 +319,372 @@ ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue,
             unsigned int nID;
             ssKey >> nID;
             CMasterKey kMasterKey;
+            ssValue >> kMasterKey;
+            if(pwallet->mapMasterKeys.count(nID) != 0)
+            {
+                strErr = strprintf("Error reading wallet database: duplicate CMasterKey id %u", nID);
+                return false;
+            }
+            pwallet->mapMasterKeys[nID] = kMasterKey;
+            if (pwallet->nMasterKeyMaxID < nID)
+                pwallet->nMasterKeyMaxID = nID;
+        }
+        else if (strType == "ckey")
+        {
+            vector<unsigned char> vchPubKey;
+            ssKey >> vchPubKey;
+            vector<unsigned char> vchPrivKey;
+            ssValue >> vchPrivKey;
+            if (!pwallet->LoadCryptedKey(vchPubKey, vchPrivKey))
+            {
+                strErr = "Error reading wallet database: LoadCryptedKey failed";
+                return false;
+            }
+            fIsEncrypted = true;
+        }
+        else if (strType == "defaultkey")
+        {
+            ssValue >> pwallet->vchDefaultKey;
+        }
+        else if (strType == "pool")
+        {
+            int64 nIndex;
+            ssKey >> nIndex;
+            pwallet->setKeyPool.insert(nIndex);
+        }
+        else if (strType == "version")
+        {
+            ssValue >> nFileVersion;
+            if (nFileVersion == 10300)
+                nFileVersion = 300;
+        }
+        else if (strType == "cscript")
+        {
+            uint160 hash;
+            ssKey >> hash;
+            CScript script;
+            ssValue >> script;
+            if (!pwallet->LoadCScript(script))
+            {
+                strErr = "Error reading wallet database: LoadCScript failed";
+                return false;
+            }
+        }
+        else if (strType == "orderposnext")
+        {
+            ssValue >> pwallet->nOrderPosNext;
+        }
+    } catch (...)
+    {
+        return false;
+    }
+    return true;
+}
+
+static bool IsKeyType(string strType)
+{
+    return (strType== "key" || strType == "wkey" ||
+            strType == "mkey" || strType == "ckey");
+}
+
+DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
+{
+    pwallet->vchDefaultKey = CPubKey();
+    int nFileVersion = 0;
+    vector<uint256> vWalletUpgrade;
+    bool fIsEncrypted = false;
+    bool fAnyUnordered = false;
+    bool fNoncriticalErrors = false;
+    DBErrors result = DB_LOAD_OK;
+
+    try {
+        LOCK(pwallet->cs_wallet);
+        int nMinVersion = 0;
+        if (Read((string)"minversion", nMinVersion))
+        {
+            if (nMinVersion > CLIENT_VERSION)
+            {
+                return DB_TOO_NEW;
+            }
+            pwallet->LoadMinVersion(nMinVersion);
+        }
+
+        // Get cursor
+        Dbc* pcursor = GetCursor();
+        if (!pcursor)
+        {
+            printf("Error getting wallet database cursor\n");
+            return DB_CORRUPT;
+        }
+
+        while (true)
+        {
+            // Read next record
+            CDataStream ssKey(SER_DISK, CLIENT_VERSION);
+            CDataStream ssValue(SER_DISK, CLIENT_VERSION);
+            int ret = ReadAtCursor(pcursor, ssKey, ssValue);
+            if (ret == DB_NOTFOUND)
+            {
+                break;
+            }
+            else if (ret != 0)
+            {
+                printf("Error reading next record from wallet database\n");
+                return DB_CORRUPT;
+            }
+            
+            // Try to be tolerant of single corrupt records:
+            string strType, strErr;
+            if (!ReadKeyValue(pwallet, ssKey, ssValue, nFileVersion, vWalletUpgrade, fIsEncrypted, fAnyUnordered, strType, strErr))
+            {
+                // losing keys is considered a catastrophic error, anything else
+                // we assume the user can live with:
+                if (IsKeyType(strType))
+                {
+                    result = DB_CORRUPT;
+                }
+                else
+                {
+                    // Leave other errors alone, if we try to fix them we might make things worse.
+                    fNoncriticalErrors = true;
+                    // ... but do warn the user there is something wrong.
+                    if (strType == "tx")
+                    {
+                        // Rescan if there is a bad transaction record:
+                        SoftSetBoolArg("-rescan", true);
+                    }
+                }
+            }
+            if (!strErr.empty())
+            {
+                printf("%s\n", strErr.c_str());
+            }
+        }
+        pcursor->close();
+    }
+    catch (...)
+    {
+        result = DB_CORRUPT;
+    }
+
+    if (fNoncriticalErrors && result == DB_LOAD_OK)
+        result = DB_NONCRITICAL_ERROR;
+
+    // Any wallet corruption at all: skip any rewriting or
+    // upgrading, we don't want to make it worse.
+    if (result != DB_LOAD_OK)
+        return result;
+
+    printf("nFileVersion = %d\n", nFileVersion);
+
+    BOOST_FOREACH(uint256 hash, vWalletUpgrade)
+        WriteTx(hash, pwallet->mapWallet[hash]);
+
+    // Rewrite encrypted wallets of versions 0.4.0 and 0.5.0rc:
+    if (fIsEncrypted && (nFileVersion == 40000 || nFileVersion == 50000))
+        return DB_NEED_REWRITE;
+
+    if (nFileVersion < CLIENT_VERSION) // Update
+        WriteVersion(CLIENT_VERSION);
+
+    if (fAnyUnordered)
+        result = ReorderTransactions(pwallet);
+
+    return result;
+}
+
+void ThreadFlushWalletDB(void* parg)
+{
+    // Make this thread recognisable as the wallet flushing thread
+    RenameThread("bitcoin-wallet");
+
+    const string& strFile = ((const string*)parg)[0];
+    static bool fOneThread;
+    if (fOneThread)
+        return;
+    fOneThread = true;
+    if (!GetBoolArg("-flushwallet", true))
+        return;
+
+    unsigned int nLastSeen = nWalletDBUpdated;
+    unsigned int nLastFlushed = nWalletDBUpdated;
+    int64 nLastWalletUpdate = GetTime();
+    while (!fShutdown)
+    {
+        MilliSleep(500);
+
+        if (nLastSeen != nWalletDBUpdated)
+        {
+            nLastSeen = nWalletDBUpdated;
+            nLastWalletUpdate = GetTime();
+        }
+
+        if (nLastFlushed != nWalletDBUpdated && GetTime() - nLastWalletUpdate >= 2)
+        {
+            TRY_LOCK(bitdb.cs_db,lockDb);
+            if (lockDb)
+            {
+                // Don't do this if any databases are in use
+                int nRefCount = 0;
+                map<string, int>::iterator mi = bitdb.mapFileUseCount.begin();
+                while (mi != bitdb.mapFileUseCount.end())
+                {
+                    nRefCount += (*mi).second;
+                    mi++;
+                }
+
+                if (nRefCount == 0 && !fShutdown)
+                {
+                    map<string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
+                    if (mi != bitdb.mapFileUseCount.end())
+                    {
+                        printf("Flushing wallet.dat\n");
+                        nLastFlushed = nWalletDBUpdated;
+                        int64 nStart = GetTimeMillis();
+
+                        // Flush wallet.dat so it's self contained
+                        bitdb.CloseDb(strFile);
+                        bitdb.CheckpointLSN(strFile);
+
+                        bitdb.mapFileUseCount.erase(mi++);
+                        printf("Flushed wallet.dat %"PRI64d"ms\n", GetTimeMillis() - nStart);
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool BackupWallet(const CWallet& wallet, const string& strDest)
+{
+    if (!wallet.fFileBacked)
+        return false;
+    while (!fShutdown)
+    {
+        {
+            LOCK(bitdb.cs_db);
+            if (!bitdb.mapFileUseCount.count(wallet.strWalletFile) || bitdb.mapFileUseCount[wallet.strWalletFile] == 0)
+            {
+                // Flush log data to the dat file
+                bitdb.CloseDb(wallet.strWalletFile);
+                bitdb.CheckpointLSN(wallet.strWalletFile);
+                bitdb.mapFileUseCount.erase(wallet.strWalletFile);
+
+                // Copy wallet.dat
+                filesystem::path pathSrc = GetDataDir() / wallet.strWalletFile;
+                filesystem::path pathDest(strDest);
+                if (filesystem::is_directory(pathDest))
+                    pathDest /= wallet.strWalletFile;
+
+                try {
+#if BOOST_VERSION >= 104000
+                    filesystem::copy_file(pathSrc, pathDest, filesystem::copy_option::overwrite_if_exists);
+#else
+                    filesystem::copy_file(pathSrc, pathDest);
+#endif
+                    printf("copied wallet.dat to %s\n", pathDest.string().c_str());
+                    return true;
+                } catch(const filesystem::filesystem_error &e) {
+                    printf("error copying wallet.dat to %s - %s\n", pathDest.string().c_str(), e.what());
+                    return false;
+                }
+            }
+        }
+        MilliSleep(100);
+    }
+    return false;
+}
+
+
+
+//
+// Try to (very carefully!) recover wallet.dat if there is a problem.
+//
+bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
+{
+    // Recovery procedure:
+    // move wallet.dat to wallet.timestamp.bak
+    // Call Salvage with fAggressive=true to
+    // get as much data as possible.
+    // Rewrite salvaged data to wallet.dat
+    // Set -rescan so any missing transactions will be
+    // found.
+
+    int64 now = GetTime();
+    std::string newFilename = strprintf("wallet.%"PRI64d".bak", now);
+
+    int result = dbenv.dbenv.dbrename(NULL, filename.c_str(), NULL, newFilename.c_str(), DB_AUTO_COMMIT);
+    if (result == 0)
+    {
+        printf("Renamed %s to %s\n", filename.c_str(), newFilename.c_str());
+    }
+    else
+    {
+        printf("Failed to rename %s to %s\n", filename.c_str(), newFilename.c_str());
+        return false;
+    }
+
+    std::vector<CDBEnv::KeyValPair> salvagedData;
+    bool allOK = dbenv.Salvage(newFilename, true, salvagedData);
+    if (salvagedData.empty())
+    {
+        printf("Salvage(aggressive) found no records in %s.\n", newFilename.c_str());
+        return false;
+    }
+    printf("Salvage(aggressive) found %"PRIszu" records\n", salvagedData.size());
+
+    bool fSuccess = allOK;
+    Db* pdbCopy = new Db(&dbenv.dbenv, 0);
+    int ret = pdbCopy->open(NULL,                 // Txn pointer
+                            filename.c_str(),     // Filename
+                            "main",               // Logical db name
+                            DB_BTREE,             // Database type
+                            DB_CREATE,            // Flags
+                            0);
+    if (ret > 0)
+    {
+        printf("Cannot create database file %s\n", filename.c_str());
+        return false;
+    }
+    CWallet dummyWallet;
+    int nFileVersion = 0;
+    vector<uint256> vWalletUpgrade;
+    bool fIsEncrypted = false;
+    bool fAnyUnordered = false;
+
+    DbTxn* ptxn = dbenv.TxnBegin();
+    BOOST_FOREACH (CDBEnv::KeyValPair& row, salvagedData)
+    {
+        if (fOnlyKeys)
+        {
+            CDataStream ssKey(row.first, SER_DISK, CLIENT_VERSION);
+            CDataStream ssValue(row.second, SER_DISK, CLIENT_VERSION);
+            string strType, strErr;
+            bool fReadOK = ReadKeyValue(&dummyWallet, ssKey, ssValue, nFileVersion, vWalletUpgrade, fIsEncrypted, fAnyUnordered, strType, strErr);
+            if (!IsKeyType(strType))
+            {
+                continue;
+            }
+            if (!fReadOK)
+            {
+                printf("WARNING: CWalletDB::Recover skipping %s: %s\n", strType.c_str(), strErr.c_str());
+                continue;
+            }
+        }
+        Dbt datKey(&row.first[0], row.first.size());
+        Dbt datValue(&row.second[0], row.second.size());
+        int ret2 = pdbCopy->put(ptxn, &datKey, &datValue, DB_NOOVERWRITE);
+        if (ret2 > 0)
+            fSuccess = false;
+    }
+    ptxn->commit(0);
+    pdbCopy->close(0);
+    delete pdbCopy;
+
+    return fSuccess;
+}
+
+bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename)
+{
+    return CWalletDB::Recover(dbenv, filename, false);
+}
