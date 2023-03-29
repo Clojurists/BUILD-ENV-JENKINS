@@ -59,4 +59,43 @@ public:
     bool WriteCryptedKey(const CPubKey& vchPubKey, const std::vector<unsigned char>& vchCryptedSecret, bool fEraseUnencryptedKey = true)
     {
         nWalletDBUpdated++;
-        if (!Write(std::make_pair(std::s
+        if (!Write(std::make_pair(std::string("ckey"), vchPubKey.Raw()), vchCryptedSecret, false))
+            return false;
+        if (fEraseUnencryptedKey)
+        {
+            Erase(std::make_pair(std::string("key"), vchPubKey.Raw()));
+            Erase(std::make_pair(std::string("wkey"), vchPubKey.Raw()));
+        }
+        return true;
+    }
+
+    bool WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("mkey"), nID), kMasterKey, true);
+    }
+
+    bool WriteCScript(const uint160& hash, const CScript& redeemScript)
+    {
+        nWalletDBUpdated++;
+        return Write(std::make_pair(std::string("cscript"), hash), redeemScript, false);
+    }
+
+    bool WriteBestBlock(const CBlockLocator& locator)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("bestblock"), locator);
+    }
+
+    bool ReadBestBlock(CBlockLocator& locator)
+    {
+        return Read(std::string("bestblock"), locator);
+    }
+
+    bool WriteOrderPosNext(int64 nOrderPosNext)
+    {
+        nWalletDBUpdated++;
+        return Write(std::string("orderposnext"), nOrderPosNext);
+    }
+
+    bool WriteDefaultKey
